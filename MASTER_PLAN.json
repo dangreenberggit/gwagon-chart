@@ -1,0 +1,422 @@
+{
+    "project": {
+      "name": "PE Inequality Dashboard",
+      "goal": "Lightweight SPA to visualize US top 1% wealth share, global PE AUM, and US G‑Class sales (2012–2024), with raw and indexed charts.",
+      "stack": ["Bun", "Vite", "React", "TypeScript", "Tailwind", "shadcn-style UI", "Tremor"],
+      "principles": [
+        "Keep it simple and static (no server).",
+        "Prefer Bun and Web APIs over Node-specific modules.",
+        "Document sources and ensure reproducibility."
+      ]
+    },
+    "globals": {
+      "paths": {
+        "public_csv": "public/data/series.csv",
+        "src_lib": "src/lib",
+        "src_components_ui": "src/components/ui",
+        "src_app": "src",
+        "tests": "src"
+      },
+      "data_sources": {
+        "wealth": "Federal Reserve DFA, WFRBST01134 (annual average of quarterlies)",
+        "pe_aum": "McKinsey Global Private Markets Reports (2012–2024, rounded)",
+        "gclass": "MBUSA press (2024) + CarFigures historical (US sales)"
+      },
+      "csv_schema": [
+        "year",
+        "us_wealth_top1_share_dfa_pct",
+        "global_pe_aum_usd_trn",
+        "us_gclass_sales_units"
+      ],
+      "bunfig_toml": "[install]\\nsaveTextLockfile = true\\n\\n[run]\\ntsx = true\\n",
+      "csv_data": "year,us_wealth_top1_share_dfa_pct,global_pe_aum_usd_trn,us_gclass_sales_units\\n2012,31.6,2.0,1408\\n2013,32.4,2.3,2494\\n2014,33.0,2.7,3051\\n2015,33.4,3.1,3616\\n2016,33.5,3.5,3950\\n2017,33.6,4.0,4188\\n2018,33.6,4.4,3593\\n2019,33.9,4.7,7401\\n2020,33.1,5.2,7723\\n2021,32.1,5.8,8523\\n2022,31.0,6.2,7297\\n2023,30.7,6.5,9355\\n2024,30.9,6.7,10987\\n"
+    },
+    "rules": {
+      "typescript": {
+        "strict_mode": true,
+        "explicit_types": true,
+        "no_any": true,
+        "naming": {
+          "components": "PascalCase",
+          "utilities": "camelCase",
+          "types": "PascalCase"
+        }
+      },
+      "react": {
+        "function_components": true,
+        "hooks_rules": true,
+        "stable_keys": true
+      },
+      "tailwind": {
+        "utility_first": true,
+        "dark_mode": "class",
+        "responsive": true,
+        "use_cn_helper": true
+      },
+      "charts": {
+        "library": "Tremor",
+        "data_format": "array of objects",
+        "index_key": "index prop set to 'Year'",
+        "categories": "string keys for each series",
+        "formatting": "valueFormatter for numbers"
+      },
+      "testing": {
+        "runner": "bun test",
+        "unit_targets": ["CSV parsing", "indexing"],
+        "e2e_optional": true
+      },
+      "comments": {
+        "test_marker": "// TEST:",
+        "explain_why": true
+      }
+    },
+    "phases": [
+      {
+        "id": "phase-0-primer",
+        "title": "Primer (Repo bootstrap)",
+        "steps": [
+          {
+            "id": "p0-s1-mkdir",
+            "description": "Create project directory and enter it",
+            "commands": [
+              "mkdir pe-dashboard && cd pe-dashboard"
+            ]
+          },
+          {
+            "id": "p0-s2-bunfig",
+            "description": "Create bunfig.toml",
+            "files_write": [
+              {
+                "path": "bunfig.toml",
+                "content": "[install]\\nsaveTextLockfile = true\\n\\n[run]\\ntsx = true\\n"
+              }
+            ]
+          }
+        ],
+        "verification": {
+          "manual": [
+            "Confirm bunfig.toml exists in repo root."
+          ],
+          "acceptance": [
+            "bunfig.toml present with expected content."
+          ]
+        }
+      },
+      {
+        "id": "phase-1-foundation",
+        "title": "Foundation Setup (Bun + Vite + Tailwind + Base UI)",
+        "steps": [
+          {
+            "id": "p1-s1-init",
+            "description": "Initialize Vite React-TS project with Bun",
+            "commands": [
+              "bunx create-vite@latest . --template react-ts"
+            ]
+          },
+          {
+            "id": "p1-s2-install",
+            "description": "Install dependencies: Tailwind, Tremor, shadcn-style helpers",
+            "commands": [
+              "bun add @tremor/react clsx tailwind-merge",
+              "bun add -D tailwindcss postcss autoprefixer @types/node prettier"
+            ]
+          },
+          {
+            "id": "p1-s3-tailwind",
+            "description": "Initialize Tailwind and configure",
+            "commands": [
+              "bunx tailwindcss init -p"
+            ],
+            "files_write": [
+              {
+                "path": "tailwind.config.js",
+                "content": "/** @type {import('tailwindcss').Config} */\\nmodule.exports = {\\n  darkMode: [\\\"class\\\"],\\n  content: [\\\"./index.html\\\", \\\"./src/**/*.{ts,tsx}\\\"],\\n  theme: { extend: {} },\\n  plugins: [],\\n};\\n"
+              },
+              {
+                "path": "src/index.css",
+                "content": "@tailwind base;\\n@tailwind components;\\n@tailwind utilities;\\n\\n:root {\\n  --background: 255 255 255;\\n  --foreground: 17 24 39;\\n}\\n\\nbody {\\n  color: rgb(var(--foreground));\\n  background: rgb(var(--background));\\n}\\n"
+              }
+            ]
+          },
+          {
+            "id": "p1-s4-ui-primitives",
+            "description": "Add minimal shadcn-style Card components and cn helper",
+            "files_write": [
+              {
+                "path": "src/lib/utils.ts",
+                "content": "import { type ClassValue } from \\\"clsx\\\";\\nimport clsx from \\\"clsx\\\";\\nimport { twMerge } from \\\"tailwind-merge\\\";\\n// Merges Tailwind classes, resolving conflicts for consistent styling\\nexport function cn(...inputs: ClassValue[]) {\\n  return twMerge(clsx(inputs));\\n}\\n"
+              },
+              {
+                "path": "src/components/ui/card.tsx",
+                "content": "import * as React from \\\"react\\\";\\nimport { cn } from \\\"@/lib/utils\\\";\\n\\n// Lightweight shadcn-style Card primitives for layout consistency\\nexport function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {\\n  return (\\n    <div className={cn(\\\"rounded-lg border bg-white shadow-sm dark:bg-neutral-900 dark:border-neutral-800\\\", className)} {...props} />\\n  );\\n}\\nexport function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {\\n  return <div className={cn(\\\"p-4 border-b\\\", className)} {...props} />;\\n}\\nexport function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {\\n  return <h3 className={cn(\\\"text-lg font-semibold\\\", className)} {...props} />;\\n}\\nexport function CardContent({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {\\n  return <div className={cn(\\\"p-4\\\", className)} {...props} />;\\n}\\n"
+              }
+            ]
+          },
+          {
+            "id": "p1-s5-scripts",
+            "description": "Add package.json scripts for Bun + Vite",
+            "modify_json": [
+              {
+                "path": "package.json",
+                "merge": {
+                  "scripts": {
+                    "dev": "vite",
+                    "build": "tsc -b && vite build",
+                    "preview": "vite preview",
+                    "test": "bun test"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "verification": {
+          "manual": [
+            "Run: bun install",
+            "Run: bun run dev",
+            "Open http://localhost:5173 and confirm Vite app loads"
+          ],
+          "tests_add": [
+            {
+              "path": "src/phase1.test.ts",
+              "content": "// TEST: Phase 1 - baseline runner\\nimport { describe, it, expect } from \\\"bun:test\\\";\\n\\ndescribe(\\\"Phase 1 baseline\\\", () => {\\n  it(\\\"adds numbers\\\", () => {\\n    expect(1 + 1).toBe(2);\\n  });\\n});\\n"
+            }
+          ],
+          "commands": [
+            "bun test"
+          ],
+          "acceptance": [
+            "Dev server runs without errors",
+            "Baseline test passes",
+            "No TypeScript errors in terminal"
+          ]
+        }
+      },
+      {
+        "id": "phase-2-data-layer",
+        "title": "Data Layer (CSV parsing and indexing)",
+        "steps": [
+          {
+            "id": "p2-s1-csv",
+            "description": "Add CSV data under public",
+            "commands": [
+              "mkdir -p public/data"
+            ],
+            "files_write": [
+              {
+                "path": "public/data/series.csv",
+                "content": "year,us_wealth_top1_share_dfa_pct,global_pe_aum_usd_trn,us_gclass_sales_units\\n2012,31.6,2.0,1408\\n2013,32.4,2.3,2494\\n2014,33.0,2.7,3051\\n2015,33.4,3.1,3616\\n2016,33.5,3.5,3950\\n2017,33.6,4.0,4188\\n2018,33.6,4.4,3593\\n2019,33.9,4.7,7401\\n2020,33.1,5.2,7723\\n2021,32.1,5.8,8523\\n2022,31.0,6.2,7297\\n2023,30.7,6.5,9355\\n2024,30.9,6.7,10987\\n"
+              }
+            ]
+          },
+          {
+            "id": "p2-s2-utils",
+            "description": "Implement CSV parser, typing, and index function",
+            "files_write": [
+              {
+                "path": "src/lib/csv.ts",
+                "content": "export type SeriesRow = {\\n  year: number;\\n  us_wealth_top1_share_dfa_pct: number;\\n  global_pe_aum_usd_trn: number;\\n  us_gclass_sales_units: number;\\n};\\n\\n// Simple CSV parser (no quoted commas).\\n// TEST: Keep minimal to avoid dependency bloat; consider papaparse if fields become complex.\\nexport function parseCSV(text: string): Record<string, string>[] {\\n  const lines = text.trim().split(/\\r?\\n/);\\n  const headers = lines[0].split(\\\",\").map((h) => h.trim());\\n  return lines.slice(1).filter(Boolean).map((line) => {\\n    const cols = line.split(\\\",\").map((c) => c.trim());\\n    const obj: Record<string, string> = {};\\n    headers.forEach((h, i) => (obj[h] = cols[i] ?? \\\"\\\"));\\n    return obj;\\n  });\\n}\\n\\n// Convert raw CSV objects to typed rows with numeric fields.\\nexport function toSeriesRows(rows: Record<string, string>[]): SeriesRow[] {\\n  return rows.map((r) => ({\\n    year: Number(r.year),\\n    us_wealth_top1_share_dfa_pct: Number(r.us_wealth_top1_share_dfa_pct),\\n    global_pe_aum_usd_trn: Number(r.global_pe_aum_usd_trn),\\n    us_gclass_sales_units: Number(r.us_gclass_sales_units),\\n  }));\\n}\\n\\n// Index series to base = 100 (e.g., first year).\\n// TEST: Protect against divide-by-zero; return zeros if base is 0 or invalid.\\nexport function indexSeries(values: number[], baseIndex = 0): number[] {\\n  const base = values[baseIndex];\\n  if (!isFinite(base) || base === 0) return values.map(() => 0);\\n  return values.map((v) => (v / base) * 100);\\n}\\n"
+              }
+            ]
+          },
+          {
+            "id": "p2-s3-wire-fetch",
+            "description": "Fetch and log parsed data in App (temporary for verification)",
+            "files_overwrite": [
+              {
+                "path": "src/App.tsx",
+                "content": "import \\\"./index.css\\\";\\nimport { useEffect, useState } from \\\"react\\\";\\nimport { parseCSV, toSeriesRows, type SeriesRow } from \\\"@/lib/csv\\\";\\n\\nexport default function App() {\\n  const [rows, setRows] = useState<SeriesRow[] | null>(null);\\n  const [error, setError] = useState<string | null>(null);\\n\\n  useEffect(() => {\\n    async function load() {\\n      try {\\n        const res = await fetch(\\\"/data/series.csv\\\", { cache: \\\"no-cache\\\" });\\n        if (!res.ok) throw new Error(`HTTP ${res.status}`);\\n        const txt = await res.text();\\n        const parsed = toSeriesRows(parseCSV(txt));\\n        // TEST: Phase 2 - verify parsed rows in console for quick inspection\\n        console.log(\\\"Parsed CSV rows:\\\", parsed);\\n        setRows(parsed);\\n      } catch (e) {\\n        setError(e instanceof Error ? e.message : String(e));\\n      }\\n    }\\n    load();\\n  }, []);\\n\\n  if (error) return <div className=\\\"p-6 text-red-600\\\">Error: {error}</div>;\\n  if (!rows) return <div className=\\\"p-6\\\">Loading data…</div>;\\n\\n  return (\\n    <main className=\\\"p-6\\\">\\n      <h1 className=\\\"text-2xl font-bold\\\">Data loaded: {rows.length} rows</h1>\\n    </main>\\n  );\\n}\\n"
+              }
+            ]
+          }
+        ],
+        "verification": {
+          "manual": [
+            "Run: bun run dev",
+            "Open console; verify an array of 13 rows (2012–2024) appears",
+            "Ensure numeric fields are numbers (no NaN)"
+          ],
+          "tests_add": [
+            {
+              "path": "src/csv.test.ts",
+              "content": "// TEST: Phase 2 - CSV parsing and indexing\\nimport { describe, it, expect } from \\\"bun:test\\\";\\nimport { parseCSV, toSeriesRows, indexSeries } from \\\"./lib/csv\\\";\\n\\ndescribe(\\\"parseCSV\\\", () => {\\n  it(\\\"parses simple CSV\\\", () => {\\n    const csv = \\\"a,b\\\\n1,2\\\\n3,4\\\";\\n    expect(parseCSV(csv)).toEqual([{ a: \\\"1\\\", b: \\\"2\\\" }, { a: \\\"3\\\", b: \\\"4\\\" }]);\\n  });\\n  it(\\\"ignores trailing empty lines\\\", () => {\\n    const csv = \\\"a,b\\\\n1,2\\\\n\\\\n\\\";\\n    expect(parseCSV(csv).length).toBe(1);\\n  });\\n});\\n\\ndescribe(\\\"toSeriesRows\\\", () => {\\n  it(\\\"converts strings to numbers\\\", () => {\\n    const raw = [{ year: \\\"2012\\\", us_wealth_top1_share_dfa_pct: \\\"31.6\\\", global_pe_aum_usd_trn: \\\"2.0\\\", us_gclass_sales_units: \\\"1408\\\" }];\\n    const r = toSeriesRows(raw)[0];\\n    expect(r.year).toBe(2012);\\n    expect(r.us_wealth_top1_share_dfa_pct).toBe(31.6);\\n  });\\n});\\n\\ndescribe(\\\"indexSeries\\\", () => {\\n  it(\\\"indexes to base=100\\\", () => {\\n    expect(indexSeries([2, 4, 6], 0)).toEqual([100, 200, 300]);\\n  });\\n  it(\\\"handles zero base\\\", () => {\\n    expect(indexSeries([0, 10], 0)).toEqual([0, 0]);\\n  });\\n});\\n"
+            }
+          ],
+          "commands": [
+            "bun test"
+          ],
+          "acceptance": [
+            "Console shows correct parsed rows",
+            "Unit tests pass for parser and indexing",
+            "No fetch errors"
+          ]
+        }
+      },
+      {
+        "id": "phase-3-charts",
+        "title": "Render Charts (raw and indexed) with Tremor + UI",
+        "steps": [
+          {
+            "id": "p3-s1-app-charts",
+            "description": "Render two charts in App using Tremor and Card UI",
+            "files_overwrite": [
+              {
+                "path": "src/App.tsx",
+                "content": "import \\\"./index.css\\\";\\nimport { useEffect, useState } from \\\"react\\\";\\nimport { Card, CardHeader, CardTitle, CardContent } from \\\"@/components/ui/card\\\";\\nimport { LineChart } from \\\"@tremor/react\\\";\\nimport { parseCSV, toSeriesRows, indexSeries } from \\\"@/lib/csv\\\";\\n\\ntype Row = { year: number; wealthPct: number; peAumT: number; gSales: number; };\\n\\n// Transform to Tremor-friendly data objects\\nfunction toChartData(rows: Row[]) {\\n  return rows.map((r) => ({\\n    Year: r.year.toString(),\\n    \\\"Top 1% wealth (%, DFA)\\\": r.wealthPct,\\n    \\\"Global PE AUM (USD T)\\\": r.peAumT,\\n    \\\"US G\\u2011Class sales (units)\\\": r.gSales,\\n  }));\\n}\\n\\nexport default function App() {\\n  const [rows, setRows] = useState<Row[] | null>(null);\\n  const [indexedRows, setIndexedRows] = useState<Row[] | null>(null);\\n  const [error, setError] = useState<string | null>(null);\\n\\n  useEffect(() => {\\n    async function load() {\\n      try {\\n        const res = await fetch(\\\"/data/series.csv\\\", { cache: \\\"no-cache\\\" });\\n        if (!res.ok) throw new Error(`HTTP ${res.status}`);\\n        const txt = await res.text();\\n        const parsed = toSeriesRows(parseCSV(txt));\\n        const base = parsed.map((r) => ({\\n          year: r.year,\\n          wealthPct: r.us_wealth_top1_share_dfa_pct,\\n          peAumT: r.global_pe_aum_usd_trn,\\n          gSales: r.us_gclass_sales_units,\\n        }));\\n        const wealthIdx = indexSeries(base.map((r) => r.wealthPct), 0);\\n        const peIdx = indexSeries(base.map((r) => r.peAumT), 0);\\n        const salesIdx = indexSeries(base.map((r) => r.gSales), 0);\\n        const indexed = base.map((r, i) => ({\\n          year: r.year,\\n          wealthPct: Number(wealthIdx[i].toFixed(1)),\\n          peAumT: Number(peIdx[i].toFixed(1)),\\n          gSales: Number(salesIdx[i].toFixed(1)),\\n        }));\\n        setRows(base);\\n        setIndexedRows(indexed);\\n      } catch (e) {\\n        setError(e instanceof Error ? e.message : String(e));\\n      }\\n    }\\n    load();\\n  }, []);\\n\\n  if (error) {\\n    return (\\n      <div className=\\\"flex h-screen items-center justify-center\\\">\\n        <Card className=\\\"max-w-md\\\">\\n          <CardHeader><CardTitle>Error Loading Data</CardTitle></CardHeader>\\n          <CardContent>\\n            <p className=\\\"text-red-600\\\">{error}</p>\\n            {/* TEST: Phase 4 - retry button for error verification */}\\n            <button className=\\\"mt-4 rounded bg-blue-600 px-4 py-2 text-white\\\" onClick={() => window.location.reload()}>Retry</button>\\n          </CardContent>\\n        </Card>\\n      </div>\\n    );\\n  }\\n\\n  if (!rows || !indexedRows) return <div className=\\\"p-6\\\">Loading…</div>;\\n\\n  const data = toChartData(rows);\\n  const dataIndexed = toChartData(indexedRows);\\n\\n  return (\\n    <main className=\\\"p-6\\\">\\n      <div className=\\\"mx-auto max-w-6xl grid gap-6\\\">\\n        <Card>\\n          <CardHeader><CardTitle>Inequality, PE AUM, and G\\u2011Class Sales (2012\\u20132024)</CardTitle></CardHeader>\\n          <CardContent>\\n            <LineChart\\n              className=\\\"h-64 sm:h-80 md:h-96\\\"\\n              data={data}\\n              index=\\\"Year\\\"\\n              categories={[\\\"Top 1% wealth (%, DFA)\\\", \\\"Global PE AUM (USD T)\\\", \\\"US G\\u2011Class sales (units)\\\"]}\\n              colors={[\\\"teal\\\", \\\"orange\\\", \\\"slate\\\"]}\\n              yAxisWidth={56}\\n              valueFormatter={(v) => (typeof v === \\\"number\\\" ? v.toLocaleString() : String(v))}\\n              connectNulls\\n            />\\n          </CardContent>\\n        </Card>\\n\\n        <Card>\\n          <CardHeader><CardTitle>Indexed (2012 = 100)</CardTitle></CardHeader>\\n          <CardContent>\\n            <LineChart\\n              className=\\\"h-64 sm:h-80 md:h-96\\\"\\n              data={dataIndexed}\\n              index=\\\"Year\\\"\\n              categories={[\\\"Top 1% wealth (%, DFA)\\\", \\\"Global PE AUM (USD T)\\\", \\\"US G\\u2011Class sales (units)\\\"]}\\n              colors={[\\\"teal\\\", \\\"orange\\\", \\\"slate\\\"]}\\n              yAxisWidth={56}\\n              valueFormatter={(v) => (typeof v === \\\"number\\\" ? v.toLocaleString(undefined, { maximumFractionDigits: 1 }) : String(v))}\\n              connectNulls\\n            />\\n          </CardContent>\\n        </Card>\\n\\n        <footer className=\\\"mt-4 border-t pt-4 text-sm text-gray-600\\\">\\n          <p className=\\\"font-medium\\\">Data Sources:</p>\\n          <ul className=\\\"mt-2 space-y-1\\\">\\n            <li><strong>Wealth:</strong> Fed DFA (WFRBST01134), annual avg of quarterlies</li>\\n            <li><strong>PE AUM:</strong> McKinsey Global Private Markets Reports</li>\\n            <li><strong>G\\u2011Class:</strong> MBUSA press + CarFigures</li>\\n          </ul>\\n        </footer>\\n      </div>\\n    </main>\\n  );\\n}\\n"
+              }
+            ]
+          }
+        ],
+        "verification": {
+          "manual": [
+            "Run: bun run dev",
+            "Visit http://localhost:5173",
+            "Verify two charts render",
+            "Hover to see tooltips; confirm values make sense",
+            "Check indexed chart shows 2012 ~ 100 for all series",
+            "Resize to test responsive heights"
+          ],
+          "acceptance": [
+            "Both charts render without errors",
+            "Legends and tooltips present and correct",
+            "Responsive heights (h-64/sm:h-80/md:h-96) work as expected"
+          ]
+        }
+      },
+      {
+        "id": "phase-4-polish",
+        "title": "Polish & UX",
+        "steps": [
+          {
+            "id": "p4-s1-loading-error",
+            "description": "Improve loading and error states (already scaffolded in App.tsx)",
+            "actions": [
+              "Temporarily rename CSV to trigger error and verify Retry flow",
+              "Restore CSV and confirm loading state transitions"
+            ]
+          },
+          {
+            "id": "p4-s2-mobile",
+            "description": "Confirm mobile responsiveness and spacing",
+            "actions": [
+              "Use DevTools responsive mode",
+              "Ensure charts are readable on small screens"
+            ]
+          },
+          {
+            "id": "p4-s3-accessibility",
+            "description": "Basic a11y pass",
+            "actions": [
+              "Ensure headings are hierarchical",
+              "Ensure color contrast acceptable in light/dark"
+            ]
+          }
+        ],
+        "verification": {
+          "manual": [
+            "Error UI appears when CSV missing",
+            "Retry reloads app successfully",
+            "Charts readable at ~375px width"
+          ],
+          "acceptance": [
+            "Graceful error handling works",
+            "Mobile layout is usable",
+            "Footer sources visible"
+          ]
+        }
+      },
+      {
+        "id": "phase-5-testing",
+        "title": "Testing & Quality",
+        "steps": [
+          {
+            "id": "p5-s1-unit",
+            "description": "Expand unit tests for CSV edge cases and indexing",
+            "files_append": [
+              {
+                "path": "src/csv.test.ts",
+                "content": "\\n// TEST: Phase 5 - edge cases\\ndescribe(\\\"edge cases\\\", () => {\\n  it(\\\"handles missing columns gracefully\\\", () => {\\n    const result = parseCSV(\\\"year,wealth\\\\n2012,31.6\\\\n2013\\\");\\n    expect(result[1].wealth).toBe(\\\"\\\");\\n  });\\n  it(\\\"invalid nums -> NaN in toSeriesRows\\\", () => {\\n    const rows = toSeriesRows([{ year: \\\"x\\\", us_wealth_top1_share_dfa_pct: \\\"y\\\", global_pe_aum_usd_trn: \\\"1\\\", us_gclass_sales_units: \\\"2\\\" }]);\\n    expect(Number.isNaN(rows[0].year)).toBe(true);\\n  });\\n});\\n"
+              }
+            ],
+            "commands": [
+              "bun test"
+            ]
+          },
+          {
+            "id": "p5-s2-lighthouse",
+            "description": "Run Lighthouse on production build",
+            "commands": [
+              "bun run build",
+              "bun run preview"
+            ],
+            "manual": [
+              "Open preview URL in Chrome",
+              "Run Lighthouse audit (Performance >90, Accessibility >95)"
+            ]
+          }
+        ],
+        "acceptance": [
+          "All unit tests pass",
+          "Lighthouse targets achieved"
+        ]
+      },
+      {
+        "id": "phase-6-build-deploy",
+        "title": "Build & Deploy",
+        "steps": [
+          {
+            "id": "p6-s1-build",
+            "description": "Build production bundle and preview",
+            "commands": [
+              "bun run build",
+              "bun run preview"
+            ],
+            "manual": [
+              "Open http://localhost:4173",
+              "Verify charts render and CSV loads"
+            ]
+          },
+          {
+            "id": "p6-s2-deploy",
+            "description": "Deploy to static host (Vercel/Netlify/Cloudflare Pages)",
+            "notes": [
+              "For Vercel: build command bun run build, output dist/",
+              "For Netlify: deploy dist/ folder",
+              "For Cloudflare Pages: build bun run build, output dist/"
+            ]
+          }
+        ],
+        "acceptance": [
+          "Build completes without errors",
+          "Production site accessible and functional",
+          "CSV loads in production"
+        ]
+      }
+    ],
+    "scripts_suggestions": {
+      "package_json_add": {
+        "scripts": {
+          "dev": "vite",
+          "build": "tsc -b && vite build",
+          "preview": "vite preview",
+          "test": "bun test"
+        }
+      }
+    },
+    "llm_agent_usage": {
+      "workflow": [
+        "Read current phase in MASTER_PLAN.json.",
+        "Execute step commands and create/modify files exactly as specified.",
+        "Run verification commands and manual checks; log results.",
+        "If verification fails, fix and retry; do not advance phases until acceptance criteria met.",
+        "Maintain a separate PROGRESS.md if needed for human-readable status."
+      ],
+      "review_checks": [
+        "All added files compile with TypeScript.",
+        "CSV fields parsed to numbers without NaN.",
+        "Charts display correct series and labels.",
+        "Responsive behavior verified.",
+        "Tests include // TEST: markers for stage-specific code."
+      ]
+    }
+  }
