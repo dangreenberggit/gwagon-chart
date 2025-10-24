@@ -2,32 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: 255 255 255;
-  --foreground: 17 24 39;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 224 60% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 60% 12%;
+    --primary: 226 72% 52%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 98%;
+    --secondary-foreground: 224 60% 20%;
+    --muted: 210 40% 97%;
+    --muted-foreground: 216 15% 45%;
+    --accent: 210 40% 97%;
+    --accent-foreground: 224 60% 20%;
+    --border: 214 32% 92%;
+    --input: 214 32% 92%;
+    --ring: 226 72% 52%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --radius: 12px;
+  }
+
+  * { @apply border-border; }
+  html, body, #root { height: 100%; }
+  body { 
+    @apply bg-background text-foreground antialiased; 
+    text-rendering: optimizeLegibility;
+  }
 }
 
-body {
-  color: rgb(var(--foreground));
-  background: rgb(var(--background));
-}
-
-/* Fix Tremor chart background and text contrast */
+/* Recharts light tweaks - using semantic tokens */
 .recharts-wrapper {
-  background-color: white !important;
+  background-color: hsl(var(--card)) !important;
 }
 
 .recharts-cartesian-axis-tick text,
 .recharts-legend-item-text,
 .recharts-label {
-  fill: #374151 !important;
+  fill: hsl(var(--muted-foreground)) !important;
   font-size: 12px !important;
-  color: #374151 !important;
+  color: hsl(var(--muted-foreground)) !important;
 }
 
-.recharts-cartesian-grid-horizontal line,
-.recharts-cartesian-grid-vertical line {
-  stroke: #e5e7eb !important;
+/* Simplified grid stroke using semantic token */
+.recharts-cartesian-grid line {
+  stroke: hsl(var(--border)) !important;
+}
+
+/* Enhanced tooltip styling */
+.recharts-tooltip-wrapper {
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.14));
+}
+
+.recharts-default-tooltip {
+  background: hsl(var(--card)) !important;
+  color: hsl(var(--card-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: 10px !important;
 }
 
 /* Ensure chart lines are visible */
@@ -44,9 +76,32 @@ body {
   stroke-width: 2px !important;
 }
 
-/* Fix Tremor chart container background */
+@layer components {
+  .card { 
+    @apply bg-card text-card-foreground rounded-lg border shadow-md; 
+  }
+  .section-title { 
+    @apply text-lg font-semibold tracking-tight; 
+  }
+  .subtle { 
+    @apply text-sm text-muted-foreground; 
+  }
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium 
+    transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
+    disabled:pointer-events-none disabled:opacity-50;
+  }
+  .btn-primary { 
+    @apply bg-primary text-primary-foreground hover:opacity-95 px-4 h-9; 
+  }
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 px-4 h-9;
+  }
+}
+
+/* Tremor chart container using semantic token */
 .tremor-LineChart-root {
-  background-color: white !important;
+  background-color: hsl(var(--card)) !important;
 }
 
 /* Ensure Tremor colors work properly */
