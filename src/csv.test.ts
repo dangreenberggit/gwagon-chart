@@ -21,7 +21,7 @@ describe("toSeriesRows", () => {
         const raw = [
             {
                 year: "2012",
-                us_wealth_top1_share_dfa_pct: "31.6",
+                sp500_total_return_pct: "16.0",
                 global_pe_aum_usd_trn: "2.0",
                 us_gclass_sales_units: "1408",
             },
@@ -29,7 +29,7 @@ describe("toSeriesRows", () => {
         const r = toSeriesRows(raw)[0];
         if (!r) throw new Error("Expected row");
         expect(r.year).toBe(2012);
-        expect(r.us_wealth_top1_share_dfa_pct).toBe(31.6);
+        expect(r.sp500_total_return_pct).toBe(16.0);
     });
 });
 
@@ -53,7 +53,7 @@ describe("edge cases", () => {
         const rows = toSeriesRows([
             {
                 year: "x",
-                us_wealth_top1_share_dfa_pct: "y",
+                sp500_total_return_pct: "y",
                 global_pe_aum_usd_trn: "1",
                 us_gclass_sales_units: "2",
             },

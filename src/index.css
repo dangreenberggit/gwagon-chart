@@ -12,3 +12,50 @@ body {
   background: rgb(var(--background));
 }
 
+/* Fix Tremor chart background and text contrast */
+.recharts-wrapper {
+  background-color: white !important;
+}
+
+.recharts-cartesian-axis-tick text,
+.recharts-legend-item-text,
+.recharts-label {
+  fill: #374151 !important;
+  font-size: 12px !important;
+  color: #374151 !important;
+}
+
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #e5e7eb !important;
+}
+
+/* Ensure chart lines are visible */
+.recharts-line-dot {
+  stroke-width: 2px !important;
+}
+
+.recharts-line {
+  stroke-width: 2px !important;
+}
+
+/* Ensure line paths are visible */
+.recharts-line-path {
+  stroke-width: 2px !important;
+}
+
+/* Fix Tremor chart container background */
+.tremor-LineChart-root {
+  background-color: white !important;
+}
+
+/* Ensure Tremor colors work properly */
+.tremor-LineChart-root .recharts-line {
+  stroke-width: 2px !important;
+}
+
+/* Fix any potential color inheritance issues */
+.recharts-line .recharts-line-path {
+  stroke-width: 2px !important;
+}
+

@@ -1,6 +1,6 @@
 export type SeriesRow = {
     year: number;
-    us_wealth_top1_share_dfa_pct: number;
+    sp500_total_return_pct: number;
     global_pe_aum_usd_trn: number;
     us_gclass_sales_units: number;
 };
@@ -27,7 +27,7 @@ export function parseCSV(text: string): Record<string, string>[] {
 export function toSeriesRows(rows: Record<string, string>[]): SeriesRow[] {
     return rows.map((r) => ({
         year: Number(r.year),
-        us_wealth_top1_share_dfa_pct: Number(r.us_wealth_top1_share_dfa_pct),
+        sp500_total_return_pct: Number(r.sp500_total_return_pct),
         global_pe_aum_usd_trn: Number(r.global_pe_aum_usd_trn),
         us_gclass_sales_units: Number(r.us_gclass_sales_units),
     }));
