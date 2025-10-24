@@ -127,13 +127,6 @@ export default function App() {
                     peAumIdx: Number((peIdx[i] ?? 0).toFixed(1)),
                     gSalesIdx: Number((salesIdx[i] ?? 0).toFixed(1)),
                 }));
-                console.log("Raw data sample:", base.slice(0, 3));
-                console.log("Indexed data sample:", indexed.slice(0, 3));
-                console.log("SPX cumulative data sample:", spxCum.slice(0, 3));
-                console.log(
-                    "Chart data sample:",
-                    toChartData(base).slice(0, 3)
-                );
                 setRows(base);
                 setIndexedRows(indexed);
                 setSpxCumData(spxCum);
@@ -446,25 +439,61 @@ export default function App() {
                             <p className="font-medium text-foreground mb-2">
                                 Data Sources:
                             </p>
-                            <ul className="space-y-1 subtle">
+                            <ul className="space-y-2 subtle">
                                 <li>
                                     <strong className="font-medium text-foreground">
                                         S&P 500 total return:
                                     </strong>{" "}
-                                    standard calendar-year total return
-                                    (compounded to form index).
+                                    <a
+                                        href="https://www.slickcharts.com/sp500/returns"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary hover:underline"
+                                    >
+                                        SlickCharts S&P 500 Returns
+                                    </a>{" "}
+                                    (annual, compounded to form index).
                                 </li>
                                 <li>
                                     <strong className="font-medium text-foreground">
                                         PE AUM:
                                     </strong>{" "}
-                                    McKinsey Global Private Markets.
+                                    <a
+                                        href="https://www.mckinsey.com/industries/private-capital/our-insights/global-private-markets-report"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary hover:underline"
+                                    >
+                                        McKinsey Global Private Markets Report
+                                    </a>
+                                    .
                                 </li>
                                 <li>
                                     <strong className="font-medium text-foreground">
-                                        G‑Class:
-                                    </strong>{" "}
-                                    MBUSA+CarFigures.
+                                        G‑Class (US sales):
+                                    </strong>
+                                    <ul className="ml-6 mt-1 space-y-1">
+                                        <li>
+                                            <a
+                                                href="https://media.mbusa.com/releases/release-4efd8afecd0ad84220062379551956e8-mercedes-benz-usa-reports-9-year-over-year-growth-for-passenger-car-sales"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-primary hover:underline"
+                                            >
+                                                MBUSA 2024 press release
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="https://carfigures.com/us-market-brand/mercedes-benz/g-class"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-primary hover:underline"
+                                            >
+                                                CarFigures historical sales
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
                             </ul>
                         </div>
