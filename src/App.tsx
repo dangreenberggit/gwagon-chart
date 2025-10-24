@@ -8,6 +8,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 // Import Tremor components
 import { LineChart } from "@tremor/react";
 import { CustomTooltip } from "./components/CustomTooltip";
+import { InteractiveLineChart } from "./components/InteractiveLineChart";
 
 type Row = {
     year: number;
@@ -208,7 +209,7 @@ export default function App() {
                                 </div>
                             }
                         >
-                            <LineChart
+                            <InteractiveLineChart
                                 className="h-64 sm:h-80 md:h-96"
                                 data={dataIndexed}
                                 index="Year"

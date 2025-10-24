@@ -30,7 +30,7 @@ export const CustomTooltip = ({
             "Global PE AUM (USD T)": "#f59e0b", // amber
             "US G‑Class sales (units)": "#10b981", // emerald
         };
-        return colorMap[dataKey] || category.color || "#6b7280";
+        return colorMap[dataKey] || "#6b7280";
     };
 
     return (
