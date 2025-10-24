@@ -7,6 +7,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // Import Tremor components
 import { LineChart } from "@tremor/react";
+import { CustomTooltip } from "./components/CustomTooltip";
 
 type Row = {
     year: number;
@@ -220,6 +221,7 @@ export default function App() {
                                 yAxisWidth={56}
                                 showLegend={true}
                                 showTooltip={true}
+                                customTooltip={CustomTooltip}
                                 valueFormatter={(v) =>
                                     typeof v === "number"
                                         ? v.toLocaleString(undefined, {
@@ -278,6 +280,7 @@ export default function App() {
                                         yAxisWidth={56}
                                         showLegend={false}
                                         showTooltip={true}
+                                        customTooltip={CustomTooltip}
                                         valueFormatter={(v) =>
                                             typeof v === "number"
                                                 ? v.toLocaleString(undefined, {
@@ -332,6 +335,7 @@ export default function App() {
                                         yAxisWidth={48}
                                         showLegend={false}
                                         showTooltip={true}
+                                        customTooltip={CustomTooltip}
                                         valueFormatter={(v) =>
                                             typeof v === "number"
                                                 ? `$${v.toFixed(1)}T`
@@ -388,6 +392,7 @@ export default function App() {
                                         yAxisWidth={52}
                                         showLegend={false}
                                         showTooltip={true}
+                                        customTooltip={CustomTooltip}
                                         valueFormatter={(v) =>
                                             typeof v === "number"
                                                 ? v.toLocaleString()

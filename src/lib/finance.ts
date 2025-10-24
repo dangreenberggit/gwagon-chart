@@ -20,13 +20,16 @@ export function buildTotalReturnIndex(
     let level = base;
 
     for (let i = 0; i < series.length; i++) {
-        const r = series[i].trPct / 100;
+        const item = series[i];
+        if (!item) continue;
+        
+        const r = item.trPct / 100;
         if (i === 0 && !baseYearIncluded) {
-            out.push({ year: series[i].year, index: Number(level.toFixed(2)) });
+            out.push({ year: item.year, index: Number(level.toFixed(2)) });
             continue;
         }
         level = level * (1 + r);
-        out.push({ year: series[i].year, index: Number(level.toFixed(2)) });
+        out.push({ year: item.year, index: Number(level.toFixed(2)) });
     }
 
     return out;
