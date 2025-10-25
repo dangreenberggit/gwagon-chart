@@ -48,7 +48,14 @@ function toChartData(rows: Row[]) {
 function toSPXCumData(spxCum: Array<{ year: number; index: number }>) {
     return spxCum.map((d) => ({
         Year: d.year.toString(),
-        "S&P 500 total return index (2012 = 100)": d.index,
+        "S&P 500 Cumulative Total Return Index (2012 = 100)": d.index,
+    }));
+}
+
+function toSPXReturnData(rows: Row[]) {
+    return rows.map((r) => ({
+        Year: r.year.toString(),
+        "S&P 500 Annual Total Return (%)": r.spxTR,
     }));
 }
 
@@ -63,6 +70,13 @@ function toGClassData(rows: Row[]) {
     return rows.map((r) => ({
         Year: r.year.toString(),
         "US G‑Class sales (units)": r.gSales,
+    }));
+}
+
+function toHouseholdNetWorthData(rows: Row[]) {
+    return rows.map((r) => ({
+        Year: r.year.toString(),
+        "Household Net Worth (USD T)": r.hhNetWorthBn,
     }));
 }
 
@@ -98,7 +112,6 @@ function toPriceIndexData(rows: IndexedRow[]) {
 function toPriceIndexWithContextData(rows: IndexedRow[]) {
     return rows.map((r) => ({
         Year: r.year.toString(),
-        "G 550 MSRP (index, 2012 = 100)": r.g550MsrpIdx,
         "G‑Class Est. ATP (index, 2012 = 100)": r.gClassAtpIdx,
         "Global PE AUM (index, 2012 = 100)": r.peAumIdx,
         "Household net worth (index, 2012 = 100)": r.hhNetWorthIdx,
@@ -118,11 +131,13 @@ export default function App() {
         pe: boolean;
         gclass: boolean;
         prices: boolean;
+        hhNetWorth: boolean;
     }>({
         spx: false,
         pe: false,
         gclass: false,
         prices: false,
+        hhNetWorth: false,
     });
 
     useEffect(() => {
@@ -227,8 +242,10 @@ export default function App() {
         );
 
     const spxData = toSPXCumData(spxCumData);
+    const spxReturnData = toSPXReturnData(rows);
     const peData = toPEData(rows);
     const gClassData = toGClassData(rows);
+    const hhNetWorthData = toHouseholdNetWorthData(rows);
     const priceData = toPriceData(rows);
     const priceIndexData = toPriceIndexData(indexedRows);
     const priceIndexWithContextData = toPriceIndexWithContextData(indexedRows);
@@ -258,8 +275,7 @@ export default function App() {
                 <div className="grid gap-6">
                     <div className="text-center mb-6">
                         <h1 className="text-3xl font-bold mb-2">
-                            S&P 500 Total Return, PE AUM, G‑Class Sales, and
-                            Household Net Worth (2012–2024)
+                            S&P 500 Total Return and G‑Class Sales (2012–2024)
                         </h1>
                     </div>
 
@@ -268,8 +284,7 @@ export default function App() {
                         <CardHeader>
                             <CardTitle>
                                 Indexed Comparison (2012 = 100): S&P 500 Total
-                                Return Index, Global PE AUM, US G‑Class Sales,
-                                and Household Net Worth
+                                Return Index and US G‑Class Sales
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
@@ -288,16 +303,55 @@ export default function App() {
                                     index="Year"
                                     categories={[
                                         "S&P 500 total return index (2012 = 100)",
-                                        "Global PE AUM (index, 2012 = 100)",
                                         "US G‑Class sales (index, 2012 = 100)",
+                                    ]}
+                                    colors={["blue", "emerald"]}
+                                    yAxisWidth={56}
+                                    showLegend={true}
+                                    showTooltip={true}
+                                    customTooltip={CustomTooltip}
+                                    valueFormatter={(v) =>
+                                        typeof v === "number"
+                                            ? v.toLocaleString(undefined, {
+                                                  maximumFractionDigits: 1,
+                                              })
+                                            : String(v)
+                                    }
+                                    connectNulls
+                                    curveType="monotone"
+                                />
+                            </ErrorBoundary>
+                        </CardContent>
+                    </Card>
+
+                    {/* G-Class ATP vs PE AUM and Household Net Worth */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>
+                                G-Class ATP vs. PE AUM and Household Net Worth
+                                (Index, 2012 = 100)
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <ErrorBoundary
+                                fallback={
+                                    <div className="h-64 sm:h-80 md:h-96 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
+                                        <p className="text-muted-foreground">
+                                            Chart failed to load
+                                        </p>
+                                    </div>
+                                }
+                            >
+                                <InteractiveLineChart
+                                    className="h-64 sm:h-80 md:h-96"
+                                    data={priceIndexWithContextData}
+                                    index="Year"
+                                    categories={[
+                                        "G‑Class Est. ATP (index, 2012 = 100)",
+                                        "Global PE AUM (index, 2012 = 100)",
                                         "Household net worth (index, 2012 = 100)",
                                     ]}
-                                    colors={[
-                                        "blue",
-                                        "amber",
-                                        "emerald",
-                                        "violet",
-                                    ]}
+                                    colors={["pink", "amber", "violet"]}
                                     yAxisWidth={56}
                                     showLegend={true}
                                     showTooltip={true}
@@ -329,9 +383,7 @@ export default function App() {
                                 onClick={() => toggleChart("spx")}
                             >
                                 <CardTitle className="flex items-center justify-between">
-                                    <span>
-                                        S&P 500 Total Return Index (2012 = 100)
-                                    </span>
+                                    <span>S&P 500 Total Return</span>
                                     <span className="subtle font-normal">
                                         {expandedCharts.spx ? "▼" : "▶"} Click
                                         to{" "}
@@ -343,43 +395,95 @@ export default function App() {
                             </CardHeader>
                             {expandedCharts.spx && (
                                 <CardContent>
-                                    <ErrorBoundary
-                                        fallback={
-                                            <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
-                                                <p className="text-muted-foreground">
-                                                    Chart failed to load
-                                                </p>
-                                            </div>
-                                        }
-                                    >
-                                        <LineChart
-                                            className="h-48 w-full"
-                                            data={spxData}
-                                            index="Year"
-                                            categories={[
-                                                "S&P 500 total return index (2012 = 100)",
-                                            ]}
-                                            colors={["blue"]}
-                                            yAxisWidth={56}
-                                            showLegend={false}
-                                            showTooltip={true}
-                                            customTooltip={CustomTooltip}
-                                            valueFormatter={(v) =>
-                                                typeof v === "number"
-                                                    ? v.toLocaleString(
-                                                          undefined,
-                                                          {
-                                                              maximumFractionDigits: 2,
-                                                          }
-                                                      )
-                                                    : String(v)
-                                            }
-                                            connectNulls
-                                            curveType="monotone"
-                                            xAxisLabel="Year"
-                                            yAxisLabel="Index (2012 = 100)"
-                                        />
-                                    </ErrorBoundary>
+                                    <div className="space-y-6">
+                                        {/* Annual Return Chart */}
+                                        <div>
+                                            <h3 className="font-medium mb-3">
+                                                Annual Total Return (%)
+                                            </h3>
+                                            <ErrorBoundary
+                                                fallback={
+                                                    <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
+                                                        <p className="text-muted-foreground">
+                                                            Chart failed to load
+                                                        </p>
+                                                    </div>
+                                                }
+                                            >
+                                                <LineChart
+                                                    className="h-48 w-full"
+                                                    data={spxReturnData}
+                                                    index="Year"
+                                                    categories={[
+                                                        "S&P 500 Annual Total Return (%)",
+                                                    ]}
+                                                    colors={["blue"]}
+                                                    yAxisWidth={56}
+                                                    showLegend={false}
+                                                    showTooltip={true}
+                                                    customTooltip={
+                                                        CustomTooltip
+                                                    }
+                                                    valueFormatter={(v) =>
+                                                        typeof v === "number"
+                                                            ? `${v.toFixed(1)}%`
+                                                            : String(v)
+                                                    }
+                                                    connectNulls
+                                                    curveType="monotone"
+                                                    xAxisLabel="Year"
+                                                    yAxisLabel="Return (%)"
+                                                />
+                                            </ErrorBoundary>
+                                        </div>
+
+                                        {/* Cumulative Return Chart */}
+                                        <div>
+                                            <h3 className="font-medium mb-3">
+                                                Cumulative Total Return Index
+                                                (2012 = 100)
+                                            </h3>
+                                            <ErrorBoundary
+                                                fallback={
+                                                    <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
+                                                        <p className="text-muted-foreground">
+                                                            Chart failed to load
+                                                        </p>
+                                                    </div>
+                                                }
+                                            >
+                                                <LineChart
+                                                    className="h-64 w-full"
+                                                    data={spxData}
+                                                    index="Year"
+                                                    categories={[
+                                                        "S&P 500 Cumulative Total Return Index (2012 = 100)",
+                                                    ]}
+                                                    colors={["blue"]}
+                                                    yAxisWidth={56}
+                                                    showLegend={false}
+                                                    showTooltip={true}
+                                                    customTooltip={
+                                                        CustomTooltip
+                                                    }
+                                                    valueFormatter={(v) =>
+                                                        typeof v === "number"
+                                                            ? v.toLocaleString(
+                                                                  undefined,
+                                                                  {
+                                                                      maximumFractionDigits: 1,
+                                                                  }
+                                                              )
+                                                            : String(v)
+                                                    }
+                                                    connectNulls
+                                                    curveType="monotone"
+                                                    xAxisLabel="Year"
+                                                    yAxisLabel="Index Value"
+                                                />
+                                            </ErrorBoundary>
+                                        </div>
+                                    </div>
                                 </CardContent>
                             )}
                         </Card>
@@ -499,6 +603,63 @@ export default function App() {
                             )}
                         </Card>
 
+                        {/* Household Net Worth Chart */}
+                        <Card>
+                            <CardHeader
+                                className="cursor-pointer hover:bg-accent transition-colors"
+                                onClick={() => toggleChart("hhNetWorth")}
+                            >
+                                <CardTitle className="flex items-center justify-between">
+                                    <span>
+                                        US Household Net Worth (USD Trillions)
+                                    </span>
+                                    <span className="subtle font-normal">
+                                        {expandedCharts.hhNetWorth ? "▼" : "▶"}{" "}
+                                        Click to{" "}
+                                        {expandedCharts.hhNetWorth
+                                            ? "collapse"
+                                            : "expand"}
+                                    </span>
+                                </CardTitle>
+                            </CardHeader>
+                            {expandedCharts.hhNetWorth && (
+                                <CardContent>
+                                    <ErrorBoundary
+                                        fallback={
+                                            <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
+                                                <p className="text-muted-foreground">
+                                                    Chart failed to load
+                                                </p>
+                                            </div>
+                                        }
+                                    >
+                                        <LineChart
+                                            className="h-48 w-full"
+                                            data={hhNetWorthData}
+                                            index="Year"
+                                            categories={[
+                                                "Household Net Worth (USD T)",
+                                            ]}
+                                            colors={["violet"]}
+                                            yAxisWidth={48}
+                                            showLegend={false}
+                                            showTooltip={true}
+                                            customTooltip={CustomTooltip}
+                                            valueFormatter={(v) =>
+                                                typeof v === "number"
+                                                    ? `$${v.toFixed(1)}T`
+                                                    : String(v)
+                                            }
+                                            connectNulls
+                                            curveType="monotone"
+                                            xAxisLabel="Year"
+                                            yAxisLabel="USD Trillions"
+                                        />
+                                    </ErrorBoundary>
+                                </CardContent>
+                            )}
+                        </Card>
+
                         {/* G-Class Pricing Chart */}
                         <Card>
                             <CardHeader
@@ -507,8 +668,7 @@ export default function App() {
                             >
                                 <CardTitle className="flex items-center justify-between">
                                     <span>
-                                        G-Class Pricing: MSRP and Estimated
-                                        Transaction Price
+                                        G-Class Estimated Transaction Price
                                     </span>
                                     <span className="subtle font-normal">
                                         {expandedCharts.prices ? "▼" : "▶"}{" "}
@@ -525,7 +685,8 @@ export default function App() {
                                         {/* Price Levels */}
                                         <div>
                                             <h3 className="font-medium mb-3">
-                                                Price Levels (USD)
+                                                Estimated Transaction Price
+                                                (USD)
                                             </h3>
                                             <ErrorBoundary
                                                 fallback={
@@ -541,12 +702,11 @@ export default function App() {
                                                     data={priceData}
                                                     index="Year"
                                                     categories={[
-                                                        "G 550 base MSRP (USD)",
                                                         "G‑Class Est. ATP (Proxy) (USD)",
                                                     ]}
-                                                    colors={["fuchsia", "pink"]}
+                                                    colors={["pink"]}
                                                     yAxisWidth={68}
-                                                    showLegend={true}
+                                                    showLegend={false}
                                                     showTooltip={true}
                                                     customTooltip={
                                                         CustomTooltip
@@ -564,63 +724,6 @@ export default function App() {
                                             </ErrorBoundary>
                                         </div>
 
-                                        {/* Price Indices with Context */}
-                                        <div>
-                                            <h3 className="font-medium mb-3">
-                                                Price Indices vs. PE AUM and
-                                                Household Net Worth (2012 = 100)
-                                            </h3>
-                                            <ErrorBoundary
-                                                fallback={
-                                                    <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
-                                                        <p className="text-muted-foreground">
-                                                            Chart failed to load
-                                                        </p>
-                                                    </div>
-                                                }
-                                            >
-                                                <InteractiveLineChart
-                                                    className="h-64 w-full"
-                                                    data={
-                                                        priceIndexWithContextData
-                                                    }
-                                                    index="Year"
-                                                    categories={[
-                                                        "G 550 MSRP (index, 2012 = 100)",
-                                                        "G‑Class Est. ATP (index, 2012 = 100)",
-                                                        "Global PE AUM (index, 2012 = 100)",
-                                                        "Household net worth (index, 2012 = 100)",
-                                                    ]}
-                                                    colors={[
-                                                        "fuchsia",
-                                                        "pink",
-                                                        "amber",
-                                                        "violet",
-                                                    ]}
-                                                    yAxisWidth={56}
-                                                    showLegend={true}
-                                                    showTooltip={true}
-                                                    customTooltip={
-                                                        CustomTooltip
-                                                    }
-                                                    valueFormatter={(v) =>
-                                                        typeof v === "number"
-                                                            ? v.toLocaleString(
-                                                                  undefined,
-                                                                  {
-                                                                      maximumFractionDigits: 1,
-                                                                  }
-                                                              )
-                                                            : String(v)
-                                                    }
-                                                    connectNulls
-                                                    curveType="monotone"
-                                                    xAxisLabel="Year"
-                                                    yAxisLabel="Index (2012 = 100)"
-                                                />
-                                            </ErrorBoundary>
-                                        </div>
-
                                         {/* Definitions */}
                                         <div className="border-t pt-4">
                                             <p className="text-sm font-medium mb-2">
@@ -629,23 +732,9 @@ export default function App() {
                                             <ul className="space-y-2 text-sm subtle">
                                                 <li>
                                                     <strong className="font-medium text-foreground">
-                                                        G 550 base MSRP (USD):
-                                                    </strong>{" "}
-                                                    Base manufacturer's
-                                                    suggested retail price for
-                                                    the Mercedes‑Benz G 550 in
-                                                    the US market, excluding
-                                                    destination charge and
-                                                    options. Assigned to the
-                                                    calendar year in which the
-                                                    corresponding model year
-                                                    primarily sold.
-                                                </li>
-                                                <li>
-                                                    <strong className="font-medium text-foreground">
                                                         G‑Class Estimated
                                                         Transaction Price
-                                                        (Proxy) (USD):
+                                                        (Proxy):
                                                     </strong>{" "}
                                                     Estimated new-vehicle
                                                     transaction price for the
@@ -654,20 +743,12 @@ export default function App() {
                                                     Multiplier calibrated to a
                                                     public Kelley Blue Book/Cox
                                                     Automotive report citing
-                                                    G‑Class ATP in March 2024.
-                                                    Reflects trim/mix (e.g., AMG
-                                                    G 63), options, and market
+                                                    G‑Class ATP in March 2024
+                                                    (~$208,663). Reflects
+                                                    trim/mix (e.g., AMG G 63),
+                                                    options, and market
                                                     conditions. This is a proxy,
                                                     not observed ATP.
-                                                </li>
-                                                <li>
-                                                    <strong className="font-medium text-foreground">
-                                                        Index (2012 = 100):
-                                                    </strong>{" "}
-                                                    Each series is normalized so
-                                                    the 2012 value equals 100.
-                                                    Values above 100 indicate
-                                                    growth relative to 2012.
                                                 </li>
                                             </ul>
                                         </div>
@@ -777,7 +858,7 @@ export default function App() {
                                 </li>
                                 <li>
                                     <strong className="font-medium text-foreground">
-                                        G 550 MSRP (US):
+                                        G 550 MSRP (basis for ATP proxy):
                                     </strong>
                                     <ul className="ml-6 mt-1 space-y-1">
                                         <li>
@@ -833,16 +914,15 @@ export default function App() {
                                 Methodology Note:
                             </p>
                             <p className="text-sm subtle">
-                                G 550 base MSRP is used as the backbone price
-                                series (US market, base trim, excluding
-                                destination/options). We compute an Estimated
-                                Transaction Price (Proxy) as a fixed multiple of
-                                MSRP calibrated to a publicly cited ATP value
-                                for March 2024 from Kelley Blue Book/Cox
-                                Automotive. This proxy reflects trim/mix and
-                                options and is presented as an estimate only.
-                                Both raw USD values and 2012‑based indices are
-                                provided for charting.
+                                Charts display the Estimated Transaction Price
+                                (Proxy), which is computed as a fixed multiple
+                                of G 550 base MSRP (US market, base trim,
+                                excluding destination/options). The multiplier
+                                is calibrated to a publicly cited ATP value for
+                                March 2024 from Kelley Blue Book/Cox Automotive
+                                (~$208,663). This proxy reflects trim/mix (e.g.,
+                                AMG G 63), options, and market conditions, and
+                                is presented as an estimate only.
                             </p>
                         </div>
                         <div className="flex items-center justify-between pt-4 border-t">
