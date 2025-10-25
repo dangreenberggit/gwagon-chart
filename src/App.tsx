@@ -1,8 +1,9 @@
 import "./index.css";
 import { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { parseCSV, toSeriesRows, indexSeries } from "@/lib/csv";
+import { parseCSV, toSeriesRows } from "@/lib/csv";
 import { buildTotalReturnIndex } from "@/lib/finance";
+import { indexSeries, indexLevelsToBase100 } from "@/lib/utils";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // Import Tremor components
@@ -15,6 +16,12 @@ type Row = {
     spxTR: number;
     peAumT: number;
     gSales: number;
+    g550Msrp: number;
+    gClassAtp: number;
+    g550MsrpIdx: number;
+    gClassAtpIdx: number;
+    hhNetWorthBn: number;
+    hhNetWorthIdx: number;
 };
 
 type IndexedRow = {
@@ -22,6 +29,9 @@ type IndexedRow = {
     spxCumIdx: number | null;
     peAumIdx: number;
     gSalesIdx: number;
+    g550MsrpIdx: number;
+    gClassAtpIdx: number;
+    hhNetWorthIdx: number;
 };
 
 // Transform to Tremor-friendly data objects for combined chart
@@ -63,6 +73,35 @@ function toIndexedChartData(rows: IndexedRow[]) {
         "S&P 500 total return index (2012 = 100)": r.spxCumIdx,
         "Global PE AUM (index, 2012 = 100)": r.peAumIdx,
         "US G‑Class sales (index, 2012 = 100)": r.gSalesIdx,
+        "Household net worth (index, 2012 = 100)": r.hhNetWorthIdx,
+    }));
+}
+
+// Price data transformers
+function toPriceData(rows: Row[]) {
+    return rows.map((r) => ({
+        Year: r.year.toString(),
+        "G 550 base MSRP (USD)": r.g550Msrp,
+        "G‑Class Est. ATP (Proxy) (USD)": r.gClassAtp,
+    }));
+}
+
+function toPriceIndexData(rows: IndexedRow[]) {
+    return rows.map((r) => ({
+        Year: r.year.toString(),
+        "G 550 MSRP (index, 2012 = 100)": r.g550MsrpIdx,
+        "G‑Class Est. ATP (index, 2012 = 100)": r.gClassAtpIdx,
+    }));
+}
+
+// Price index with PE AUM and Household Net Worth for comparison
+function toPriceIndexWithContextData(rows: IndexedRow[]) {
+    return rows.map((r) => ({
+        Year: r.year.toString(),
+        "G 550 MSRP (index, 2012 = 100)": r.g550MsrpIdx,
+        "G‑Class Est. ATP (index, 2012 = 100)": r.gClassAtpIdx,
+        "Global PE AUM (index, 2012 = 100)": r.peAumIdx,
+        "Household net worth (index, 2012 = 100)": r.hhNetWorthIdx,
     }));
 }
 
@@ -78,10 +117,12 @@ export default function App() {
         spx: boolean;
         pe: boolean;
         gclass: boolean;
+        prices: boolean;
     }>({
         spx: false,
         pe: false,
         gclass: false,
+        prices: false,
     });
 
     useEffect(() => {
@@ -98,6 +139,12 @@ export default function App() {
                     spxTR: r.sp500_total_return_pct,
                     peAumT: r.global_pe_aum_usd_trn,
                     gSales: r.us_gclass_sales_units,
+                    g550Msrp: r.g550_base_msrp_usd,
+                    gClassAtp: r.gclass_est_atp_usd_proxy,
+                    g550MsrpIdx: r.g550_msrp_index_2012,
+                    gClassAtpIdx: r.gclass_est_atp_index_2012,
+                    hhNetWorthBn: r.hh_net_worth_usd_bn_q4,
+                    hhNetWorthIdx: r.hh_net_worth_index_2012,
                 }));
 
                 // Build cumulative SPX total return index (2012 base applied)
@@ -120,12 +167,27 @@ export default function App() {
                     0
                 );
 
+                // Use indexLevelsToBase100 for price indices (2012 = index 0)
+                const g550MsrpIdx = indexLevelsToBase100(
+                    base.map((r) => r.g550Msrp),
+                    0,
+                    { decimals: 1, onIssue: (msg) => console.warn(msg) }
+                );
+                const gClassAtpIdx = indexLevelsToBase100(
+                    base.map((r) => r.gClassAtp),
+                    0,
+                    { decimals: 1, onIssue: (msg) => console.warn(msg) }
+                );
+
                 // Use cumulative SPX index directly (already represents accumulation)
                 const indexed = base.map((r, i) => ({
                     year: r.year,
                     spxCumIdx: spxCumByYear.get(r.year) ?? null, // number
                     peAumIdx: Number((peIdx[i] ?? 0).toFixed(1)),
                     gSalesIdx: Number((salesIdx[i] ?? 0).toFixed(1)),
+                    g550MsrpIdx: g550MsrpIdx[i] ?? 0,
+                    gClassAtpIdx: gClassAtpIdx[i] ?? 0,
+                    hhNetWorthIdx: r.hhNetWorthIdx, // Use pre-indexed value from CSV
                 }));
                 setRows(base);
                 setIndexedRows(indexed);
@@ -167,6 +229,9 @@ export default function App() {
     const spxData = toSPXCumData(spxCumData);
     const peData = toPEData(rows);
     const gClassData = toGClassData(rows);
+    const priceData = toPriceData(rows);
+    const priceIndexData = toPriceIndexData(indexedRows);
+    const priceIndexWithContextData = toPriceIndexWithContextData(indexedRows);
     const dataIndexed = toIndexedChartData(indexedRows);
 
     const toggleChart = (chart: keyof typeof expandedCharts) => {
@@ -193,8 +258,8 @@ export default function App() {
                 <div className="grid gap-6">
                     <div className="text-center mb-6">
                         <h1 className="text-3xl font-bold mb-2">
-                            S&P 500 Total Return Index (2012=100), PE AUM, and
-                            G‑Class Sales (2012–2024)
+                            S&P 500 Total Return, PE AUM, G‑Class Sales, and
+                            Household Net Worth (2012–2024)
                         </h1>
                     </div>
 
@@ -203,8 +268,8 @@ export default function App() {
                         <CardHeader>
                             <CardTitle>
                                 Indexed Comparison (2012 = 100): S&P 500 Total
-                                Return Index, Global PE AUM, and US G‑Class
-                                Sales
+                                Return Index, Global PE AUM, US G‑Class Sales,
+                                and Household Net Worth
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
@@ -225,8 +290,14 @@ export default function App() {
                                         "S&P 500 total return index (2012 = 100)",
                                         "Global PE AUM (index, 2012 = 100)",
                                         "US G‑Class sales (index, 2012 = 100)",
+                                        "Household net worth (index, 2012 = 100)",
                                     ]}
-                                    colors={["blue", "amber", "emerald"]}
+                                    colors={[
+                                        "blue",
+                                        "amber",
+                                        "emerald",
+                                        "violet",
+                                    ]}
                                     yAxisWidth={56}
                                     showLegend={true}
                                     showTooltip={true}
@@ -427,6 +498,183 @@ export default function App() {
                                 </CardContent>
                             )}
                         </Card>
+
+                        {/* G-Class Pricing Chart */}
+                        <Card>
+                            <CardHeader
+                                className="cursor-pointer hover:bg-accent transition-colors"
+                                onClick={() => toggleChart("prices")}
+                            >
+                                <CardTitle className="flex items-center justify-between">
+                                    <span>
+                                        G-Class Pricing: MSRP and Estimated
+                                        Transaction Price
+                                    </span>
+                                    <span className="subtle font-normal">
+                                        {expandedCharts.prices ? "▼" : "▶"}{" "}
+                                        Click to{" "}
+                                        {expandedCharts.prices
+                                            ? "collapse"
+                                            : "expand"}
+                                    </span>
+                                </CardTitle>
+                            </CardHeader>
+                            {expandedCharts.prices && (
+                                <CardContent>
+                                    <div className="space-y-6">
+                                        {/* Price Levels */}
+                                        <div>
+                                            <h3 className="font-medium mb-3">
+                                                Price Levels (USD)
+                                            </h3>
+                                            <ErrorBoundary
+                                                fallback={
+                                                    <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
+                                                        <p className="text-muted-foreground">
+                                                            Chart failed to load
+                                                        </p>
+                                                    </div>
+                                                }
+                                            >
+                                                <LineChart
+                                                    className="h-64 w-full"
+                                                    data={priceData}
+                                                    index="Year"
+                                                    categories={[
+                                                        "G 550 base MSRP (USD)",
+                                                        "G‑Class Est. ATP (Proxy) (USD)",
+                                                    ]}
+                                                    colors={["fuchsia", "pink"]}
+                                                    yAxisWidth={68}
+                                                    showLegend={true}
+                                                    showTooltip={true}
+                                                    customTooltip={
+                                                        CustomTooltip
+                                                    }
+                                                    valueFormatter={(v) =>
+                                                        typeof v === "number"
+                                                            ? `$${v.toLocaleString()}`
+                                                            : String(v)
+                                                    }
+                                                    connectNulls
+                                                    curveType="monotone"
+                                                    xAxisLabel="Year"
+                                                    yAxisLabel="Price (USD)"
+                                                />
+                                            </ErrorBoundary>
+                                        </div>
+
+                                        {/* Price Indices with Context */}
+                                        <div>
+                                            <h3 className="font-medium mb-3">
+                                                Price Indices vs. PE AUM and
+                                                Household Net Worth (2012 = 100)
+                                            </h3>
+                                            <ErrorBoundary
+                                                fallback={
+                                                    <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
+                                                        <p className="text-muted-foreground">
+                                                            Chart failed to load
+                                                        </p>
+                                                    </div>
+                                                }
+                                            >
+                                                <InteractiveLineChart
+                                                    className="h-64 w-full"
+                                                    data={
+                                                        priceIndexWithContextData
+                                                    }
+                                                    index="Year"
+                                                    categories={[
+                                                        "G 550 MSRP (index, 2012 = 100)",
+                                                        "G‑Class Est. ATP (index, 2012 = 100)",
+                                                        "Global PE AUM (index, 2012 = 100)",
+                                                        "Household net worth (index, 2012 = 100)",
+                                                    ]}
+                                                    colors={[
+                                                        "fuchsia",
+                                                        "pink",
+                                                        "amber",
+                                                        "violet",
+                                                    ]}
+                                                    yAxisWidth={56}
+                                                    showLegend={true}
+                                                    showTooltip={true}
+                                                    customTooltip={
+                                                        CustomTooltip
+                                                    }
+                                                    valueFormatter={(v) =>
+                                                        typeof v === "number"
+                                                            ? v.toLocaleString(
+                                                                  undefined,
+                                                                  {
+                                                                      maximumFractionDigits: 1,
+                                                                  }
+                                                              )
+                                                            : String(v)
+                                                    }
+                                                    connectNulls
+                                                    curveType="monotone"
+                                                    xAxisLabel="Year"
+                                                    yAxisLabel="Index (2012 = 100)"
+                                                />
+                                            </ErrorBoundary>
+                                        </div>
+
+                                        {/* Definitions */}
+                                        <div className="border-t pt-4">
+                                            <p className="text-sm font-medium mb-2">
+                                                Definitions:
+                                            </p>
+                                            <ul className="space-y-2 text-sm subtle">
+                                                <li>
+                                                    <strong className="font-medium text-foreground">
+                                                        G 550 base MSRP (USD):
+                                                    </strong>{" "}
+                                                    Base manufacturer's
+                                                    suggested retail price for
+                                                    the Mercedes‑Benz G 550 in
+                                                    the US market, excluding
+                                                    destination charge and
+                                                    options. Assigned to the
+                                                    calendar year in which the
+                                                    corresponding model year
+                                                    primarily sold.
+                                                </li>
+                                                <li>
+                                                    <strong className="font-medium text-foreground">
+                                                        G‑Class Estimated
+                                                        Transaction Price
+                                                        (Proxy) (USD):
+                                                    </strong>{" "}
+                                                    Estimated new-vehicle
+                                                    transaction price for the
+                                                    G‑Class computed as a
+                                                    multiple of G 550 base MSRP.
+                                                    Multiplier calibrated to a
+                                                    public Kelley Blue Book/Cox
+                                                    Automotive report citing
+                                                    G‑Class ATP in March 2024.
+                                                    Reflects trim/mix (e.g., AMG
+                                                    G 63), options, and market
+                                                    conditions. This is a proxy,
+                                                    not observed ATP.
+                                                </li>
+                                                <li>
+                                                    <strong className="font-medium text-foreground">
+                                                        Index (2012 = 100):
+                                                    </strong>{" "}
+                                                    Each series is normalized so
+                                                    the 2012 value equals 100.
+                                                    Values above 100 indicate
+                                                    growth relative to 2012.
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            )}
+                        </Card>
                     </div>
                 </div>
             </main>
@@ -495,7 +743,107 @@ export default function App() {
                                         </li>
                                     </ul>
                                 </li>
+                                <li>
+                                    <strong className="font-medium text-foreground">
+                                        G‑Class ATP calibration:
+                                    </strong>{" "}
+                                    <a
+                                        href="https://www.kbb.com/press-releases/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary hover:underline"
+                                    >
+                                        Kelley Blue Book / Cox Automotive
+                                    </a>
+                                    , New‑Vehicle Average Transaction Price
+                                    Report, March 2024: G‑Class ATP ≈ $208,663.
+                                </li>
+                                <li>
+                                    <strong className="font-medium text-foreground">
+                                        Household net worth:
+                                    </strong>{" "}
+                                    <a
+                                        href="https://fred.stlouisfed.org/series/TNWBSHNO"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary hover:underline"
+                                    >
+                                        Federal Reserve Economic Data (FRED)
+                                    </a>
+                                    , Series TNWBSHNO — Households and nonprofit
+                                    organizations; net worth, level. Year-end
+                                    (Q4) observations; values are subject to
+                                    revision by the Federal Reserve.
+                                </li>
+                                <li>
+                                    <strong className="font-medium text-foreground">
+                                        G 550 MSRP (US):
+                                    </strong>
+                                    <ul className="ml-6 mt-1 space-y-1">
+                                        <li>
+                                            <a
+                                                href="https://media.mbusa.com"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-primary hover:underline"
+                                            >
+                                                MBUSA media resources
+                                            </a>{" "}
+                                            (2018 G‑Class Quick Reference Guide,
+                                            G 550 MSRP $123,600)
+                                        </li>
+                                        <li>
+                                            US News model pages:
+                                            <ul className="ml-4 mt-1 space-y-1">
+                                                <li>
+                                                    <a
+                                                        href="https://cars.usnews.com/cars-trucks/mercedes-benz/g-class/2018/specs"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-primary hover:underline"
+                                                    >
+                                                        2018 G 550
+                                                    </a>{" "}
+                                                    base MSRP $123,600
+                                                </li>
+                                                <li>
+                                                    <a
+                                                        href="https://cars.usnews.com/cars-trucks/mercedes-benz/g-class/2020/specs"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-primary hover:underline"
+                                                    >
+                                                        2020 G 550
+                                                    </a>{" "}
+                                                    base MSRP $130,900
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            MY2023 G 550 base MSRP ≈ $139,900
+                                            (automotive press, 2022 launch
+                                            coverage)
+                                        </li>
+                                    </ul>
+                                </li>
                             </ul>
+                        </div>
+                        <div className="border-t pt-4">
+                            <p className="font-medium text-foreground mb-2">
+                                Methodology Note:
+                            </p>
+                            <p className="text-sm subtle">
+                                G 550 base MSRP is used as the backbone price
+                                series (US market, base trim, excluding
+                                destination/options). We compute an Estimated
+                                Transaction Price (Proxy) as a fixed multiple of
+                                MSRP calibrated to a publicly cited ATP value
+                                for March 2024 from Kelley Blue Book/Cox
+                                Automotive. This proxy reflects trim/mix and
+                                options and is presented as an estimate only.
+                                Both raw USD values and 2012‑based indices are
+                                provided for charting.
+                            </p>
                         </div>
                         <div className="flex items-center justify-between pt-4 border-t">
                             <span className="subtle">

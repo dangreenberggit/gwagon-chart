@@ -1,6 +1,7 @@
 // TEST: Phase 2 - CSV parsing and indexing
 import { describe, it, expect } from "bun:test";
-import { parseCSV, toSeriesRows, indexSeries } from "./lib/csv";
+import { parseCSV, toSeriesRows } from "./lib/csv";
+import { indexSeries } from "./lib/utils";
 
 describe("parseCSV", () => {
     it("parses simple CSV", () => {

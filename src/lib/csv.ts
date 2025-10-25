@@ -3,6 +3,12 @@ export type SeriesRow = {
     sp500_total_return_pct: number;
     global_pe_aum_usd_trn: number;
     us_gclass_sales_units: number;
+    g550_base_msrp_usd: number;
+    gclass_est_atp_usd_proxy: number;
+    g550_msrp_index_2012: number;
+    gclass_est_atp_index_2012: number;
+    hh_net_worth_usd_bn_q4: number;
+    hh_net_worth_index_2012: number;
 };
 
 // Simple CSV parser (no quoted commas).
@@ -30,14 +36,11 @@ export function toSeriesRows(rows: Record<string, string>[]): SeriesRow[] {
         sp500_total_return_pct: Number(r.sp500_total_return_pct),
         global_pe_aum_usd_trn: Number(r.global_pe_aum_usd_trn),
         us_gclass_sales_units: Number(r.us_gclass_sales_units),
+        g550_base_msrp_usd: Number(r.g550_base_msrp_usd),
+        gclass_est_atp_usd_proxy: Number(r.gclass_est_atp_usd_proxy),
+        g550_msrp_index_2012: Number(r.g550_msrp_index_2012),
+        gclass_est_atp_index_2012: Number(r.gclass_est_atp_index_2012),
+        hh_net_worth_usd_bn_q4: Number(r.hh_net_worth_usd_bn_q4),
+        hh_net_worth_index_2012: Number(r.hh_net_worth_index_2012),
     }));
-}
-
-// Index series to base = 100 (e.g., first year).
-// TEST: Protect against divide-by-zero; return zeros if base is 0 or invalid.
-export function indexSeries(values: number[], baseIndex = 0): number[] {
-    const base = values[baseIndex];
-    if (base === undefined || !isFinite(base) || base === 0)
-        return values.map(() => 0);
-    return values.map((v) => (v / base) * 100);
 }
