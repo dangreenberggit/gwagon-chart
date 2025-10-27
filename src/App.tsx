@@ -275,21 +275,15 @@ export default function App() {
                 <div className="grille-pattern absolute inset-0 pointer-events-none" />
                 <div className="relative mx-auto max-w-7xl px-4 py-4">
                     <div className="flex items-center justify-between">
-                        {/* Left: emblem + titles */}
                         <div className="flex items-center gap-3">
-                            {/* circular emblem (headlamp nod) */}
-                            <div
-                                className="size-10 rounded-full relative flex items-center justify-center"
-                                aria-hidden="true"
-                            >
-                                <div className="absolute inset-0 rounded-full border border-mb-silver/70 bg-white" />
-                                <div className="absolute inset-1 rounded-full border border-border" />
-                                <span className="relative z-10 text-[13px] font-semibold tracking-tight text-foreground">
-                                    G
-                                </span>
+                            {/* Tire-cover plaque */}
+                            <div className="relative h-10 w-10 rounded-full bg-white border border-border shadow-sm tire-sheen">
+                                <div className="absolute inset-1 rounded-full border border-border/70" />
+                                <div className="absolute left-1 right-1 top-1/2 -translate-y-1/2 h-3 rounded bg-mb-night" />
+                                <div className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 rounded-full bg-white border border-border shadow-[inset_0_0_0_1px_rgba(0,0,0,0.06)]" />
                             </div>
 
-                            {/* wordmark with silver divider */}
+                            {/* word block with silver divider */}
                             <div className="flex items-start gap-3">
                                 <div className="h-8 w-px bg-mb-silver/60" />
                                 <div className="leading-tight">
@@ -304,15 +298,15 @@ export default function App() {
                             </div>
                         </div>
 
-                        {/* Right: compact meta pill */}
+                        {/* meta pill */}
                         <div className="hidden sm:flex items-center gap-2">
-                            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-2.5 py-1 text-[11px] text-muted-foreground">
+                            <span className="inline-flex items-center rounded-full border border-border bg-secondary px-2.5 py-1 text-[11px] text-muted-foreground">
                                 2012–2024 • Annual
                             </span>
                         </div>
                     </div>
 
-                    {/* Footnotes row under the main header */}
+                    {/* footnotes row */}
                     <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground">
                         <span>
                             Range: 2012–2024 • Annual, calendar-year data
@@ -333,6 +327,11 @@ export default function App() {
                     <div className="relative overflow-hidden rounded-lg border border-border bg-gradient-to-br from-card via-card to-g-cream/20 p-8 shadow-lg">
                         <div className="grille-pattern absolute inset-0 pointer-events-none" />
                         <div className="relative text-center">
+                            {/* Tire-cover bar motif */}
+                            <div className="mx-auto mb-3 flex items-center justify-center gap-2">
+                                <div className="h-2 w-2 rounded-full bg-white border border-border shadow-sm" />
+                                <div className="h-2 w-24 rounded bg-mb-night" />
+                            </div>
                             <h2 className="text-3xl font-bold mb-2 tracking-tight">
                                 S&P 500 Total Return and G‑Class Sales
                                 (2012–2024)
@@ -1014,11 +1013,10 @@ export default function App() {
                         </div>
                         <div className="flex items-center justify-between pt-4 border-t border-border">
                             <span className="subtle flex items-center gap-2">
-                                <div className="h-6 w-6 rounded-full relative flex items-center justify-center">
-                                    <div className="absolute inset-0 rounded-full border border-mb-silver/70 bg-white" />
-                                    <span className="relative z-10 text-[10px] font-semibold text-foreground">
-                                        G
-                                    </span>
+                                <div className="relative h-6 w-6 rounded-full bg-white border border-border shadow-sm tire-sheen">
+                                    <div className="absolute inset-0.5 rounded-full border border-border/70" />
+                                    <div className="absolute left-0.5 right-0.5 top-1/2 -translate-y-1/2 h-2 rounded bg-mb-night" />
+                                    <div className="absolute left-1 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-white border border-border shadow-[inset_0_0_0_1px_rgba(0,0,0,0.06)]" />
                                 </div>
                                 © 2025 The G‑Class Economy
                             </span>
