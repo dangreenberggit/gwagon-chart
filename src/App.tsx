@@ -167,7 +167,17 @@ export default function App() {
                     year: r.year,
                     trPct: r.spxTR,
                 }));
-                const spxCum = buildTotalReturnIndex(spxTRSeries, 100, true); // true applies 2012 return
+                let spxCum = buildTotalReturnIndex(spxTRSeries, 100, true); // includes 2012 perf
+
+                // Rebase so 2012 equals exactly 100 (Option A)
+                const base2012 = spxCum.find((d) => d.year === 2012)?.index;
+                if (base2012 && base2012 !== 100) {
+                    spxCum = spxCum.map((d) => ({
+                        year: d.year,
+                        index: (d.index / base2012) * 100,
+                    }));
+                }
+
                 const spxCumByYear = new Map<number, number>(
                     spxCum.map((d) => [d.year, d.index])
                 );
@@ -284,8 +294,13 @@ export default function App() {
                         <CardHeader>
                             <CardTitle>
                                 Indexed Comparison (2012 = 100): S&P 500 Total
-                                Return Index and US G‑Class Sales
+                                Return, G‑Class Sales, and Household Net Worth
                             </CardTitle>
+                            <p className="text-sm text-muted-foreground mt-1">
+                                Annual, calendar-year data. S&P 500 is total
+                                return (with dividends), compounded; sales and
+                                household net worth indexed by ratio to 2012.
+                            </p>
                         </CardHeader>
                         <CardContent>
                             <ErrorBoundary
@@ -304,54 +319,9 @@ export default function App() {
                                     categories={[
                                         "S&P 500 total return index (2012 = 100)",
                                         "US G‑Class sales (index, 2012 = 100)",
-                                    ]}
-                                    colors={["blue", "emerald"]}
-                                    yAxisWidth={56}
-                                    showLegend={true}
-                                    showTooltip={true}
-                                    customTooltip={CustomTooltip}
-                                    valueFormatter={(v) =>
-                                        typeof v === "number"
-                                            ? v.toLocaleString(undefined, {
-                                                  maximumFractionDigits: 1,
-                                              })
-                                            : String(v)
-                                    }
-                                    connectNulls
-                                    curveType="monotone"
-                                />
-                            </ErrorBoundary>
-                        </CardContent>
-                    </Card>
-
-                    {/* G-Class ATP vs PE AUM and Household Net Worth */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>
-                                G-Class ATP vs. PE AUM and Household Net Worth
-                                (Index, 2012 = 100)
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <ErrorBoundary
-                                fallback={
-                                    <div className="h-64 sm:h-80 md:h-96 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
-                                        <p className="text-muted-foreground">
-                                            Chart failed to load
-                                        </p>
-                                    </div>
-                                }
-                            >
-                                <InteractiveLineChart
-                                    className="h-64 sm:h-80 md:h-96"
-                                    data={priceIndexWithContextData}
-                                    index="Year"
-                                    categories={[
-                                        "G‑Class Est. ATP (index, 2012 = 100)",
-                                        "Global PE AUM (index, 2012 = 100)",
                                         "Household net worth (index, 2012 = 100)",
                                     ]}
-                                    colors={["pink", "amber", "violet"]}
+                                    colors={["blue", "emerald", "violet"]}
                                     yAxisWidth={56}
                                     showLegend={true}
                                     showTooltip={true}
@@ -453,7 +423,7 @@ export default function App() {
                                                 }
                                             >
                                                 <LineChart
-                                                    className="h-64 w-full"
+                                                    className="h-96 w-full"
                                                     data={spxData}
                                                     index="Year"
                                                     categories={[
@@ -496,8 +466,8 @@ export default function App() {
                             >
                                 <CardTitle className="flex items-center justify-between">
                                     <span>
-                                        Global Private Equity Assets Under
-                                        Management (USD Trillions)
+                                        Global Private Equity AUM (USD
+                                        Trillions)
                                     </span>
                                     <span className="subtle font-normal">
                                         {expandedCharts.pe ? "▼" : "▶"} Click
@@ -508,6 +478,14 @@ export default function App() {
                                     </span>
                                 </CardTitle>
                             </CardHeader>
+                            {expandedCharts.pe && (
+                                <div className="px-6 pb-4">
+                                    <p className="text-sm text-muted-foreground mt-1">
+                                        Year-end levels; nominal USD;
+                                        definitions per McKinsey GPMR.
+                                    </p>
+                                </div>
+                            )}
                             {expandedCharts.pe && (
                                 <CardContent>
                                     <ErrorBoundary
@@ -566,6 +544,14 @@ export default function App() {
                                 </CardTitle>
                             </CardHeader>
                             {expandedCharts.gclass && (
+                                <div className="px-6 pb-4">
+                                    <p className="text-sm text-muted-foreground mt-1">
+                                        Calendar-year sales/deliveries as
+                                        reported by sources.
+                                    </p>
+                                </div>
+                            )}
+                            {expandedCharts.gclass && (
                                 <CardContent>
                                     <ErrorBoundary
                                         fallback={
@@ -611,7 +597,8 @@ export default function App() {
                             >
                                 <CardTitle className="flex items-center justify-between">
                                     <span>
-                                        US Household Net Worth (USD Trillions)
+                                        US Household Net Worth (USD Trillions,
+                                        Q4)
                                     </span>
                                     <span className="subtle font-normal">
                                         {expandedCharts.hhNetWorth ? "▼" : "▶"}{" "}
@@ -622,6 +609,15 @@ export default function App() {
                                     </span>
                                 </CardTitle>
                             </CardHeader>
+                            {expandedCharts.hhNetWorth && (
+                                <div className="px-6 pb-4">
+                                    <p className="text-sm text-muted-foreground mt-1">
+                                        Year-end (Q4) levels from Federal
+                                        Reserve Financial Accounts (Z.1).
+                                        Subject to revision.
+                                    </p>
+                                </div>
+                            )}
                             {expandedCharts.hhNetWorth && (
                                 <CardContent>
                                     <ErrorBoundary
@@ -668,7 +664,8 @@ export default function App() {
                             >
                                 <CardTitle className="flex items-center justify-between">
                                     <span>
-                                        G-Class Estimated Transaction Price
+                                        G‑Class Estimated Transaction Price
+                                        (Proxy) and G 550 MSRP (USD)
                                     </span>
                                     <span className="subtle font-normal">
                                         {expandedCharts.prices ? "▼" : "▶"}{" "}
@@ -680,14 +677,28 @@ export default function App() {
                                 </CardTitle>
                             </CardHeader>
                             {expandedCharts.prices && (
+                                <div className="px-6 pb-4">
+                                    <p className="text-sm text-muted-foreground mt-1">
+                                        Annual; MSRP = base G 550 (excludes
+                                        destination/options). Estimated ATP is a
+                                        proxy calibrated to KBB/Cox March 2024.
+                                    </p>
+                                </div>
+                            )}
+                            {expandedCharts.prices && (
                                 <CardContent>
                                     <div className="space-y-6">
                                         {/* Price Levels */}
                                         <div>
                                             <h3 className="font-medium mb-3">
-                                                Estimated Transaction Price
-                                                (USD)
+                                                G‑Class Estimated Transaction
+                                                Price (Proxy) (USD)
                                             </h3>
+                                            <p className="text-xs text-muted-foreground mb-2">
+                                                Proxy multiplier ≈ 1.46×
+                                                (calibrated to Mar 2024 KBB/Cox
+                                                ATP ≈ $208,663).
+                                            </p>
                                             <ErrorBoundary
                                                 fallback={
                                                     <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
@@ -780,12 +791,15 @@ export default function App() {
                                         className="text-primary hover:underline"
                                     >
                                         SlickCharts S&P 500 Returns
-                                    </a>{" "}
-                                    (annual, compounded to form index).
+                                    </a>
+                                    . S&P 500 calendar-year total return
+                                    percentages (with dividends), compounded to
+                                    form the cumulative total return index. 2012
+                                    is set to 100; compounding begins in 2013.
                                 </li>
                                 <li>
                                     <strong className="font-medium text-foreground">
-                                        PE AUM:
+                                        Global PE AUM:
                                     </strong>{" "}
                                     <a
                                         href="https://www.mckinsey.com/industries/private-capital/our-insights/global-private-markets-report"
@@ -794,13 +808,17 @@ export default function App() {
                                         className="text-primary hover:underline"
                                     >
                                         McKinsey Global Private Markets Report
+                                        (GPMR)
                                     </a>
-                                    .
+                                    . Nominal USD, year-end levels. Historical
+                                    values may be revised in later editions.
                                 </li>
                                 <li>
                                     <strong className="font-medium text-foreground">
-                                        G‑Class (US sales):
-                                    </strong>
+                                        G‑Class US sales:
+                                    </strong>{" "}
+                                    US market; sales/deliveries as reported by
+                                    MBUSA and CarFigures.
                                     <ul className="ml-6 mt-1 space-y-1">
                                         <li>
                                             <a
@@ -849,12 +867,12 @@ export default function App() {
                                         rel="noopener noreferrer"
                                         className="text-primary hover:underline"
                                     >
-                                        Federal Reserve Economic Data (FRED)
+                                        Federal Reserve Economic Data (FRED),
+                                        TNWBSHNO
                                     </a>
-                                    , Series TNWBSHNO — Households and nonprofit
-                                    organizations; net worth, level. Year-end
-                                    (Q4) observations; values are subject to
-                                    revision by the Federal Reserve.
+                                    — Households and nonprofit organizations;
+                                    net worth, level. Q4 observations by year;
+                                    subject to revision.
                                 </li>
                                 <li>
                                     <strong className="font-medium text-foreground">
@@ -914,13 +932,22 @@ export default function App() {
                                 Methodology Note:
                             </p>
                             <p className="text-sm subtle">
-                                Charts display the Estimated Transaction Price
-                                (Proxy), which is computed as a fixed multiple
-                                of G 550 base MSRP (US market, base trim,
-                                excluding destination/options). The multiplier
-                                is calibrated to a publicly cited ATP value for
+                                <strong>Indexing:</strong> All indexed series
+                                use 2012 = 100. For the S&P 500 total return,
+                                the cumulative index is rebased so 2012 equals
+                                100 and compounding begins in 2013. For level
+                                series (PE AUM, G‑Class sales, household net
+                                worth, prices), index = 100 × value_t /
+                                value_2012.
+                            </p>
+                            <p className="text-sm subtle mt-2">
+                                <strong>G‑Class Estimated ATP (Proxy):</strong>{" "}
+                                Computed as a fixed multiple of G 550 base MSRP
+                                (US market, base trim, excluding
+                                destination/options). The multiplier (≈1.46×) is
+                                calibrated to a publicly cited ATP value for
                                 March 2024 from Kelley Blue Book/Cox Automotive
-                                (~$208,663). This proxy reflects trim/mix (e.g.,
+                                (≈$208,663). This proxy reflects trim/mix (e.g.,
                                 AMG G 63), options, and market conditions, and
                                 is presented as an estimate only.
                             </p>

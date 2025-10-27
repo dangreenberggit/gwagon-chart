@@ -9,6 +9,8 @@ const getConciseLabel = (dataKey: string) => {
         "S&P 500 total return (%)": "S&P 500",
         "Global PE AUM (USD T)": "PE AUM",
         "US G‑Class sales (units)": "G‑Class Sales",
+        "G‑Class Est. ATP (index, 2012 = 100)": "G‑Class ATP",
+        "Household net worth (index, 2012 = 100)": "HH Net Worth",
     };
     return labelMap[dataKey] || dataKey;
 };
@@ -29,6 +31,8 @@ export const CustomTooltip = ({
             "S&P 500 total return (%)": "#3b82f6", // blue
             "Global PE AUM (USD T)": "#f59e0b", // amber
             "US G‑Class sales (units)": "#10b981", // emerald
+            "G‑Class Est. ATP (index, 2012 = 100)": "#ec4899", // pink
+            "Household net worth (index, 2012 = 100)": "#8b5cf6", // violet
         };
         return colorMap[dataKey] || "#6b7280";
     };
