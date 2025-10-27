@@ -272,50 +272,64 @@ export default function App() {
         <div className="min-h-screen bg-background text-foreground">
             {/* Header */}
             <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/85">
+                {/* Subtle grille motif */}
                 <div className="grille-pattern absolute inset-0 pointer-events-none" />
-                <div className="relative mx-auto max-w-7xl px-4 py-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            {/* Tire-cover plaque */}
-                            <div className="relative h-10 w-10 rounded-full bg-white border border-border shadow-sm tire-sheen">
-                                <div className="absolute inset-1 rounded-full border border-border/70" />
-                                <div className="absolute left-1 right-1 top-1/2 -translate-y-1/2 h-3 rounded bg-mb-night" />
-                                <div className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 rounded-full bg-white border border-border shadow-[inset_0_0_0_1px_rgba(0,0,0,0.06)]" />
-                            </div>
 
-                            {/* word block with silver divider */}
-                            <div className="flex items-start gap-3">
-                                <div className="h-8 w-px bg-mb-silver/60" />
-                                <div className="leading-tight">
-                                    <h1 className="text-[18px] sm:text-[20px] font-semibold tracking-tighter">
-                                        The G‑Class Economy
-                                    </h1>
-                                    <p className="text-xs text-muted-foreground">
-                                        Markets, wealth, and sales—tracked from
-                                        2012 to 2024
-                                    </p>
+                {/* Motif band */}
+                <div className="relative">
+                    <div className="mx-auto max-w-7xl px-4">
+                        <div className="relative h-12 flex items-center">
+                            {/* circular logo port - positioned on the left */}
+                            <div className="relative h-10 w-10 rounded-full bg-white border-2 border-mb-night shadow-sm z-10">
+                                <div
+                                    className="pointer-events-none absolute inset-0 rounded-full"
+                                    style={{
+                                        background:
+                                            "linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0) 60%)",
+                                    }}
+                                />
+                                {/* Logo */}
+                                <div className="absolute inset-0 grid place-items-center p-1">
+                                    <img
+                                        src="/img/gwagonlogo.png"
+                                        alt="Logo"
+                                        className="h-full w-full object-contain"
+                                        loading="eager"
+                                        decoding="async"
+                                    />
                                 </div>
                             </div>
-                        </div>
-
-                        {/* meta pill */}
-                        <div className="hidden sm:flex items-center gap-2">
-                            <span className="inline-flex items-center rounded-full border border-border bg-secondary px-2.5 py-1 text-[11px] text-muted-foreground">
-                                2012–2024 • Annual
-                            </span>
+                            {/* black bar - starts from circle center, extends right halfway, rounded end */}
+                            <div className="absolute left-5 top-1/2 -translate-y-1/2 h-10 w-[45%] rounded-r-full bg-mb-night flex items-center">
+                                <h1 className="ml-8 text-[20px] sm:text-[22px] font-semibold tracking-tighter text-white">
+                                    The G‑Class Economy
+                                </h1>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    {/* footnotes row */}
-                    <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground">
-                        <span>
-                            Range: 2012–2024 • Annual, calendar-year data
-                        </span>
-                        <span className="hidden sm:inline h-3 w-px bg-border" />
-                        <span>
-                            Note: Independent analysis; not affiliated with
-                            Mercedes‑Benz
-                        </span>
+                {/* Word block */}
+                <div className="relative mx-auto max-w-7xl px-4 py-3">
+                    <div className="flex items-start gap-3">
+                        <div className="w-px bg-mb-silver/60 self-stretch" />
+                        <div className="leading-tight">
+                            <p className="text-xs text-muted-foreground">
+                                Markets, wealth, and sales—tracked from 2012 to
+                                2024
+                            </p>
+                            <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground">
+                                <span>
+                                    Range: 2012–2024 • Annual, calendar-year
+                                    data
+                                </span>
+                                <span className="hidden sm:inline h-3 w-px bg-border" />
+                                <span>
+                                    Note: Independent analysis; not affiliated
+                                    with Mercedes‑Benz
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </header>
@@ -323,26 +337,19 @@ export default function App() {
             {/* Main Content */}
             <main className="mx-auto max-w-7xl px-4 py-10">
                 <div className="grid gap-6">
-                    {/* Hero Section */}
-                    <div className="relative overflow-hidden rounded-lg border border-border bg-gradient-to-br from-card via-card to-g-cream/20 p-8 shadow-lg">
+                    {/* Section lead */}
+                    <section className="relative overflow-hidden rounded border border-border bg-card">
                         <div className="grille-pattern absolute inset-0 pointer-events-none" />
-                        <div className="relative text-center">
-                            {/* Tire-cover bar motif */}
-                            <div className="mx-auto mb-3 flex items-center justify-center gap-2">
-                                <div className="h-2 w-2 rounded-full bg-white border border-border shadow-sm" />
-                                <div className="h-2 w-24 rounded bg-mb-night" />
-                            </div>
-                            <h2 className="text-3xl font-bold mb-2 tracking-tight">
-                                S&P 500 Total Return and G‑Class Sales
-                                (2012–2024)
-                            </h2>
-                            <p className="text-muted-foreground max-w-2xl mx-auto">
-                                Tracking the correlation between market
-                                performance, luxury vehicle sales, and household
-                                wealth
+                        <div className="relative px-4 py-5 text-center">
+                            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                Indexed comparison
+                            </p>
+                            <p className="mt-1 text-sm text-muted-foreground">
+                                S&P 500 total return, US G‑Class sales, and
+                                household wealth (2012–2024)
                             </p>
                         </div>
-                    </div>
+                    </section>
 
                     {/* Indexed Comparison Chart - Main Chart */}
                     <Card className="border-l-4 border-l-primary shadow-md">
