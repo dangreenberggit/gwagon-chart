@@ -109,20 +109,22 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
                                 key={category}
                                 onClick={() => toggleCategory(category)}
                                 className={cn(
-                                    "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all duration-200",
-                                    "border border-gray-200 hover:border-gray-300",
-                                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
+                                    "inline-flex items-center gap-2 rounded px-3 py-2 text-sm font-medium transition-all duration-200",
+                                    "border hover:shadow-md",
+                                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                                     isVisible
-                                        ? "bg-white text-gray-900 shadow-sm"
-                                        : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                                        ? "bg-card text-card-foreground border-border shadow-sm"
+                                        : "bg-secondary text-muted-foreground border-border hover:bg-secondary/80"
                                 )}
                             >
                                 {/* Color indicator */}
                                 <div
                                     className={cn(
-                                        "h-3 w-3 rounded-full",
+                                        "h-3 w-3 rounded-full ring-2 ring-offset-1",
                                         getColorClassName(color, "bg"),
-                                        !isVisible && "opacity-30"
+                                        isVisible
+                                            ? "ring-white"
+                                            : "ring-transparent opacity-40"
                                     )}
                                 />
 

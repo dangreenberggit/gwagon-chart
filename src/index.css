@@ -4,24 +4,50 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 224 60% 12%;
-    --card: 0 0% 100%;
-    --card-foreground: 224 60% 12%;
-    --primary: 226 72% 52%;
+    /* Mercedes G-Class Theme - Light */
+    --background: 220 15% 98%; /* #FAFAFB */
+    --foreground: 220 60% 6%; /* #0E0F12 */
+    
+    --card: 0 0% 100%; /* #FFFFFF */
+    --card-foreground: 220 60% 6%;
+    
+    --primary: 24 93% 53%; /* #F39A1E - indicator amber */
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 98%;
-    --secondary-foreground: 224 60% 20%;
-    --muted: 210 40% 97%;
-    --muted-foreground: 216 15% 45%;
-    --accent: 210 40% 97%;
-    --accent-foreground: 224 60% 20%;
-    --border: 214 32% 92%;
-    --input: 214 32% 92%;
-    --ring: 226 72% 52%;
+    
+    --secondary: 216 20% 95%; /* star silver tint */
+    --secondary-foreground: 220 60% 15%;
+    
+    --muted: 210 20% 97%;
+    --muted-foreground: 215 15% 35%; /* #4B4F57 */
+    
+    --accent: 135 21% 45%; /* #587B5B - agave green */
+    --accent-foreground: 0 0% 100%;
+    
+    --border: 215 20% 91%; /* #E6E8EC */
+    --input: 215 20% 91%;
+    --ring: 24 93% 53%; /* amber focus ring */
+    
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --radius: 12px;
+    
+    --radius: 4px; /* Squared G-Class geometry */
+    
+    /* Mercedes brand colors */
+    --mb-night-black: 220 30% 4%; /* #0B0C0E */
+    --mb-star-silver: 215 12% 79%; /* #C0C5CC */
+    
+    /* G-Class heritage accents */
+    --g-agave: 135 21% 45%; /* #587B5B */
+    --g-colorado: 38 35% 63%; /* #C7AA7A */
+    --g-cream: 40 25% 90%; /* #E7E1D6 */
+    
+    /* Chart series colors */
+    --chart-spx: 226 100% 56%; /* #2453FF */
+    --chart-sales: 162 98% 37%; /* #1FA97A */
+    --chart-pe: 42 100% 41%; /* #D39B00 */
+    --chart-wealth: 254 57% 59%; /* #6F5BD5 */
+    --chart-atp: 343 78% 61%; /* #E05E8C */
+    --chart-axis: 216 12% 79%; /* #C8CCD3 */
   }
 
   * { @apply border-border; }
@@ -29,10 +55,11 @@
   body { 
     @apply bg-background text-foreground antialiased; 
     text-rendering: optimizeLegibility;
+    font-feature-settings: "tnum"; /* Tabular numerals */
   }
 }
 
-/* Recharts light tweaks - using semantic tokens */
+/* Recharts - Mercedes styled */
 .recharts-wrapper {
   background-color: hsl(var(--card)) !important;
 }
@@ -42,77 +69,96 @@
 .recharts-label {
   fill: hsl(var(--muted-foreground)) !important;
   font-size: 12px !important;
-  color: hsl(var(--muted-foreground)) !important;
+  font-weight: 500 !important;
 }
 
-/* Simplified grid stroke using semantic token */
+/* Straight grid lines for boxy G-Class feel */
 .recharts-cartesian-grid line {
   stroke: hsl(var(--border)) !important;
+  stroke-width: 1px !important;
+  stroke-dasharray: none !important;
 }
 
-/* Enhanced tooltip styling */
+/* Enhanced tooltip */
 .recharts-tooltip-wrapper {
-  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.14));
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.08));
 }
 
 .recharts-default-tooltip {
   background: hsl(var(--card)) !important;
   color: hsl(var(--card-foreground)) !important;
   border: 1px solid hsl(var(--border)) !important;
-  border-radius: 10px !important;
+  border-radius: 4px !important;
+  font-weight: 500 !important;
 }
 
-/* Ensure chart lines are visible */
+/* Chart lines - Mercedes precision */
+.recharts-line {
+  stroke-width: 3px !important;
+  stroke-linecap: round !important;
+}
+
 .recharts-line-dot {
   stroke-width: 2px !important;
+  r: 4 !important;
 }
 
-.recharts-line {
-  stroke-width: 2px !important;
-}
-
-/* Ensure line paths are visible */
-.recharts-line-path {
-  stroke-width: 2px !important;
+/* Circular markers for headlamp feel */
+.recharts-dot {
+  r: 4 !important;
 }
 
 @layer components {
   .card { 
-    @apply bg-card text-card-foreground rounded-lg border shadow-md; 
+    @apply bg-card text-card-foreground rounded border shadow-sm; 
+    border-radius: 4px; /* Squared corners */
   }
+  
   .section-title { 
     @apply text-lg font-semibold tracking-tight; 
   }
+  
   .subtle { 
-    @apply text-sm text-muted-foreground; 
+    @apply text-sm text-muted-foreground font-medium; 
   }
+  
   .btn {
-    @apply inline-flex items-center justify-center rounded-md text-sm font-medium 
-    transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
+    @apply inline-flex items-center justify-center rounded text-sm font-medium 
+    transition-colors focus-visible:outline-none focus-visible:ring-2 
+    focus-visible:ring-ring focus-visible:ring-offset-2
     disabled:pointer-events-none disabled:opacity-50;
+    border-radius: 4px;
   }
+  
   .btn-primary { 
-    @apply bg-primary text-primary-foreground hover:opacity-95 px-4 h-9; 
+    @apply bg-primary text-primary-foreground hover:opacity-90 px-4 h-9; 
   }
+  
   .btn-secondary {
-    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 px-4 h-9;
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 px-4 h-9 
+    border border-border;
+  }
+  
+  /* Grille motif pattern - subtle vertical lines */
+  .grille-pattern {
+    background-image: repeating-linear-gradient(
+      90deg,
+      hsl(var(--border)),
+      hsl(var(--border)) 1px,
+      transparent 1px,
+      transparent 6px
+    );
+    opacity: 0.03;
   }
 }
 
-/* Tremor chart container using semantic token */
-.tremor-LineChart-root {
+/* Tremor chart overrides */
+.tremor-LineChart-root,
+.tremor-AreaChart-root,
+.tremor-BarChart-root {
   background-color: hsl(var(--card)) !important;
 }
 
-/* Ensure Tremor colors work properly */
 .tremor-LineChart-root .recharts-line {
-  stroke-width: 2px !important;
+  stroke-width: 3px !important;
 }
-
-/* Fix any potential color inheritance issues */
-.recharts-line .recharts-line-path {
-  stroke-width: 2px !important;
-}
-
-
-

@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    "./index.html", 
+    "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
   ],
@@ -37,15 +37,55 @@ export default {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+        // Mercedes brand colors
+        mb: {
+          night: "hsl(var(--mb-night-black))",
+          silver: "hsl(var(--mb-star-silver))",
+        },
+        // G-Class heritage accents
+        g: {
+          agave: "hsl(var(--g-agave))",
+          colorado: "hsl(var(--g-colorado))",
+          cream: "hsl(var(--g-cream))",
+        },
+        // Chart series
+        chart: {
+          spx: "hsl(var(--chart-spx))",
+          sales: "hsl(var(--chart-sales))",
+          pe: "hsl(var(--chart-pe))",
+          wealth: "hsl(var(--chart-wealth))",
+          atp: "hsl(var(--chart-atp))",
+          axis: "hsl(var(--chart-axis))",
+        },
       },
       borderRadius: {
-        lg: "12px",
-        md: "10px",
-        sm: "8px",
+        lg: "4px",
+        md: "4px",
+        sm: "4px",
       },
       boxShadow: {
-        md: "0 6px 20px rgba(0,0,0,0.06)",
-        lg: "0 10px 30px -12px rgba(0,0,0,0.18)",
+        sm: "0 1px 2px rgba(0,0,0,0.04)",
+        md: "0 2px 8px rgba(0,0,0,0.06)",
+        lg: "0 4px 16px rgba(0,0,0,0.08)",
+      },
+      fontFamily: {
+        sans: [
+          "Inter",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "sans-serif",
+        ],
+        mono: [
+          "ui-monospace",
+          "SFMono-Regular",
+          "Consolas",
+          "monospace",
+        ],
+      },
+      letterSpacing: {
+        tighter: "-0.01em",
+        tight: "-0.005em",
       },
       keyframes: {
         hide: {
@@ -73,9 +113,7 @@ export default {
           to: { height: "var(--radix-accordion-content-height)" },
         },
         accordionClose: {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0px" },
         },
         dialogOverlayShow: {
@@ -87,7 +125,10 @@ export default {
             opacity: "0",
             transform: "translate(-50%, -45%) scale(0.95)",
           },
-          to: { opacity: "1", transform: "translate(-50%, -50%) scale(1)" },
+          to: {
+            opacity: "1",
+            transform: "translate(-50%, -50%) scale(1)",
+          },
         },
         drawerSlideLeftAndFade: {
           from: { opacity: "0", transform: "translateX(100%)" },
@@ -100,28 +141,22 @@ export default {
       },
       animation: {
         hide: "hide 150ms cubic-bezier(0.16, 1, 0.3, 1)",
-        slideDownAndFade:
-          "slideDownAndFade 150ms cubic-bezier(0.16, 1, 0.3, 1)",
-        slideLeftAndFade:
-          "slideLeftAndFade 150ms cubic-bezier(0.16, 1, 0.3, 1)",
+        slideDownAndFade: "slideDownAndFade 150ms cubic-bezier(0.16, 1, 0.3, 1)",
+        slideLeftAndFade: "slideLeftAndFade 150ms cubic-bezier(0.16, 1, 0.3, 1)",
         slideUpAndFade: "slideUpAndFade 150ms cubic-bezier(0.16, 1, 0.3, 1)",
         slideRightAndFade:
           "slideRightAndFade 150ms cubic-bezier(0.16, 1, 0.3, 1)",
-        // Accordion
         accordionOpen: "accordionOpen 150ms cubic-bezier(0.87, 0, 0.13, 1)",
         accordionClose: "accordionClose 150ms cubic-bezier(0.87, 0, 0.13, 1)",
-        // Dialog
         dialogOverlayShow:
           "dialogOverlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)",
         dialogContentShow:
           "dialogContentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)",
-        // Drawer
         drawerSlideLeftAndFade:
-        "drawerSlideLeftAndFade 150ms cubic-bezier(0.16, 1, 0.3, 1)",
+          "drawerSlideLeftAndFade 150ms cubic-bezier(0.16, 1, 0.3, 1)",
         drawerSlideRightAndFade: "drawerSlideRightAndFade 150ms ease-in",
       },
     },
   },
   plugins: [require("@tailwindcss/forms")],
 };
-

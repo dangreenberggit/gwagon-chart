@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-// Lightweight shadcn-style Card primitives for layout consistency
+// Mercedes G-Class styled Card primitives
 export function Card({
     className,
     ...props
@@ -9,7 +9,7 @@ export function Card({
     return (
         <div
             className={cn(
-                "rounded-lg border bg-white border-gray-200 shadow-sm",
+                "rounded border bg-card border-border shadow-sm",
                 className
             )}
             {...props}
@@ -22,7 +22,7 @@ export function CardHeader({
 }: React.HTMLAttributes<HTMLDivElement>) {
     return (
         <div
-            className={cn("p-4 border-b border-gray-200", className)}
+            className={cn("p-4 border-b border-border", className)}
             {...props}
         />
     );
@@ -33,7 +33,10 @@ export function CardTitle({
 }: React.HTMLAttributes<HTMLHeadingElement>) {
     return (
         <h3
-            className={cn("text-lg font-semibold text-gray-900", className)}
+            className={cn(
+                "text-lg font-semibold text-card-foreground tracking-tight",
+                className
+            )}
             {...props}
         />
     );

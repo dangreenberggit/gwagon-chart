@@ -271,11 +271,57 @@ export default function App() {
     return (
         <div className="min-h-screen bg-background text-foreground">
             {/* Header */}
-            <header className="sticky top-0 z-30 border-b bg-background/80 backdrop-blur">
-                <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="size-8 rounded-md bg-primary" />
-                        <span className="font-semibold">G-Wagon Chart</span>
+            <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/85">
+                <div className="grille-pattern absolute inset-0 pointer-events-none" />
+                <div className="relative mx-auto max-w-7xl px-4 py-4">
+                    <div className="flex items-center justify-between">
+                        {/* Left: emblem + titles */}
+                        <div className="flex items-center gap-3">
+                            {/* circular emblem (headlamp nod) */}
+                            <div
+                                className="size-10 rounded-full relative flex items-center justify-center"
+                                aria-hidden="true"
+                            >
+                                <div className="absolute inset-0 rounded-full border border-mb-silver/70 bg-white" />
+                                <div className="absolute inset-1 rounded-full border border-border" />
+                                <span className="relative z-10 text-[13px] font-semibold tracking-tight text-foreground">
+                                    G
+                                </span>
+                            </div>
+
+                            {/* wordmark with silver divider */}
+                            <div className="flex items-start gap-3">
+                                <div className="h-8 w-px bg-mb-silver/60" />
+                                <div className="leading-tight">
+                                    <h1 className="text-[18px] sm:text-[20px] font-semibold tracking-tighter">
+                                        The G‑Class Economy
+                                    </h1>
+                                    <p className="text-xs text-muted-foreground">
+                                        Markets, wealth, and sales—tracked from
+                                        2012 to 2024
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right: compact meta pill */}
+                        <div className="hidden sm:flex items-center gap-2">
+                            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-2.5 py-1 text-[11px] text-muted-foreground">
+                                2012–2024 • Annual
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Footnotes row under the main header */}
+                    <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground">
+                        <span>
+                            Range: 2012–2024 • Annual, calendar-year data
+                        </span>
+                        <span className="hidden sm:inline h-3 w-px bg-border" />
+                        <span>
+                            Note: Independent analysis; not affiliated with
+                            Mercedes‑Benz
+                        </span>
                     </div>
                 </div>
             </header>
@@ -283,14 +329,24 @@ export default function App() {
             {/* Main Content */}
             <main className="mx-auto max-w-7xl px-4 py-10">
                 <div className="grid gap-6">
-                    <div className="text-center mb-6">
-                        <h1 className="text-3xl font-bold mb-2">
-                            S&P 500 Total Return and G‑Class Sales (2012–2024)
-                        </h1>
+                    {/* Hero Section */}
+                    <div className="relative overflow-hidden rounded-lg border border-border bg-gradient-to-br from-card via-card to-g-cream/20 p-8 shadow-lg">
+                        <div className="grille-pattern absolute inset-0 pointer-events-none" />
+                        <div className="relative text-center">
+                            <h2 className="text-3xl font-bold mb-2 tracking-tight">
+                                S&P 500 Total Return and G‑Class Sales
+                                (2012–2024)
+                            </h2>
+                            <p className="text-muted-foreground max-w-2xl mx-auto">
+                                Tracking the correlation between market
+                                performance, luxury vehicle sales, and household
+                                wealth
+                            </p>
+                        </div>
                     </div>
 
                     {/* Indexed Comparison Chart - Main Chart */}
-                    <Card>
+                    <Card className="border-l-4 border-l-primary shadow-md">
                         <CardHeader>
                             <CardTitle>
                                 Indexed Comparison (2012 = 100): S&P 500 Total
@@ -342,14 +398,18 @@ export default function App() {
 
                     {/* Individual Charts - Collapsible */}
                     <div className="space-y-4">
-                        <h2 className="section-title mb-4">
-                            Individual Series Details
-                        </h2>
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="h-1 flex-1 bg-gradient-to-r from-border via-primary/30 to-border" />
+                            <h2 className="section-title">
+                                Individual Series Details
+                            </h2>
+                            <div className="h-1 flex-1 bg-gradient-to-r from-border via-primary/30 to-border" />
+                        </div>
 
                         {/* S&P 500 Chart */}
-                        <Card>
+                        <Card className="border-l-4 border-l-chart-spx hover:shadow-lg transition-shadow">
                             <CardHeader
-                                className="cursor-pointer hover:bg-accent transition-colors"
+                                className="cursor-pointer hover:bg-secondary/50 transition-colors"
                                 onClick={() => toggleChart("spx")}
                             >
                                 <CardTitle className="flex items-center justify-between">
@@ -459,9 +519,9 @@ export default function App() {
                         </Card>
 
                         {/* Global PE AUM Chart */}
-                        <Card>
+                        <Card className="border-l-4 border-l-chart-pe hover:shadow-lg transition-shadow">
                             <CardHeader
-                                className="cursor-pointer hover:bg-accent transition-colors"
+                                className="cursor-pointer hover:bg-secondary/50 transition-colors"
                                 onClick={() => toggleChart("pe")}
                             >
                                 <CardTitle className="flex items-center justify-between">
@@ -525,9 +585,9 @@ export default function App() {
                         </Card>
 
                         {/* G-Class Sales Chart */}
-                        <Card>
+                        <Card className="border-l-4 border-l-chart-sales hover:shadow-lg transition-shadow">
                             <CardHeader
-                                className="cursor-pointer hover:bg-accent transition-colors"
+                                className="cursor-pointer hover:bg-secondary/50 transition-colors"
                                 onClick={() => toggleChart("gclass")}
                             >
                                 <CardTitle className="flex items-center justify-between">
@@ -590,9 +650,9 @@ export default function App() {
                         </Card>
 
                         {/* Household Net Worth Chart */}
-                        <Card>
+                        <Card className="border-l-4 border-l-chart-wealth hover:shadow-lg transition-shadow">
                             <CardHeader
-                                className="cursor-pointer hover:bg-accent transition-colors"
+                                className="cursor-pointer hover:bg-secondary/50 transition-colors"
                                 onClick={() => toggleChart("hhNetWorth")}
                             >
                                 <CardTitle className="flex items-center justify-between">
@@ -657,9 +717,9 @@ export default function App() {
                         </Card>
 
                         {/* G-Class Pricing Chart */}
-                        <Card>
+                        <Card className="border-l-4 border-l-chart-atp hover:shadow-lg transition-shadow">
                             <CardHeader
-                                className="cursor-pointer hover:bg-accent transition-colors"
+                                className="cursor-pointer hover:bg-secondary/50 transition-colors"
                                 onClick={() => toggleChart("prices")}
                             >
                                 <CardTitle className="flex items-center justify-between">
@@ -772,8 +832,8 @@ export default function App() {
             </main>
 
             {/* Footer */}
-            <footer className="border-t mt-10">
-                <div className="mx-auto max-w-7xl px-4 py-6">
+            <footer className="border-t border-border bg-gradient-to-b from-card to-secondary/30 mt-10">
+                <div className="mx-auto max-w-7xl px-4 py-8">
                     <div className="flex flex-col gap-4">
                         <div>
                             <p className="font-medium text-foreground mb-2">
@@ -952,10 +1012,21 @@ export default function App() {
                                 is presented as an estimate only.
                             </p>
                         </div>
-                        <div className="flex items-center justify-between pt-4 border-t">
-                            <span className="subtle">
-                                © 2025 G-Wagon Chart
+                        <div className="flex items-center justify-between pt-4 border-t border-border">
+                            <span className="subtle flex items-center gap-2">
+                                <div className="h-6 w-6 rounded-full relative flex items-center justify-center">
+                                    <div className="absolute inset-0 rounded-full border border-mb-silver/70 bg-white" />
+                                    <span className="relative z-10 text-[10px] font-semibold text-foreground">
+                                        G
+                                    </span>
+                                </div>
+                                © 2025 The G‑Class Economy
                             </span>
+                            <div className="flex items-center gap-3">
+                                <div className="h-1.5 w-1.5 rounded-full bg-g-agave" />
+                                <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+                                <div className="h-1.5 w-1.5 rounded-full bg-chart-spx" />
+                            </div>
                         </div>
                     </div>
                 </div>
