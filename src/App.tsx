@@ -846,150 +846,190 @@ export default function App() {
                                 Data Sources:
                             </p>
                             <ul className="space-y-2 subtle">
-                                <li>
-                                    <strong className="font-medium text-foreground">
-                                        S&P 500 total return:
-                                    </strong>{" "}
-                                    <a
-                                        href="https://www.slickcharts.com/sp500/returns"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-primary hover:underline"
-                                    >
-                                        SlickCharts S&P 500 Returns
-                                    </a>
-                                    . S&P 500 calendar-year total return
-                                    percentages (with dividends), compounded to
-                                    form the cumulative total return index. 2012
-                                    is set to 100; compounding begins in 2013.
+                                <li className="flex items-start gap-2">
+                                    <div
+                                        className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
+                                        style={{ backgroundColor: "#2453FF" }}
+                                    />
+                                    <div>
+                                        <strong className="font-medium text-foreground">
+                                            S&P 500 total return:
+                                        </strong>{" "}
+                                        <a
+                                            href="https://www.slickcharts.com/sp500/returns"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-primary hover:underline"
+                                        >
+                                            SlickCharts S&P 500 Returns
+                                        </a>
+                                        . S&P 500 calendar-year total return
+                                        percentages (with dividends), compounded
+                                        to form the cumulative total return
+                                        index. 2012 is set to 100; compounding
+                                        begins in 2013.
+                                    </div>
                                 </li>
-                                <li>
-                                    <strong className="font-medium text-foreground">
-                                        Global PE AUM:
-                                    </strong>{" "}
-                                    <a
-                                        href="https://www.mckinsey.com/industries/private-capital/our-insights/global-private-markets-report"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-primary hover:underline"
-                                    >
-                                        McKinsey Global Private Markets Report
-                                        (GPMR)
-                                    </a>
-                                    . Nominal USD, year-end levels. Historical
-                                    values may be revised in later editions.
+                                <li className="flex items-start gap-2">
+                                    <div
+                                        className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
+                                        style={{ backgroundColor: "#D39B00" }}
+                                    />
+                                    <div>
+                                        <strong className="font-medium text-foreground">
+                                            Global PE AUM:
+                                        </strong>{" "}
+                                        <a
+                                            href="https://www.mckinsey.com/industries/private-capital/our-insights/global-private-markets-report"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-primary hover:underline"
+                                        >
+                                            McKinsey Global Private Markets
+                                            Report (GPMR)
+                                        </a>
+                                        . Nominal USD, year-end levels.
+                                        Historical values may be revised in
+                                        later editions.
+                                    </div>
                                 </li>
-                                <li>
-                                    <strong className="font-medium text-foreground">
-                                        G‑Class US sales:
-                                    </strong>{" "}
-                                    US market; sales/deliveries as reported by
-                                    MBUSA and CarFigures.
-                                    <ul className="ml-6 mt-1 space-y-1">
-                                        <li>
-                                            <a
-                                                href="https://media.mbusa.com/releases/release-4efd8afecd0ad84220062379551956e8-mercedes-benz-usa-reports-9-year-over-year-growth-for-passenger-car-sales"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-primary hover:underline"
-                                            >
-                                                MBUSA 2024 press release
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="https://carfigures.com/us-market-brand/mercedes-benz/g-class"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-primary hover:underline"
-                                            >
-                                                CarFigures historical sales
-                                            </a>
-                                        </li>
-                                    </ul>
+                                <li className="flex items-start gap-2">
+                                    <div
+                                        className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
+                                        style={{ backgroundColor: "#1FA97A" }}
+                                    />
+                                    <div>
+                                        <strong className="font-medium text-foreground">
+                                            G‑Class US sales:
+                                        </strong>{" "}
+                                        US market; sales/deliveries as reported
+                                        by MBUSA and CarFigures.
+                                        <ul className="ml-6 mt-1 space-y-1">
+                                            <li>
+                                                <a
+                                                    href="https://media.mbusa.com/releases/release-4efd8afecd0ad84220062379551956e8-mercedes-benz-usa-reports-9-year-over-year-growth-for-passenger-car-sales"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-primary hover:underline"
+                                                >
+                                                    MBUSA 2024 press release
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a
+                                                    href="https://carfigures.com/us-market-brand/mercedes-benz/g-class"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-primary hover:underline"
+                                                >
+                                                    CarFigures historical sales
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </li>
-                                <li>
-                                    <strong className="font-medium text-foreground">
-                                        G‑Class ATP calibration:
-                                    </strong>{" "}
-                                    <a
-                                        href="https://www.kbb.com/press-releases/"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-primary hover:underline"
-                                    >
-                                        Kelley Blue Book / Cox Automotive
-                                    </a>
-                                    , New‑Vehicle Average Transaction Price
-                                    Report, March 2024: G‑Class ATP ≈ $208,663.
+                                <li className="flex items-start gap-2">
+                                    <div
+                                        className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
+                                        style={{ backgroundColor: "#E05E8C" }}
+                                    />
+                                    <div>
+                                        <strong className="font-medium text-foreground">
+                                            G‑Class ATP calibration:
+                                        </strong>{" "}
+                                        <a
+                                            href="https://www.kbb.com/press-releases/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-primary hover:underline"
+                                        >
+                                            Kelley Blue Book / Cox Automotive
+                                        </a>
+                                        , New‑Vehicle Average Transaction Price
+                                        Report, March 2024: G‑Class ATP ≈
+                                        $208,663.
+                                    </div>
                                 </li>
-                                <li>
-                                    <strong className="font-medium text-foreground">
-                                        Household net worth:
-                                    </strong>{" "}
-                                    <a
-                                        href="https://fred.stlouisfed.org/series/TNWBSHNO"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-primary hover:underline"
-                                    >
-                                        Federal Reserve Economic Data (FRED),
-                                        TNWBSHNO
-                                    </a>
-                                    — Households and nonprofit organizations;
-                                    net worth, level. Q4 observations by year;
-                                    subject to revision.
+                                <li className="flex items-start gap-2">
+                                    <div
+                                        className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
+                                        style={{ backgroundColor: "#6F5BD5" }}
+                                    />
+                                    <div>
+                                        <strong className="font-medium text-foreground">
+                                            Household net worth:
+                                        </strong>{" "}
+                                        <a
+                                            href="https://fred.stlouisfed.org/series/TNWBSHNO"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-primary hover:underline"
+                                        >
+                                            Federal Reserve Economic Data
+                                            (FRED), TNWBSHNO
+                                        </a>
+                                        — Households and nonprofit
+                                        organizations; net worth, level. Q4
+                                        observations by year; subject to
+                                        revision.
+                                    </div>
                                 </li>
-                                <li>
-                                    <strong className="font-medium text-foreground">
-                                        G 550 MSRP (basis for ATP proxy):
-                                    </strong>
-                                    <ul className="ml-6 mt-1 space-y-1">
-                                        <li>
-                                            <a
-                                                href="https://media.mbusa.com"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-primary hover:underline"
-                                            >
-                                                MBUSA media resources
-                                            </a>{" "}
-                                            (2018 G‑Class Quick Reference Guide,
-                                            G 550 MSRP $123,600)
-                                        </li>
-                                        <li>
-                                            US News model pages:
-                                            <ul className="ml-4 mt-1 space-y-1">
-                                                <li>
-                                                    <a
-                                                        href="https://cars.usnews.com/cars-trucks/mercedes-benz/g-class/2018/specs"
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-primary hover:underline"
-                                                    >
-                                                        2018 G 550
-                                                    </a>{" "}
-                                                    base MSRP $123,600
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        href="https://cars.usnews.com/cars-trucks/mercedes-benz/g-class/2020/specs"
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-primary hover:underline"
-                                                    >
-                                                        2020 G 550
-                                                    </a>{" "}
-                                                    base MSRP $130,900
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            MY2023 G 550 base MSRP ≈ $139,900
-                                            (automotive press, 2022 launch
-                                            coverage)
-                                        </li>
-                                    </ul>
+                                <li className="flex items-start gap-2">
+                                    <div
+                                        className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
+                                        style={{ backgroundColor: "#E05E8C" }}
+                                    />
+                                    <div>
+                                        <strong className="font-medium text-foreground">
+                                            G 550 MSRP (basis for ATP proxy):
+                                        </strong>
+                                        <ul className="ml-6 mt-1 space-y-1">
+                                            <li>
+                                                <a
+                                                    href="https://media.mbusa.com"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-primary hover:underline"
+                                                >
+                                                    MBUSA media resources
+                                                </a>{" "}
+                                                (2018 G‑Class Quick Reference
+                                                Guide, G 550 MSRP $123,600)
+                                            </li>
+                                            <li>
+                                                US News model pages:
+                                                <ul className="ml-4 mt-1 space-y-1">
+                                                    <li>
+                                                        <a
+                                                            href="https://cars.usnews.com/cars-trucks/mercedes-benz/g-class/2018/specs"
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-primary hover:underline"
+                                                        >
+                                                            2018 G 550
+                                                        </a>{" "}
+                                                        base MSRP $123,600
+                                                    </li>
+                                                    <li>
+                                                        <a
+                                                            href="https://cars.usnews.com/cars-trucks/mercedes-benz/g-class/2020/specs"
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-primary hover:underline"
+                                                        >
+                                                            2020 G 550
+                                                        </a>{" "}
+                                                        base MSRP $130,900
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                MY2023 G 550 base MSRP ≈
+                                                $139,900 (automotive press, 2022
+                                                launch coverage)
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
