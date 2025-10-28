@@ -10,6 +10,8 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { LineChart } from "@tremor/react";
 import { CustomTooltip } from "./components/CustomTooltip";
 import { InteractiveLineChart } from "./components/InteractiveLineChart";
+import { GrillSeparator } from "./components/GrillSeparator";
+import { Logo } from "./components/Logo";
 
 type Row = {
     year: number;
@@ -279,28 +281,18 @@ export default function App() {
                 <div className="relative">
                     <div className="mx-auto max-w-7xl px-4">
                         <div className="relative h-12 flex items-center">
-                            {/* circular logo port - positioned on the left */}
-                            <div className="relative h-10 w-10 rounded-full bg-white border-2 border-mb-night shadow-sm z-10">
-                                <div
-                                    className="pointer-events-none absolute inset-0 rounded-full"
-                                    style={{
-                                        background:
-                                            "linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0) 60%)",
-                                    }}
-                                />
-                                {/* Logo */}
-                                <div className="absolute inset-0 grid place-items-center p-1">
-                                    <img
-                                        src="/img/gwagonlogo.png"
-                                        alt="Logo"
-                                        className="h-full w-full object-contain"
-                                        loading="eager"
-                                        decoding="async"
-                                    />
-                                </div>
+                            {/* circular logo mask — no rim */}
+                            <div className="relative z-20">
+                                <Logo size="lg" loading="eager" />
                             </div>
-                            {/* black bar - starts from circle center, extends right halfway, rounded end */}
-                            <div className="absolute left-5 top-1/2 -translate-y-1/2 h-10 w-[45%] rounded-r-full bg-mb-night flex items-center">
+                            {/* black bar underneath */}
+                            <div
+                                className="absolute z-10 left-5 top-1/2 -translate-y-1/2 h-10 w-[45%] bg-mb-night flex items-center"
+                                style={{
+                                    borderTopRightRadius: "80px",
+                                    borderBottomRightRadius: "80px",
+                                }}
+                            >
                                 <h1 className="ml-8 text-[20px] sm:text-[22px] font-semibold tracking-tighter text-white">
                                     The G‑Class Economy
                                 </h1>
@@ -337,19 +329,8 @@ export default function App() {
             {/* Main Content */}
             <main className="mx-auto max-w-7xl px-4 py-10">
                 <div className="grid gap-6">
-                    {/* Section lead */}
-                    <section className="relative overflow-hidden rounded border border-border bg-card">
-                        <div className="grille-pattern absolute inset-0 pointer-events-none" />
-                        <div className="relative px-4 py-5 text-center">
-                            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                Indexed comparison
-                            </p>
-                            <p className="mt-1 text-sm text-muted-foreground">
-                                S&P 500 total return, US G‑Class sales, and
-                                household wealth (2012–2024)
-                            </p>
-                        </div>
-                    </section>
+                    {/* Indexed Comparison Section Header */}
+                    <GrillSeparator>Indexed Comparison</GrillSeparator>
 
                     {/* Indexed Comparison Chart - Main Chart */}
                     <Card className="border-l-4 border-l-primary shadow-md">
@@ -404,13 +385,9 @@ export default function App() {
 
                     {/* Individual Charts - Collapsible */}
                     <div className="space-y-4">
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="h-1 flex-1 bg-gradient-to-r from-border via-primary/30 to-border" />
-                            <h2 className="section-title">
-                                Individual Series Details
-                            </h2>
-                            <div className="h-1 flex-1 bg-gradient-to-r from-border via-primary/30 to-border" />
-                        </div>
+                        <GrillSeparator>
+                            Individual Series Details
+                        </GrillSeparator>
 
                         {/* S&P 500 Chart */}
                         <Card className="border-l-4 border-l-chart-spx hover:shadow-lg transition-shadow">
@@ -1060,12 +1037,8 @@ export default function App() {
                         </div>
                         <div className="flex items-center justify-between pt-4 border-t border-border">
                             <span className="subtle flex items-center gap-2">
-                                <div className="relative h-6 w-6 rounded-full bg-white border border-border shadow-sm tire-sheen">
-                                    <div className="absolute inset-0.5 rounded-full border border-border/70" />
-                                    <div className="absolute left-0.5 right-0.5 top-1/2 -translate-y-1/2 h-2 rounded bg-mb-night" />
-                                    <div className="absolute left-1 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-white border border-border shadow-[inset_0_0_0_1px_rgba(0,0,0,0.06)]" />
-                                </div>
-                                © 2025 The G‑Class Economy
+                                <Logo size="md" loading="lazy" />© 2025 The
+                                G‑Class Economy
                             </span>
                             <div className="flex items-center gap-3">
                                 <div className="h-1.5 w-1.5 rounded-full bg-g-agave" />
