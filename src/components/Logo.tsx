@@ -27,7 +27,7 @@ export const Logo: React.FC<LogoProps> = ({
                 src="/img/gwagonlogo.png"
                 alt="Logo"
                 className="absolute inset-0 size-full object-cover object-center"
-                style={{ transform: "scale(1.34)" }}
+                style={{ transform: "scale(1.35)" }}
                 loading={loading}
             />
         </div>

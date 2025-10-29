@@ -285,15 +285,30 @@ export default function App() {
                             <div className="relative z-20">
                                 <Logo size="lg" loading="eager" />
                             </div>
-                            {/* black bar underneath */}
-                            <div
-                                className="absolute z-10 left-5 top-1/2 -translate-y-1/2 h-10 w-[45%] bg-mb-night flex items-center"
-                                style={{
-                                    borderTopRightRadius: "80px",
-                                    borderBottomRightRadius: "80px",
-                                }}
-                            >
-                                <h1 className="ml-8 text-[20px] sm:text-[22px] font-semibold tracking-tighter text-white">
+
+                            {/* black bar with custom SVG shape */}
+                            <div className="absolute z-10 left-5 top-1/2 -translate-y-1/2 h-10 w-[45%]">
+                                <svg
+                                    viewBox="0 0 1000 80"
+                                    preserveAspectRatio="none"
+                                    className="absolute inset-0 w-full h-full"
+                                >
+                                    <path
+                                        d="
+                                            M 0 0
+                                            L 960 0
+                                            Q 985 0 995 12
+                                            Q 1000 26 1000 40
+                                            Q 1000 54 995 68
+                                            Q 985 80 960 80
+                                            L 0 80
+                                            Z
+                                        "
+                                        fill="#0e1114"
+                                    />
+                                </svg>
+
+                                <h1 className="relative z-10 ml-8 text-[20px] sm:text-[22px] font-semibold tracking-tighter text-white flex items-center h-full">
                                     The G‑Class Economy
                                 </h1>
                             </div>
