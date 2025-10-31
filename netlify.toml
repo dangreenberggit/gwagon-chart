@@ -1,0 +1,10 @@
+[build]
+  command = "bun run build"
+  publish = "dist"
+
+# SPA routing: send all routes to the client
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
