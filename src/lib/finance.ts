@@ -1,4 +1,3 @@
-// src/lib/finance.ts
 // Build a cumulative total return index from annual total return percentages.
 //
 // Inputs:

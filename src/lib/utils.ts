@@ -1,12 +1,11 @@
 import { type ClassValue } from "clsx";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
-// Merges Tailwind classes, resolving conflicts for consistent styling
+
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-// Find index of a specific year in an aligned array of years
 export function findYearIndex(years: number[], targetYear: number): number {
     const idx = years.indexOf(targetYear);
     if (idx < 0) throw new Error(`Base year ${targetYear} not found`);

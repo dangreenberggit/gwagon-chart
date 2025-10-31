@@ -1,6 +1,5 @@
 import type { Row, IndexedRow } from "./types";
 
-// Transform to Tremor-friendly data objects for combined chart
 export function toChartData(rows: Row[]) {
     return rows.map((r) => ({
         Year: r.year.toString(),
@@ -10,7 +9,6 @@ export function toChartData(rows: Row[]) {
     }));
 }
 
-// Individual chart data transformers
 export function toSPXCumData(spxCum: Array<{ year: number; index: number }>) {
     return spxCum.map((d) => ({
         Year: d.year.toString(),
@@ -46,7 +44,6 @@ export function toHouseholdNetWorthData(rows: Row[]) {
     }));
 }
 
-// Transform indexed data for combined chart
 export function toIndexedChartData(rows: IndexedRow[]) {
     return rows.map((r) => ({
         Year: r.year.toString(),
@@ -57,7 +54,6 @@ export function toIndexedChartData(rows: IndexedRow[]) {
     }));
 }
 
-// Price data transformers
 export function toPriceData(rows: Row[]) {
     return rows.map((r) => ({
         Year: r.year.toString(),
@@ -74,7 +70,6 @@ export function toPriceIndexData(rows: IndexedRow[]) {
     }));
 }
 
-// Price index with PE AUM and Household Net Worth for comparison
 export function toPriceIndexWithContextData(rows: IndexedRow[]) {
     return rows.map((r) => ({
         Year: r.year.toString(),

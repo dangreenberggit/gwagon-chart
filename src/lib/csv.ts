@@ -12,7 +12,7 @@ export type SeriesRow = {
 };
 
 // Simple CSV parser (no quoted commas).
-// TEST: Keep minimal to avoid dependency bloat; consider papaparse if fields become complex.
+// Keep minimal to avoid dependency bloat; consider papaparse if fields become complex.
 export function parseCSV(text: string): Record<string, string>[] {
     const lines = text.trim().split(/\r?\n/);
     const firstLine = lines[0];
@@ -29,7 +29,6 @@ export function parseCSV(text: string): Record<string, string>[] {
         });
 }
 
-// Convert raw CSV objects to typed rows with numeric fields.
 export function toSeriesRows(rows: Record<string, string>[]): SeriesRow[] {
     return rows.map((r) => ({
         year: Number(r.year),

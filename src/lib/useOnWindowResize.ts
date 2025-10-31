@@ -1,4 +1,3 @@
-// Tremor useOnWindowResize [v0.0.2]
 import * as React from "react";
 
 export const useOnWindowResize = (handler: () => void) => {

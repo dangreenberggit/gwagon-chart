@@ -40,9 +40,9 @@ export function useDataLoader() {
                     year: r.year,
                     trPct: r.spxTR,
                 }));
-                let spxCum = buildTotalReturnIndex(spxTRSeries, 100, true); // includes 2012 perf
+                let spxCum = buildTotalReturnIndex(spxTRSeries, 100, true);
 
-                // Rebase so 2012 equals exactly 100 (Option A)
+                // Rebase so 2012 equals exactly 100
                 const base2012 = spxCum.find((d) => d.year === 2012)?.index;
                 if (base2012 && base2012 !== 100) {
                     spxCum = spxCum.map((d) => ({
@@ -80,7 +80,7 @@ export function useDataLoader() {
                 // Use cumulative SPX index directly (already represents accumulation)
                 const indexed = base.map((r, i) => ({
                     year: r.year,
-                    spxCumIdx: spxCumByYear.get(r.year) ?? null, // number
+                    spxCumIdx: spxCumByYear.get(r.year) ?? null,
                     peAumIdx: Number((peIdx[i] ?? 0).toFixed(1)),
                     gSalesIdx: Number((salesIdx[i] ?? 0).toFixed(1)),
                     g550MsrpIdx: g550MsrpIdx[i] ?? 0,

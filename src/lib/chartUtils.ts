@@ -1,4 +1,3 @@
-// Tremor Raw chartColors [v0.1.0]
 export type ColorUtility = "bg" | "stroke" | "fill" | "text";
 
 export const chartColors = {
@@ -91,7 +90,6 @@ export const getColorClassName = (
     return chartColors[color]?.[type] ?? fallbackColor[type];
 };
 
-// Tremor Raw getYAxisDomain [v0.0.0]
 export const getYAxisDomain = (
     autoMinValue: boolean,
     minValue: number | undefined,
@@ -102,7 +100,6 @@ export const getYAxisDomain = (
     return [minDomain, maxDomain];
 };
 
-// Tremor Raw hasOnlyOneValueForKey [v0.1.0]
 export function hasOnlyOneValueForKey(
     array: any[],
     keyToCheck: string

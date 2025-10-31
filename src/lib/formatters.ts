@@ -68,7 +68,6 @@ export function formatPercentage(
 
 /**
  * Format value based on dataKey type and context.
- * Extracted from CustomTooltip.tsx and enhanced with locale support.
  */
 export function formatValue(
     dataKey: string,
