@@ -4,6 +4,13 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { parseCSV, toSeriesRows } from "@/lib/csv";
 import { buildTotalReturnIndex } from "@/lib/finance";
 import { indexSeries, indexLevelsToBase100 } from "@/lib/utils";
+import {
+    formatIndexValue,
+    formatPercentage,
+    formatTrillions,
+    formatCurrency,
+    formatUnits,
+} from "@/lib/formatters";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // Import Tremor components
@@ -78,7 +85,7 @@ function toGClassData(rows: Row[]) {
 function toHouseholdNetWorthData(rows: Row[]) {
     return rows.map((r) => ({
         Year: r.year.toString(),
-        "Household Net Worth (USD T)": r.hhNetWorthBn,
+        "Household Net Worth (USD T)": r.hhNetWorthBn / 1000, // Convert billions to trillions
     }));
 }
 
@@ -322,18 +329,15 @@ export default function App() {
                         <div className="w-px bg-mb-silver/60 self-stretch" />
                         <div className="leading-tight">
                             <p className="text-xs text-muted-foreground">
-                                Markets, wealth, and sales—tracked from 2012 to
-                                2024
+                                Markets, wealth, and G‑Class sales, 2012–2024
+                                (annual)
                             </p>
                             <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground">
-                                <span>
-                                    Range: 2012–2024 • Annual, calendar-year
-                                    data
-                                </span>
+                                <span>Range: 2012–2024 • Annual</span>
                                 <span className="hidden sm:inline h-3 w-px bg-border" />
                                 <span>
-                                    Note: Independent analysis; not affiliated
-                                    with Mercedes‑Benz
+                                    Independent analysis; not affiliated with
+                                    Mercedes‑Benz
                                 </span>
                             </div>
                         </div>
@@ -356,8 +360,9 @@ export default function App() {
                             </CardTitle>
                             <p className="text-sm text-muted-foreground mt-1">
                                 Annual, calendar-year data. S&P 500 is total
-                                return (with dividends), compounded; sales and
-                                household net worth indexed by ratio to 2012.
+                                return with dividends (compounded, rebased so
+                                2012 = 100); sales and household net worth are
+                                level series indexed to 2012.
                             </p>
                         </CardHeader>
                         <CardContent>
@@ -384,13 +389,7 @@ export default function App() {
                                     showLegend={true}
                                     showTooltip={true}
                                     customTooltip={CustomTooltip}
-                                    valueFormatter={(v) =>
-                                        typeof v === "number"
-                                            ? v.toLocaleString(undefined, {
-                                                  maximumFractionDigits: 1,
-                                              })
-                                            : String(v)
-                                    }
+                                    valueFormatter={formatIndexValue}
                                     connectNulls
                                     curveType="monotone"
                                 />
@@ -427,8 +426,12 @@ export default function App() {
                                         {/* Annual Return Chart */}
                                         <div>
                                             <h3 className="font-medium mb-3">
-                                                Annual Total Return (%)
+                                                S&P 500 Annual Total Return (%)
                                             </h3>
+                                            <p className="text-xs text-muted-foreground mb-2">
+                                                Calendar-year total return
+                                                (price change + dividends).
+                                            </p>
                                             <ErrorBoundary
                                                 fallback={
                                                     <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
@@ -452,10 +455,8 @@ export default function App() {
                                                     customTooltip={
                                                         CustomTooltip
                                                     }
-                                                    valueFormatter={(v) =>
-                                                        typeof v === "number"
-                                                            ? `${v.toFixed(1)}%`
-                                                            : String(v)
+                                                    valueFormatter={
+                                                        formatPercentage
                                                     }
                                                     connectNulls
                                                     curveType="monotone"
@@ -468,9 +469,13 @@ export default function App() {
                                         {/* Cumulative Return Chart */}
                                         <div>
                                             <h3 className="font-medium mb-3">
-                                                Cumulative Total Return Index
-                                                (2012 = 100)
+                                                S&P 500 Cumulative Total Return
+                                                Index (2012 = 100)
                                             </h3>
+                                            <p className="text-xs text-muted-foreground mb-2">
+                                                Rebased so 2012 equals 100;
+                                                compounding starts in 2013.
+                                            </p>
                                             <ErrorBoundary
                                                 fallback={
                                                     <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
@@ -494,15 +499,8 @@ export default function App() {
                                                     customTooltip={
                                                         CustomTooltip
                                                     }
-                                                    valueFormatter={(v) =>
-                                                        typeof v === "number"
-                                                            ? v.toLocaleString(
-                                                                  undefined,
-                                                                  {
-                                                                      maximumFractionDigits: 1,
-                                                                  }
-                                                              )
-                                                            : String(v)
+                                                    valueFormatter={
+                                                        formatIndexValue
                                                     }
                                                     connectNulls
                                                     curveType="monotone"
@@ -539,8 +537,8 @@ export default function App() {
                             {expandedCharts.pe && (
                                 <div className="px-6 pb-4">
                                     <p className="text-sm text-muted-foreground mt-1">
-                                        Year-end levels; nominal USD;
-                                        definitions per McKinsey GPMR.
+                                        Year-end levels, nominal USD
+                                        (trillions).
                                     </p>
                                 </div>
                             )}
@@ -567,11 +565,7 @@ export default function App() {
                                             showLegend={false}
                                             showTooltip={true}
                                             customTooltip={CustomTooltip}
-                                            valueFormatter={(v) =>
-                                                typeof v === "number"
-                                                    ? `$${v.toFixed(1)}T`
-                                                    : String(v)
-                                            }
+                                            valueFormatter={formatTrillions}
                                             connectNulls
                                             curveType="monotone"
                                             xAxisLabel="Year"
@@ -604,8 +598,8 @@ export default function App() {
                             {expandedCharts.gclass && (
                                 <div className="px-6 pb-4">
                                     <p className="text-sm text-muted-foreground mt-1">
-                                        Calendar-year sales/deliveries as
-                                        reported by sources.
+                                        US calendar-year sales/deliveries
+                                        (units).
                                     </p>
                                 </div>
                             )}
@@ -632,11 +626,7 @@ export default function App() {
                                             showLegend={false}
                                             showTooltip={true}
                                             customTooltip={CustomTooltip}
-                                            valueFormatter={(v) =>
-                                                typeof v === "number"
-                                                    ? v.toLocaleString()
-                                                    : String(v)
-                                            }
+                                            valueFormatter={formatUnits}
                                             connectNulls
                                             curveType="monotone"
                                             xAxisLabel="Year"
@@ -670,9 +660,9 @@ export default function App() {
                             {expandedCharts.hhNetWorth && (
                                 <div className="px-6 pb-4">
                                     <p className="text-sm text-muted-foreground mt-1">
-                                        Year-end (Q4) levels from Federal
-                                        Reserve Financial Accounts (Z.1).
-                                        Subject to revision.
+                                        US households and nonprofits; Q4
+                                        year‑end levels (USD trillions). Subject
+                                        to revision.
                                     </p>
                                 </div>
                             )}
@@ -695,15 +685,11 @@ export default function App() {
                                                 "Household Net Worth (USD T)",
                                             ]}
                                             colors={["violet"]}
-                                            yAxisWidth={48}
+                                            yAxisWidth={64}
                                             showLegend={false}
                                             showTooltip={true}
                                             customTooltip={CustomTooltip}
-                                            valueFormatter={(v) =>
-                                                typeof v === "number"
-                                                    ? `$${v.toFixed(1)}T`
-                                                    : String(v)
-                                            }
+                                            valueFormatter={formatTrillions}
                                             connectNulls
                                             curveType="monotone"
                                             xAxisLabel="Year"
@@ -737,9 +723,10 @@ export default function App() {
                             {expandedCharts.prices && (
                                 <div className="px-6 pb-4">
                                     <p className="text-sm text-muted-foreground mt-1">
-                                        Annual; MSRP = base G 550 (excludes
-                                        destination/options). Estimated ATP is a
-                                        proxy calibrated to KBB/Cox March 2024.
+                                        Annual; G 550 base MSRP excludes
+                                        destination/options. Estimated ATP is a
+                                        proxy calibrated to a KBB/Cox March 2024
+                                        report.
                                     </p>
                                 </div>
                             )}
@@ -780,10 +767,8 @@ export default function App() {
                                                     customTooltip={
                                                         CustomTooltip
                                                     }
-                                                    valueFormatter={(v) =>
-                                                        typeof v === "number"
-                                                            ? `$${v.toLocaleString()}`
-                                                            : String(v)
+                                                    valueFormatter={
+                                                        formatCurrency
                                                     }
                                                     connectNulls
                                                     curveType="monotone"
@@ -801,23 +786,17 @@ export default function App() {
                                             <ul className="space-y-2 text-sm subtle">
                                                 <li>
                                                     <strong className="font-medium text-foreground">
-                                                        G‑Class Estimated
-                                                        Transaction Price
-                                                        (Proxy):
+                                                        Estimated Transaction
+                                                        Price (Proxy):
                                                     </strong>{" "}
-                                                    Estimated new-vehicle
-                                                    transaction price for the
-                                                    G‑Class computed as a
-                                                    multiple of G 550 base MSRP.
+                                                    computed as a fixed multiple
+                                                    of G 550 base MSRP.
                                                     Multiplier calibrated to a
-                                                    public Kelley Blue Book/Cox
-                                                    Automotive report citing
-                                                    G‑Class ATP in March 2024
-                                                    (~$208,663). Reflects
-                                                    trim/mix (e.g., AMG G 63),
-                                                    options, and market
-                                                    conditions. This is a proxy,
-                                                    not observed ATP.
+                                                    publicly cited G‑Class ATP
+                                                    in March 2024 (KBB/Cox).
+                                                    Reflects trim/mix (e.g., AMG
+                                                    G 63) and options; this is a
+                                                    proxy, not observed ATP.
                                                 </li>
                                             </ul>
                                         </div>
@@ -855,11 +834,9 @@ export default function App() {
                                         >
                                             SlickCharts S&P 500 Returns
                                         </a>
-                                        . S&P 500 calendar-year total return
-                                        percentages (with dividends), compounded
-                                        to form the cumulative total return
-                                        index. 2012 is set to 100; compounding
-                                        begins in 2013.
+                                        . Calendar-year total return percentages
+                                        (with dividends), compounded to a
+                                        cumulative index rebased to 2012 = 100.
                                     </div>
                                 </li>
                                 <li className="flex items-start gap-2">
@@ -880,9 +857,9 @@ export default function App() {
                                             McKinsey Global Private Markets
                                             Report (GPMR)
                                         </a>
-                                        . Nominal USD, year-end levels.
-                                        Historical values may be revised in
-                                        later editions.
+                                        . Global private equity assets under
+                                        management, nominal USD, year‑end
+                                        levels.
                                     </div>
                                 </li>
                                 <li className="flex items-start gap-2">
@@ -894,8 +871,8 @@ export default function App() {
                                         <strong className="font-medium text-foreground">
                                             G‑Class US sales:
                                         </strong>{" "}
-                                        US market; sales/deliveries as reported
-                                        by MBUSA and CarFigures.
+                                        US calendar-year sales/deliveries
+                                        (units).
                                         <ul className="ml-6 mt-1 space-y-1">
                                             <li>
                                                 <a
@@ -935,11 +912,11 @@ export default function App() {
                                             rel="noopener noreferrer"
                                             className="text-primary hover:underline"
                                         >
-                                            Kelley Blue Book / Cox Automotive
+                                            Kelley Blue Book / Cox Automotive,
+                                            new‑vehicle ATP report (March 2024)
                                         </a>
-                                        , New‑Vehicle Average Transaction Price
-                                        Report, March 2024: G‑Class ATP ≈
-                                        $208,663.
+                                        : G‑Class ATP ≈ $208,663 (used for proxy
+                                        calibration).
                                     </div>
                                 </li>
                                 <li className="flex items-start gap-2">
@@ -961,9 +938,8 @@ export default function App() {
                                             (FRED), TNWBSHNO
                                         </a>
                                         — Households and nonprofit
-                                        organizations; net worth, level. Q4
-                                        observations by year; subject to
-                                        revision.
+                                        organizations; net worth (level). Q4
+                                        observation used for each year.
                                     </div>
                                 </li>
                                 <li className="flex items-start gap-2">
@@ -973,8 +949,11 @@ export default function App() {
                                     />
                                     <div>
                                         <strong className="font-medium text-foreground">
-                                            G 550 MSRP (basis for ATP proxy):
-                                        </strong>
+                                            G 550 MSRP (basis for proxy):
+                                        </strong>{" "}
+                                        G 550 base MSRP (US). Base trim;
+                                        excludes destination/options. Selected
+                                        model‑year references:
                                         <ul className="ml-6 mt-1 space-y-1">
                                             <li>
                                                 <a
@@ -1031,23 +1010,19 @@ export default function App() {
                             </p>
                             <p className="text-sm subtle">
                                 <strong>Indexing:</strong> All indexed series
-                                use 2012 = 100. For the S&P 500 total return,
-                                the cumulative index is rebased so 2012 equals
-                                100 and compounding begins in 2013. For level
-                                series (PE AUM, G‑Class sales, household net
-                                worth, prices), index = 100 × value_t /
-                                value_2012.
+                                use 2012 = 100. The S&P 500 cumulative index is
+                                rebased so 2012 equals 100; compounding begins
+                                in 2013. For level series (PE AUM, G‑Class
+                                sales, household net worth, prices), index = 100
+                                × value_t / value_2012.
                             </p>
                             <p className="text-sm subtle mt-2">
-                                <strong>G‑Class Estimated ATP (Proxy):</strong>{" "}
-                                Computed as a fixed multiple of G 550 base MSRP
-                                (US market, base trim, excluding
-                                destination/options). The multiplier (≈1.46×) is
-                                calibrated to a publicly cited ATP value for
-                                March 2024 from Kelley Blue Book/Cox Automotive
-                                (≈$208,663). This proxy reflects trim/mix (e.g.,
-                                AMG G 63), options, and market conditions, and
-                                is presented as an estimate only.
+                                <strong>Estimated ATP (Proxy):</strong> A fixed
+                                multiple of G 550 base MSRP (US). Multiplier
+                                (≈1.46×) calibrated to a publicly cited G‑Class
+                                ATP in March 2024 (KBB/Cox; ≈$208,663). Proxy
+                                reflects trim/mix and options. This is an
+                                estimate, not observed ATP.
                             </p>
                         </div>
                         <div className="flex items-center justify-between pt-4 border-t border-border">
