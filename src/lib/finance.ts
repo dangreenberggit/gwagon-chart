@@ -15,6 +15,11 @@ export function buildTotalReturnIndex(
     base = 100,
     baseYearIncluded = true
 ): Array<{ year: number; index: number }> {
+    if (!series || series.length === 0) {
+        console.warn('buildTotalReturnIndex: empty or null series provided');
+        return [];
+    }
+    
     const out: Array<{ year: number; index: number }> = [];
     let level = base;
 

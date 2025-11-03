@@ -11,6 +11,10 @@ export function useDataLoader() {
         year: number;
         index: number;
     }> | null>(null);
+    const [spxCumInvestment, setSpxCumInvestment] = useState<Array<{
+        year: number;
+        index: number;
+    }> | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -40,16 +44,15 @@ export function useDataLoader() {
                     year: r.year,
                     trPct: r.spxTR,
                 }));
-                let spxCum = buildTotalReturnIndex(spxTRSeries, 100, true);
-
-                // Rebase so 2012 equals exactly 100
-                const base2012 = spxCum.find((d) => d.year === 2012)?.index;
-                if (base2012 && base2012 !== 100) {
-                    spxCum = spxCum.map((d) => ({
-                        year: d.year,
-                        index: (d.index / base2012) * 100,
-                    }));
-                }
+                
+                // Comparison mode: 2012 = 100, compounding starts 2013
+                const spxCumComparison = buildTotalReturnIndex(spxTRSeries, 100, false);
+                
+                // Investment mode: $100 at start of 2012, includes 2012's return
+                const spxCumInvestment = buildTotalReturnIndex(spxTRSeries, 100, true);
+                
+                // Use comparison mode for indexed view (2012 = 100)
+                const spxCum = spxCumComparison;
 
                 const spxCumByYear = new Map<number, number>(
                     spxCum.map((d) => [d.year, d.index])
@@ -90,6 +93,7 @@ export function useDataLoader() {
                 setRows(base);
                 setIndexedRows(indexed);
                 setSpxCumData(spxCum);
+                setSpxCumInvestment(spxCumInvestment);
             } catch (e) {
                 console.error("Error loading data:", e);
                 setError(e instanceof Error ? e.message : String(e));
@@ -100,5 +104,5 @@ export function useDataLoader() {
         load();
     }, []);
 
-    return { rows, indexedRows, spxCumData, error, isLoading };
+    return { rows, indexedRows, spxCumData, spxCumInvestment, error, isLoading };
 }

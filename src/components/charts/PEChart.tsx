@@ -28,7 +28,7 @@ export function PEChart({
             >
                 <CardTitle className="flex items-center justify-between">
                     <span>
-                        Global Private Equity AUM (USD
+                        Global Private Equity Assets Under Management (USD
                         Trillions)
                     </span>
                     <span className="subtle font-normal">

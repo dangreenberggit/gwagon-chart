@@ -39,7 +39,7 @@ export function Footer() {
                                 />
                                 <div>
                                     <strong className="font-medium text-foreground">
-                                        Global PE AUM:
+                                        Global PE Assets Under Management:
                                     </strong>{" "}
                                     <a
                                         href="https://www.mckinsey.com/industries/private-capital/our-insights/global-private-markets-report"
@@ -203,7 +203,7 @@ export function Footer() {
                             <strong>Indexing:</strong> All indexed series use
                             2012 = 100. The S&P 500 cumulative index is rebased
                             so 2012 equals 100; compounding begins in 2013. For
-                            level series (PE AUM, G‑Class sales, household net
+                            level series (PE Assets Under Management, G‑Class sales, household net
                             worth, prices), index = 100 × value_t / value_2012.
                         </p>
                         <p className="text-sm subtle mt-2">

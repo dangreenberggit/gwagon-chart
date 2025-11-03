@@ -9,6 +9,7 @@ import type { ExpandedCharts } from "@/lib/types";
 interface SPXChartProps {
     rows: Row[];
     spxCumData: Array<{ year: number; index: number }>;
+    spxCumInvestment: Array<{ year: number; index: number }>;
     expandedCharts: ExpandedCharts;
     onToggle: () => void;
 }
@@ -16,6 +17,7 @@ interface SPXChartProps {
 export function SPXChart({
     rows,
     spxCumData,
+    spxCumInvestment,
     expandedCharts,
     onToggle,
 }: SPXChartProps) {
@@ -24,10 +26,19 @@ export function SPXChart({
         "S&P 500 Annual Total Return (%)": r.spxTR,
     }));
 
-    const spxData = spxCumData.map((d) => ({
-        Year: d.year.toString(),
-        "S&P 500 Cumulative Total Return Index (2012 = 100)": d.index,
-    }));
+    // Combine both cumulative series for the chart
+    const spxData = spxCumData.map((d) => {
+        const investmentData = spxCumInvestment.find(
+            (inv) => inv.year === d.year
+        );
+        return {
+            Year: d.year.toString(),
+            "S&P 500 Total Return Index (2012 = 100, compounding from 2013)":
+                d.index,
+            "S&P 500 Total Return Index (base 100, compounding from 2012)":
+                investmentData?.index ?? null,
+        };
+    });
 
     return (
         <Card className="border-l-4 border-l-chart-spx hover:shadow-lg transition-shadow">
@@ -38,8 +49,7 @@ export function SPXChart({
                 <CardTitle className="flex items-center justify-between">
                     <span>S&P 500 Total Return</span>
                     <span className="subtle font-normal">
-                        {expandedCharts.spx ? "▼" : "▶"} Click
-                        to{" "}
+                        {expandedCharts.spx ? "▼" : "▶"} Click to{" "}
                         {expandedCharts.spx ? "collapse" : "expand"}
                     </span>
                 </CardTitle>
@@ -53,8 +63,8 @@ export function SPXChart({
                                 S&P 500 Annual Total Return (%)
                             </h3>
                             <p className="text-xs text-muted-foreground mb-2">
-                                Calendar-year total return
-                                (price change + dividends).
+                                Calendar-year total return (price change +
+                                dividends).
                             </p>
                             <ErrorBoundary
                                 fallback={
@@ -89,12 +99,14 @@ export function SPXChart({
                         {/* Cumulative Return Chart */}
                         <div>
                             <h3 className="font-medium mb-3">
-                                S&P 500 Cumulative Total Return
-                                Index (2012 = 100)
+                                S&P 500 Cumulative Total Return Index (2012 =
+                                100)
                             </h3>
                             <p className="text-xs text-muted-foreground mb-2">
-                                Rebased so 2012 equals 100;
-                                compounding starts in 2013.
+                                Two cumulative total return indices. Blue:
+                                Indexed so 2012 = 100, compounding from 2013.
+                                Green: Base 100 at start of 2012, compounding
+                                from 2012.
                             </p>
                             <ErrorBoundary
                                 fallback={
@@ -110,11 +122,12 @@ export function SPXChart({
                                     data={spxData}
                                     index="Year"
                                     categories={[
-                                        "S&P 500 Cumulative Total Return Index (2012 = 100)",
+                                        "S&P 500 Total Return Index (2012 = 100, compounding from 2013)",
+                                        "S&P 500 Total Return Index (base 100, compounding from 2012)",
                                     ]}
-                                    colors={["blue"]}
+                                    colors={["blue", "emerald"]}
                                     yAxisWidth={56}
-                                    showLegend={false}
+                                    showLegend={true}
                                     showTooltip={true}
                                     customTooltip={CustomTooltip}
                                     valueFormatter={formatIndexValue}
@@ -131,4 +144,3 @@ export function SPXChart({
         </Card>
     );
 }
-

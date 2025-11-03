@@ -29,7 +29,7 @@ export function PricingChart({
                 <CardTitle className="flex items-center justify-between">
                     <span>
                         G‑Class Estimated Transaction Price
-                        (Proxy) and G 550 MSRP (USD)
+                        (Proxy) (USD)
                     </span>
                     <span className="subtle font-normal">
                         {expandedCharts.prices ? "▼" : "▶"}{" "}
@@ -41,10 +41,7 @@ export function PricingChart({
             {expandedCharts.prices && (
                 <div className="px-6 pb-4">
                     <p className="text-sm text-muted-foreground mt-1">
-                        Annual; G 550 base MSRP excludes
-                        destination/options. Estimated ATP is a
-                        proxy calibrated to a KBB/Cox March 2024
-                        report.
+                        Estimated ATP proxy (1.46× MSRP).
                     </p>
                 </div>
             )}
@@ -58,9 +55,8 @@ export function PricingChart({
                                 Price (Proxy) (USD)
                             </h3>
                             <p className="text-xs text-muted-foreground mb-2">
-                                Proxy multiplier ≈ 1.46×
-                                (calibrated to Mar 2024 KBB/Cox
-                                ATP ≈ $208,663).
+                                Proxy estimate (1.46× MSRP), calibrated to Mar
+                                2024 KBB/Cox ATP ≈ $208,663. Not observed data.
                             </p>
                             <ErrorBoundary
                                 fallback={
@@ -79,7 +75,7 @@ export function PricingChart({
                                         "G‑Class Est. ATP (Proxy) (USD)",
                                     ]}
                                     colors={["pink"]}
-                                    yAxisWidth={68}
+                                    yAxisWidth={56}
                                     showLegend={false}
                                     showTooltip={true}
                                     customTooltip={CustomTooltip}
@@ -88,6 +84,8 @@ export function PricingChart({
                                     curveType="monotone"
                                     xAxisLabel="Year"
                                     yAxisLabel="Price (USD)"
+                                    minValue={160000}
+                                    maxValue={215000}
                                 />
                             </ErrorBoundary>
                         </div>

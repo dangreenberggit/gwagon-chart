@@ -14,14 +14,27 @@ import { PricingChart } from "./components/charts/PricingChart";
 import { toIndexedChartData } from "@/lib/dataTransformers";
 
 export default function App() {
-    const { rows, indexedRows, spxCumData, error, isLoading } = useDataLoader();
+    const {
+        rows,
+        indexedRows,
+        spxCumData,
+        spxCumInvestment,
+        error,
+        isLoading,
+    } = useDataLoader();
     const { expandedCharts, toggleChart } = useChartExpansion();
 
     if (error) {
         return <ErrorPage error={error} />;
     }
 
-    if (isLoading || !rows || !indexedRows || !spxCumData) {
+    if (
+        isLoading ||
+        !rows ||
+        !indexedRows ||
+        !spxCumData ||
+        !spxCumInvestment
+    ) {
         return (
             <div className="p-6 bg-background text-foreground">Loading…</div>
         );
@@ -51,6 +64,7 @@ export default function App() {
                         <SPXChart
                             rows={rows}
                             spxCumData={spxCumData}
+                            spxCumInvestment={spxCumInvestment}
                             expandedCharts={expandedCharts}
                             onToggle={() => toggleChart("spx")}
                         />

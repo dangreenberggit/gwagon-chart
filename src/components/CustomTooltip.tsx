@@ -8,6 +8,10 @@ const getConciseLabel = (dataKey: string) => {
         "S&P 500 Cumulative Total Return Index (2012 = 100)": "S&P 500",
         "S&P 500 Annual Total Return (%)": "S&P 500",
         "S&P 500 total return (%)": "S&P 500",
+        "S&P 500 Total Return Index (2012 = 100, compounding from 2013)":
+            "S&P 500 (from 2013)",
+        "S&P 500 Total Return Index (base 100, compounding from 2012)":
+            "S&P 500 (from 2012)",
         "Global PE AUM (index, 2012 = 100)": "PE AUM",
         "Global PE AUM (USD T)": "PE AUM",
         "US G‑Class sales (index, 2012 = 100)": "G‑Class Sales",
@@ -35,6 +39,10 @@ export const CustomTooltip = ({
             "S&P 500 Cumulative Total Return Index (2012 = 100)": "#3b82f6", // blue
             "S&P 500 Annual Total Return (%)": "#3b82f6", // blue
             "S&P 500 total return (%)": "#3b82f6", // blue
+            "S&P 500 Total Return Index (2012 = 100, compounding from 2013)":
+                "#3b82f6", // blue
+            "S&P 500 Total Return Index (base 100, compounding from 2012)":
+                "#10b981", // emerald
             "Global PE AUM (index, 2012 = 100)": "#f59e0b", // amber
             "Global PE AUM (USD T)": "#f59e0b", // amber
             "US G‑Class sales (index, 2012 = 100)": "#10b981", // emerald

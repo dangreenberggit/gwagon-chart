@@ -22,10 +22,9 @@ export function IndexedComparisonChart({ data }: IndexedComparisonChartProps) {
                     Return, G‑Class Sales, and Household Net Worth
                 </CardTitle>
                 <p className="text-sm text-muted-foreground mt-1">
-                    Annual, calendar-year data. S&P 500 is total
-                    return with dividends (compounded, rebased so
-                    2012 = 100); sales and household net worth are
-                    level series indexed to 2012.
+                    Annual, calendar-year data. S&P 500 is total return with
+                    dividends (compounded, rebased so 2012 = 100); sales and
+                    household net worth are level series indexed to 2012.
                 </p>
             </CardHeader>
             <CardContent>
