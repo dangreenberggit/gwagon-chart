@@ -4,6 +4,13 @@ import { LineChart } from "@tremor/react";
 import { CustomTooltip } from "../CustomTooltip";
 import { formatUnits } from "@/lib/formatters";
 import { toGClassData } from "@/lib/dataTransformers";
+import {
+    Titles,
+    Subtitles,
+    Categories,
+    AxisLabels,
+    FooterAnchors,
+} from "@/constants/strings";
 import type { Row } from "@/lib/types";
 import type { ExpandedCharts } from "@/lib/types";
 
@@ -25,14 +32,25 @@ export function GClassSalesChart({
             <CardHeader
                 className="cursor-pointer hover:bg-secondary/50 transition-colors"
                 onClick={onToggle}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        onToggle();
+                    }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-expanded={expandedCharts.gclass}
             >
                 <CardTitle className="flex items-center justify-between">
-                    <span>
-                        US Mercedes-Benz G-Class Sales (Units)
+                    <span className="flex items-center gap-2">
+                        {Titles.GCLASS_CARD}
+                        <span className="text-xs font-normal px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">
+                            Units
+                        </span>
                     </span>
                     <span className="subtle font-normal">
-                        {expandedCharts.gclass ? "▼" : "▶"}{" "}
-                        Click to{" "}
+                        {expandedCharts.gclass ? "▼" : "▶"} Click to{" "}
                         {expandedCharts.gclass ? "collapse" : "expand"}
                     </span>
                 </CardTitle>
@@ -40,42 +58,51 @@ export function GClassSalesChart({
             {expandedCharts.gclass && (
                 <div className="px-6 pb-4">
                     <p className="text-sm text-muted-foreground mt-1">
-                        US calendar-year sales/deliveries
-                        (units).
+                        {Subtitles.GCLASS_CARD}
                     </p>
                 </div>
             )}
             {expandedCharts.gclass && (
                 <CardContent>
-                    <ErrorBoundary
-                        fallback={
-                            <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
-                                <p className="text-muted-foreground">
-                                    Chart failed to load
-                                </p>
-                            </div>
-                        }
-                    >
-                        <LineChart
-                            className="h-48 w-full"
-                            data={gClassData}
-                            index="Year"
-                            categories={["US G‑Class sales (units)"]}
-                            colors={["emerald"]}
-                            yAxisWidth={52}
-                            showLegend={false}
-                            showTooltip={true}
-                            customTooltip={CustomTooltip}
-                            valueFormatter={formatUnits}
-                            connectNulls
-                            curveType="monotone"
-                            xAxisLabel="Year"
-                            yAxisLabel="Units Sold"
-                        />
-                    </ErrorBoundary>
+                    <div className="space-y-4">
+                        <ErrorBoundary
+                            fallback={
+                                <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
+                                    <p className="text-muted-foreground">
+                                        Chart failed to load
+                                    </p>
+                                </div>
+                            }
+                        >
+                            <LineChart
+                                className="h-48 w-full"
+                                data={gClassData}
+                                index="Year"
+                                categories={[...Categories.GCLASS]}
+                                colors={["emerald"]}
+                                yAxisWidth={52}
+                                showLegend={false}
+                                showTooltip={true}
+                                customTooltip={CustomTooltip}
+                                valueFormatter={formatUnits}
+                                connectNulls
+                                curveType="monotone"
+                                xAxisLabel={AxisLabels.YEAR}
+                                yAxisLabel={AxisLabels.UNITS}
+                            />
+                        </ErrorBoundary>
+                        <div className="pt-4 border-t">
+                            <a
+                                href={`#${FooterAnchors.GCLASS}`}
+                                className="text-sm text-primary hover:underline"
+                                aria-label="View sources and definitions for G-Class U.S. sales"
+                            >
+                                Sources and definitions
+                            </a>
+                        </div>
+                    </div>
                 </CardContent>
             )}
         </Card>
     );
 }
-

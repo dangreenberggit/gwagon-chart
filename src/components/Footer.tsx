@@ -10,7 +10,10 @@ export function Footer() {
                             Data Sources:
                         </p>
                         <ul className="space-y-2 subtle">
-                            <li className="flex items-start gap-2">
+                            <li
+                                id="spx-sources"
+                                className="flex items-start gap-2"
+                            >
                                 <div
                                     className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
                                     style={{ backgroundColor: "#2453FF" }}
@@ -19,6 +22,10 @@ export function Footer() {
                                     <strong className="font-medium text-foreground">
                                         S&P 500 total return:
                                     </strong>{" "}
+                                    S&P 500 total return (with dividends),
+                                    calendar‑year. Cumulative index uses
+                                    geometric compounding and is rebased to 2012
+                                    = 100.{" "}
                                     <a
                                         href="https://www.slickcharts.com/sp500/returns"
                                         target="_blank"
@@ -36,12 +43,12 @@ export function Footer() {
                                     >
                                         Return Details
                                     </a>
-                                    . Calendar-year total return percentages
-                                    (with dividends), compounded to a cumulative
-                                    index rebased to 2012 = 100.
                                 </div>
                             </li>
-                            <li className="flex items-start gap-2">
+                            <li
+                                id="pe-sources"
+                                className="flex items-start gap-2"
+                            >
                                 <div
                                     className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
                                     style={{ backgroundColor: "#D39B00" }}
@@ -63,71 +70,44 @@ export function Footer() {
                                     management, nominal USD, year‑end levels.
                                 </div>
                             </li>
-                            <li className="flex items-start gap-2">
+                            <li
+                                id="gclass-sources"
+                                className="flex items-start gap-2"
+                            >
                                 <div
                                     className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
                                     style={{ backgroundColor: "#1FA97A" }}
                                 />
                                 <div>
                                     <strong className="font-medium text-foreground">
-                                        G‑Class US sales:
+                                        G‑Class U.S. sales:
                                     </strong>{" "}
-                                    US calendar-year sales/deliveries (units).
-                                    <ul className="ml-6 mt-1 space-y-1">
-                                        <li>
-                                            <a
-                                                href="https://media.mbusa.com/releases/release-4efd8afecd0ad84220062379551956e8-mercedes-benz-usa-reports-9-year-over-year-growth-for-passenger-car-sales"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-primary hover:underline"
-                                            >
-                                                MBUSA 2024 press release
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="https://carfigures.com/us-market-brand/mercedes-benz/g-class"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-primary hover:underline"
-                                            >
-                                                CarFigures historical sales
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <div
-                                    className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
-                                    style={{ backgroundColor: "#E05E8C" }}
-                                />
-                                <div>
-                                    <strong className="font-medium text-foreground">
-                                        G‑Class ATP calibration:
-                                    </strong>{" "}
+                                    G‑Class U.S. sales (units), calendar year.
+                                    Sources:{" "}
                                     <a
-                                        href="https://mediaroom.kbb.com/2024-04-15-New-Vehicle-Average-Transaction-Prices-Drop-to-Lowest-Level-in-nearly-Two-Years,-According-to-Latest-Kelley-Blue-Book-Estimates"
+                                        href="https://media.mbusa.com/releases/release-4efd8afecd0ad84220062379551956e8-mercedes-benz-usa-reports-9-year-over-year-growth-for-passenger-car-sales"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="text-primary hover:underline"
                                     >
-                                        Kelley Blue Book / Cox Automotive,
-                                        Average Transaction Prices (March 2024)
-                                    </a>{" "}
-                                    (press release). G‑Class ATP ≈ $208,663.{" "}
-                                    <a
-                                        href="https://www.coxautoinc.com/wp-content/uploads/2024/04/March-2024-Kelley-Blue-Book-Average-Transaction-Price-tables.pdf"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-primary hover:underline"
-                                    >
-                                        Data tables (PDF)
+                                        MBUSA press releases
                                     </a>
-                                    . Used for proxy calibration.
+                                    ;{" "}
+                                    <a
+                                        href="https://carfigures.com/us-market-brand/mercedes-benz/g-class"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary hover:underline"
+                                    >
+                                        CarFigures historical sales
+                                    </a>
+                                    .
                                 </div>
                             </li>
-                            <li className="flex items-start gap-2">
+                            <li
+                                id="hhnw-sources"
+                                className="flex items-start gap-2"
+                            >
                                 <div
                                     className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
                                     style={{ backgroundColor: "#6F5BD5" }}
@@ -136,78 +116,43 @@ export function Footer() {
                                     <strong className="font-medium text-foreground">
                                         Household net worth:
                                     </strong>{" "}
+                                    Household and nonprofit net worth (level),
+                                    Q4 of each year. Source:{" "}
                                     <a
                                         href="https://fred.stlouisfed.org/series/TNWBSHNO"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="text-primary hover:underline"
                                     >
-                                        Federal Reserve Economic Data (FRED),
-                                        TNWBSHNO
+                                        FRED, TNWBSHNO
                                     </a>
-                                    — Households and nonprofit organizations;
-                                    net worth (level). Q4 observation used for
-                                    each year.
+                                    . Nominal U.S. dollars.
                                 </div>
                             </li>
-                            <li className="flex items-start gap-2">
+                            <li
+                                id="pricing-sources"
+                                className="flex items-start gap-2"
+                            >
                                 <div
                                     className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
                                     style={{ backgroundColor: "#E05E8C" }}
                                 />
                                 <div>
                                     <strong className="font-medium text-foreground">
-                                        G 550 MSRP (basis for proxy):
+                                        G‑Class pricing:
                                     </strong>{" "}
-                                    G 550 base MSRP (US). Base trim; excludes
-                                    destination/options. Selected model‑year
-                                    references:
-                                    <ul className="ml-6 mt-1 space-y-1">
-                                        <li>
-                                            <a
-                                                href="https://media.mbusa.com"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-primary hover:underline"
-                                            >
-                                                MBUSA media resources
-                                            </a>{" "}
-                                            (2018 G‑Class Quick Reference Guide,
-                                            G 550 MSRP $123,600)
-                                        </li>
-                                        <li>
-                                            US News model pages:
-                                            <ul className="ml-4 mt-1 space-y-1">
-                                                <li>
-                                                    <a
-                                                        href="https://cars.usnews.com/cars-trucks/mercedes-benz/g-class/2018/specs"
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-primary hover:underline"
-                                                    >
-                                                        2018 G 550
-                                                    </a>{" "}
-                                                    base MSRP $123,600
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        href="https://cars.usnews.com/cars-trucks/mercedes-benz/g-class/2020/specs"
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-primary hover:underline"
-                                                    >
-                                                        2020 G 550
-                                                    </a>{" "}
-                                                    base MSRP $130,900
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            MY2023 G 550 base MSRP ≈ $139,900
-                                            (automotive press, 2022 launch
-                                            coverage)
-                                        </li>
-                                    </ul>
+                                    Estimated price is a proxy = 1.46 × base
+                                    MSRP. Calibrated to{" "}
+                                    <a
+                                        href="https://mediaroom.kbb.com/2024-04-15-New-Vehicle-Average-Transaction-Prices-Drop-to-Lowest-Level-in-nearly-Two-Years,-According-to-Latest-Kelley-Blue-Book-Estimates"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary hover:underline"
+                                    >
+                                        Kelley Blue Book / Cox Automotive March
+                                        2024 estimate (~$208,663)
+                                    </a>
+                                    . Not observed transaction data.
                                 </div>
                             </li>
                         </ul>
@@ -222,13 +167,10 @@ export function Footer() {
                             <strong> geometric compounding</strong>: each year's
                             index = previous year's index × (1 + return/100),
                             representing cumulative compounded returns. Other
-                            series (PE Assets Under Management, G‑Class sales,
-                            household net worth, prices) use{" "}
+                            series (private equity assets under management,
+                            G‑Class sales, household net worth, prices) use{" "}
                             <strong>arithmetic indexing</strong>: index = 100 ×
-                            current value / 2012 value, representing relative
-                            change from base. When comparing on the same chart,
-                            both start at 100 but growth patterns differ
-                            (multiplicative vs relative).
+                            value ÷ 2012 value.
                         </p>
                         <p className="text-sm subtle mt-2">
                             <strong>Estimated ATP (Proxy):</strong> A fixed

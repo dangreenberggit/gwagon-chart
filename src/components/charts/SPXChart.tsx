@@ -3,6 +3,13 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { LineChart } from "@tremor/react";
 import { CustomTooltip } from "../CustomTooltip";
 import { formatPercentage, formatIndexValue } from "@/lib/formatters";
+import {
+    Titles,
+    Subtitles,
+    Categories,
+    AxisLabels,
+    FooterAnchors,
+} from "@/constants/strings";
 import type { Row } from "@/lib/types";
 import type { ExpandedCharts } from "@/lib/types";
 
@@ -23,49 +30,56 @@ export function SPXChart({
 }: SPXChartProps) {
     const spxReturnData = rows.map((r) => ({
         Year: r.year.toString(),
-        "S&P 500 Annual Total Return (%)": r.spxTR,
+        [Categories.SPX_ANNUAL[0]]: r.spxTR,
     }));
 
     // Combine both cumulative series for the chart
-    const spxData = spxCumData.map((d) => {
-        const investmentData = spxCumInvestment.find(
-            (inv) => inv.year === d.year
-        );
-        return {
-            Year: d.year.toString(),
-            "S&P 500 Total Return Index (2012 = 100, compounding from 2013)":
-                d.index,
-            "S&P 500 Total Return Index (base 100, compounding from 2012)":
-                investmentData?.index ?? null,
-        };
-    });
+    const invByYear = new Map(spxCumInvestment.map((d) => [d.year, d.index]));
+    const spxData = spxCumData.map((d) => ({
+        Year: d.year.toString(),
+        [Categories.SPX_CUMULATIVE[0]]: d.index,
+        [Categories.SPX_CUMULATIVE[1]]: invByYear.get(d.year) ?? null,
+    }));
 
     return (
         <Card className="border-l-4 border-l-chart-spx hover:shadow-lg transition-shadow">
             <CardHeader
                 className="cursor-pointer hover:bg-secondary/50 transition-colors"
                 onClick={onToggle}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        onToggle();
+                    }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-expanded={expandedCharts.spx}
             >
                 <CardTitle className="flex items-center justify-between">
-                    <span>S&P 500 Total Return</span>
-                    <span className="subtle font-normal">
-                        {expandedCharts.spx ? "▼" : "▶"} Click to{" "}
-                        {expandedCharts.spx ? "collapse" : "expand"}
+                    <span className="flex items-center gap-2">
+                        {expandedCharts.spx ? "▼" : "▶"} {Titles.SPX_CARD}
+                        <span className="text-xs font-normal px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">
+                            % / Index
+                        </span>
                     </span>
                 </CardTitle>
             </CardHeader>
+            {expandedCharts.spx && (
+                <div className="px-6 pb-4">
+                    <p className="text-sm text-muted-foreground mt-1">
+                        {Subtitles.SPX_CARD}
+                    </p>
+                </div>
+            )}
             {expandedCharts.spx && (
                 <CardContent>
                     <div className="space-y-6">
                         {/* Annual Return Chart */}
                         <div>
                             <h3 className="font-medium mb-3">
-                                S&P 500 Annual Total Return (%)
+                                {Titles.SPX_ANNUAL}
                             </h3>
-                            <p className="text-xs text-muted-foreground mb-2">
-                                Calendar-year total return (price change +
-                                dividends).
-                            </p>
                             <ErrorBoundary
                                 fallback={
                                     <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
@@ -79,9 +93,7 @@ export function SPXChart({
                                     className="h-48 w-full"
                                     data={spxReturnData}
                                     index="Year"
-                                    categories={[
-                                        "S&P 500 Annual Total Return (%)",
-                                    ]}
+                                    categories={[...Categories.SPX_ANNUAL]}
                                     colors={["blue"]}
                                     yAxisWidth={56}
                                     showLegend={false}
@@ -90,8 +102,8 @@ export function SPXChart({
                                     valueFormatter={formatPercentage}
                                     connectNulls
                                     curveType="monotone"
-                                    xAxisLabel="Year"
-                                    yAxisLabel="Return (%)"
+                                    xAxisLabel={AxisLabels.YEAR}
+                                    yAxisLabel={AxisLabels.PERCENT}
                                 />
                             </ErrorBoundary>
                         </div>
@@ -99,15 +111,8 @@ export function SPXChart({
                         {/* Cumulative Return Chart */}
                         <div>
                             <h3 className="font-medium mb-3">
-                                S&P 500 Cumulative Total Return Index (2012 =
-                                100)
+                                {Titles.SPX_CUMULATIVE}
                             </h3>
-                            <p className="text-xs text-muted-foreground mb-2">
-                                Two cumulative total return indices. Blue:
-                                Indexed so 2012 = 100, compounding from 2013.
-                                Green: Base 100 at start of 2012, compounding
-                                from 2012.
-                            </p>
                             <ErrorBoundary
                                 fallback={
                                     <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
@@ -121,10 +126,7 @@ export function SPXChart({
                                     className="h-96 w-full"
                                     data={spxData}
                                     index="Year"
-                                    categories={[
-                                        "S&P 500 Total Return Index (2012 = 100, compounding from 2013)",
-                                        "S&P 500 Total Return Index (base 100, compounding from 2012)",
-                                    ]}
+                                    categories={[...Categories.SPX_CUMULATIVE]}
                                     colors={["blue", "emerald"]}
                                     yAxisWidth={56}
                                     showLegend={true}
@@ -133,10 +135,19 @@ export function SPXChart({
                                     valueFormatter={formatIndexValue}
                                     connectNulls
                                     curveType="monotone"
-                                    xAxisLabel="Year"
-                                    yAxisLabel="Index Value"
+                                    xAxisLabel={AxisLabels.YEAR}
+                                    yAxisLabel={AxisLabels.INDEX}
                                 />
                             </ErrorBoundary>
+                        </div>
+                        <div className="pt-4 border-t">
+                            <a
+                                href={`#${FooterAnchors.SPX}`}
+                                className="text-sm text-primary hover:underline"
+                                aria-label="View sources and definitions for S&P 500 total return"
+                            >
+                                Sources and definitions
+                            </a>
                         </div>
                     </div>
                 </CardContent>

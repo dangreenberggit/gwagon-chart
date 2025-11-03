@@ -57,8 +57,7 @@ export function toIndexedChartData(rows: IndexedRow[]) {
 export function toPriceData(rows: Row[]) {
     return rows.map((r) => ({
         Year: r.year.toString(),
-        "G 550 base MSRP (USD)": r.g550Msrp,
-        "G‑Class Est. ATP (Proxy) (USD)": r.gClassAtp,
+        "G‑Class estimated price (proxy, USD)": r.gClassAtp,
     }));
 }
 

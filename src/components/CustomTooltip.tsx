@@ -12,12 +12,15 @@ const getConciseLabel = (dataKey: string) => {
             "S&P 500 (from 2013)",
         "S&P 500 Total Return Index (base 100, compounding from 2012)":
             "S&P 500 (from 2012)",
+        "Total return (compounding from 2013)": "S&P 500 (from 2013)",
+        "Total return (compounding from 2012)": "S&P 500 (from 2012)",
         "Global PE AUM (index, 2012 = 100)": "PE AUM",
         "Global PE AUM (USD T)": "PE AUM",
         "US G‑Class sales (index, 2012 = 100)": "G‑Class Sales",
         "US G‑Class sales (units)": "G‑Class Sales",
         "G‑Class Est. ATP (index, 2012 = 100)": "G‑Class ATP",
         "G‑Class Est. ATP (Proxy) (USD)": "G‑Class ATP",
+        "G‑Class estimated price (proxy, USD)": "G‑Class Price",
         "G 550 base MSRP (USD)": "G 550 MSRP",
         "Household net worth (index, 2012 = 100)": "HH Net Worth",
         "Household Net Worth (USD T)": "HH Net Worth",
@@ -43,12 +46,15 @@ export const CustomTooltip = ({
                 "#3b82f6", // blue
             "S&P 500 Total Return Index (base 100, compounding from 2012)":
                 "#10b981", // emerald
+            "Total return (compounding from 2013)": "#3b82f6", // blue
+            "Total return (compounding from 2012)": "#10b981", // emerald
             "Global PE AUM (index, 2012 = 100)": "#f59e0b", // amber
             "Global PE AUM (USD T)": "#f59e0b", // amber
             "US G‑Class sales (index, 2012 = 100)": "#10b981", // emerald
             "US G‑Class sales (units)": "#10b981", // emerald
             "G‑Class Est. ATP (index, 2012 = 100)": "#ec4899", // pink
             "G‑Class Est. ATP (Proxy) (USD)": "#ec4899", // pink
+            "G‑Class estimated price (proxy, USD)": "#ec4899", // pink
             "G 550 base MSRP (USD)": "#a855f7", // purple
             "Household net worth (index, 2012 = 100)": "#8b5cf6", // violet
             "Household Net Worth (USD T)": "#8b5cf6", // violet

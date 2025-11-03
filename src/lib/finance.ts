@@ -27,6 +27,8 @@ export function buildTotalReturnIndex(
         const item = series[i];
         if (!item) continue;
         
+        if (!Number.isFinite(item.trPct)) continue;
+        
         const r = item.trPct / 100;
         if (i === 0 && !baseYearIncluded) {
             out.push({ year: item.year, index: level });

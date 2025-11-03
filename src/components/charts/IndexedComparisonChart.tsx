@@ -3,6 +3,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { InteractiveLineChart } from "../InteractiveLineChart";
 import { CustomTooltip } from "../CustomTooltip";
 import { formatIndexValue } from "@/lib/formatters";
+import { Titles, Subtitles, Categories } from "@/constants/strings";
 
 interface IndexedComparisonChartProps {
     data: Array<{
@@ -17,14 +18,9 @@ export function IndexedComparisonChart({ data }: IndexedComparisonChartProps) {
     return (
         <Card className="border-l-4 border-l-primary shadow-md">
             <CardHeader>
-                <CardTitle>
-                    Indexed Comparison (2012 = 100): S&P 500 Total
-                    Return, G‑Class Sales, and Household Net Worth
-                </CardTitle>
+                <CardTitle>{Titles.INDEXED_CARD}</CardTitle>
                 <p className="text-sm text-muted-foreground mt-1">
-                    Annual, calendar-year data. S&P 500 is total return with
-                    dividends (compounded, rebased so 2012 = 100); sales and
-                    household net worth are level series indexed to 2012.
+                    {Subtitles.INDEXED_CARD}
                 </p>
             </CardHeader>
             <CardContent>
@@ -41,11 +37,7 @@ export function IndexedComparisonChart({ data }: IndexedComparisonChartProps) {
                         className="h-64 sm:h-80 md:h-96"
                         data={data}
                         index="Year"
-                        categories={[
-                            "S&P 500 total return index (2012 = 100)",
-                            "US G‑Class sales (index, 2012 = 100)",
-                            "Household net worth (index, 2012 = 100)",
-                        ]}
+                        categories={[...Categories.INDEXED]}
                         colors={["blue", "emerald", "violet"]}
                         yAxisWidth={56}
                         showLegend={true}

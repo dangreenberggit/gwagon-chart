@@ -47,7 +47,7 @@ export default function App() {
             <Header />
 
             {/* Main Content */}
-            <main className="mx-auto max-w-7xl px-4 py-10">
+            <main className="mx-auto max-w-7xl px-4 py-4">
                 <div className="grid gap-6">
                     {/* Indexed Comparison Section Header */}
                     <GrillSeparator>Indexed Comparison</GrillSeparator>

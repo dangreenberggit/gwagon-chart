@@ -4,6 +4,13 @@ import { LineChart } from "@tremor/react";
 import { CustomTooltip } from "../CustomTooltip";
 import { formatCurrency } from "@/lib/formatters";
 import { toPriceData } from "@/lib/dataTransformers";
+import {
+    Titles,
+    Subtitles,
+    Categories,
+    AxisLabels,
+    FooterAnchors,
+} from "@/constants/strings";
 import type { Row } from "@/lib/types";
 import type { ExpandedCharts } from "@/lib/types";
 
@@ -25,15 +32,25 @@ export function PricingChart({
             <CardHeader
                 className="cursor-pointer hover:bg-secondary/50 transition-colors"
                 onClick={onToggle}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        onToggle();
+                    }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-expanded={expandedCharts.prices}
             >
                 <CardTitle className="flex items-center justify-between">
-                    <span>
-                        G‑Class Estimated Transaction Price
-                        (Proxy) (USD)
+                    <span className="flex items-center gap-2">
+                        {Titles.PRICES_CARD}
+                        <span className="text-xs font-normal px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">
+                            USD
+                        </span>
                     </span>
                     <span className="subtle font-normal">
-                        {expandedCharts.prices ? "▼" : "▶"}{" "}
-                        Click to{" "}
+                        {expandedCharts.prices ? "▼" : "▶"} Click to{" "}
                         {expandedCharts.prices ? "collapse" : "expand"}
                     </span>
                 </CardTitle>
@@ -41,81 +58,49 @@ export function PricingChart({
             {expandedCharts.prices && (
                 <div className="px-6 pb-4">
                     <p className="text-sm text-muted-foreground mt-1">
-                        Estimated ATP proxy (1.46× MSRP).
+                        {Subtitles.PRICES_CARD}
                     </p>
                 </div>
             )}
             {expandedCharts.prices && (
                 <CardContent>
-                    <div className="space-y-6">
-                        {/* Price Levels */}
-                        <div>
-                            <h3 className="font-medium mb-3">
-                                G‑Class Estimated Transaction
-                                Price (Proxy) (USD)
-                            </h3>
-                            <p className="text-xs text-muted-foreground mb-2">
-                                Proxy estimate (1.46× MSRP), calibrated to Mar
-                                2024 KBB/Cox ATP ≈ $208,663. Not observed data.
-                            </p>
-                            <ErrorBoundary
-                                fallback={
-                                    <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
-                                        <p className="text-muted-foreground">
-                                            Chart failed to load
-                                        </p>
-                                    </div>
-                                }
-                            >
-                                <LineChart
-                                    className="h-64 w-full"
-                                    data={priceData}
-                                    index="Year"
-                                    categories={[
-                                        "G‑Class Est. ATP (Proxy) (USD)",
-                                    ]}
-                                    colors={["pink"]}
-                                    yAxisWidth={56}
-                                    showLegend={false}
-                                    showTooltip={true}
-                                    customTooltip={CustomTooltip}
-                                    valueFormatter={formatCurrency}
-                                    connectNulls
-                                    curveType="monotone"
-                                    xAxisLabel="Year"
-                                    yAxisLabel="Price (USD)"
-                                    minValue={160000}
-                                    maxValue={215000}
-                                />
-                            </ErrorBoundary>
-                        </div>
-
-                        {/* Definitions */}
-                        <div className="border-t pt-4">
-                            <p className="text-sm font-medium mb-2">
-                                Definitions:
-                            </p>
-                            <ul className="space-y-2 text-sm subtle">
-                                <li>
-                                    <strong className="font-medium text-foreground">
-                                        Estimated Transaction
-                                        Price (Proxy):
-                                    </strong>{" "}
-                                    computed as a fixed multiple
-                                    of G 550 base MSRP.
-                                    Multiplier calibrated to a
-                                    publicly cited G‑Class ATP
-                                    in March 2024 (KBB/Cox).
-                                    Reflects trim/mix (e.g., AMG
-                                    G 63) and options; this is a
-                                    proxy, not observed ATP.
-                                </li>
-                            </ul>
-                        </div>
+                    <ErrorBoundary
+                        fallback={
+                            <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
+                                <p className="text-muted-foreground">
+                                    Chart failed to load
+                                </p>
+                            </div>
+                        }
+                    >
+                        <LineChart
+                            className="h-56 w-full"
+                            data={priceData}
+                            index="Year"
+                            categories={[...Categories.PRICES]}
+                            colors={["pink"]}
+                            yAxisWidth={56}
+                            showLegend={false}
+                            showTooltip={true}
+                            customTooltip={CustomTooltip}
+                            valueFormatter={formatCurrency}
+                            connectNulls
+                            curveType="monotone"
+                            xAxisLabel={AxisLabels.YEAR}
+                            yAxisLabel={AxisLabels.USD_PRICE}
+                        />
+                    </ErrorBoundary>
+                    <div className="pt-4 border-t">
+                        <a
+                            href={`#${FooterAnchors.PRICING}`}
+                            className="text-sm text-primary hover:underline"
+                            aria-label="View sources and definitions for G‑Class pricing"
+                        >
+                            Sources and definitions
+                        </a>
                     </div>
                 </CardContent>
             )}
         </Card>
     );
 }
-

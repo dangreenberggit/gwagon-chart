@@ -4,6 +4,13 @@ import { LineChart } from "@tremor/react";
 import { CustomTooltip } from "../CustomTooltip";
 import { formatTrillions } from "@/lib/formatters";
 import { toPEData } from "@/lib/dataTransformers";
+import {
+    Titles,
+    Subtitles,
+    Categories,
+    AxisLabels,
+    FooterAnchors,
+} from "@/constants/strings";
 import type { Row } from "@/lib/types";
 import type { ExpandedCharts } from "@/lib/types";
 
@@ -25,11 +32,22 @@ export function PEChart({
             <CardHeader
                 className="cursor-pointer hover:bg-secondary/50 transition-colors"
                 onClick={onToggle}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        onToggle();
+                    }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-expanded={expandedCharts.pe}
             >
                 <CardTitle className="flex items-center justify-between">
-                    <span>
-                        Global Private Equity Assets Under Management (USD
-                        Trillions)
+                    <span className="flex items-center gap-2">
+                        {Titles.PE_CARD}
+                        <span className="text-xs font-normal px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">
+                            USD T
+                        </span>
                     </span>
                     <span className="subtle font-normal">
                         {expandedCharts.pe ? "▼" : "▶"} Click
@@ -41,8 +59,7 @@ export function PEChart({
             {expandedCharts.pe && (
                 <div className="px-6 pb-4">
                     <p className="text-sm text-muted-foreground mt-1">
-                        Year-end levels, nominal USD
-                        (trillions).
+                        {Subtitles.PE_CARD}
                     </p>
                 </div>
             )}
@@ -61,7 +78,7 @@ export function PEChart({
                             className="h-48 w-full"
                             data={peData}
                             index="Year"
-                            categories={["Global PE AUM (USD T)"]}
+                            categories={[...Categories.PE]}
                             colors={["amber"]}
                             yAxisWidth={48}
                             showLegend={false}
@@ -70,10 +87,19 @@ export function PEChart({
                             valueFormatter={formatTrillions}
                             connectNulls
                             curveType="monotone"
-                            xAxisLabel="Year"
-                            yAxisLabel="USD Trillions"
+                            xAxisLabel={AxisLabels.YEAR}
+                            yAxisLabel={AxisLabels.USD_TRILLIONS}
                         />
                     </ErrorBoundary>
+                    <div className="pt-4 border-t">
+                        <a
+                            href={`#${FooterAnchors.PE}`}
+                            className="text-sm text-primary hover:underline"
+                            aria-label="View sources and definitions for Global private equity assets under management"
+                        >
+                            Sources and definitions
+                        </a>
+                    </div>
                 </CardContent>
             )}
         </Card>

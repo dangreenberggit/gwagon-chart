@@ -51,8 +51,7 @@ export function Header() {
                     <div className="w-px bg-mb-silver/60 self-stretch" />
                     <div className="leading-tight">
                         <p className="text-xs text-muted-foreground">
-                            Markets, wealth, and G‑Class sales, 2012–2024
-                            (annual)
+                            Markets, wealth, and G‑Class sales
                         </p>
                         <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground">
                             <span>Range: 2012–2024 • Annual</span>
