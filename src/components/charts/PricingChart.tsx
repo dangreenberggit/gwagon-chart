@@ -42,7 +42,7 @@ export function PricingChart({
                 tabIndex={0}
                 aria-expanded={expandedCharts.prices}
             >
-                <CardTitle className="flex items-center justify-between">
+                <CardTitle className="flex items-center justify-between gap-2 pr-2">
                     <span className="flex items-center gap-2">
                         {expandedCharts.prices ? "▼" : "▶"} {Titles.PRICES_CARD}
                         <span className="text-xs font-normal px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">

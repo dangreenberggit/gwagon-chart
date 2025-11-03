@@ -42,7 +42,7 @@ export function GClassSalesChart({
                 tabIndex={0}
                 aria-expanded={expandedCharts.gclass}
             >
-                <CardTitle className="flex items-center justify-between">
+                <CardTitle className="flex items-center justify-between gap-2 pr-2">
                     <span className="flex items-center gap-2">
                         {expandedCharts.gclass ? "▼" : "▶"}{" "}
                         {Titles.GCLASS_CARD}

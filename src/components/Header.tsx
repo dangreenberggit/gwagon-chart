@@ -1,6 +1,17 @@
 import { Logo } from "./Logo";
+import { useState, useEffect } from "react";
 
 export function Header() {
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 10);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
     return (
         <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/85">
             {/* Subtle grille motif */}
@@ -16,7 +27,7 @@ export function Header() {
                         </div>
 
                         {/* black bar with custom SVG shape */}
-                        <div className="absolute z-10 left-5 top-1/2 -translate-y-1/2 h-10 w-[70%] sm:w-[60%] md:w-[28%]">
+                        <div className="absolute z-10 left-5 top-1/2 -translate-y-1/2 h-10 w-[65%] sm:w-[60%] md:w-[28%]">
                             <svg
                                 viewBox="0 0 1000 80"
                                 preserveAspectRatio="none"
@@ -46,7 +57,13 @@ export function Header() {
             </div>
 
             {/* Word block */}
-            <div className="relative mx-auto max-w-7xl px-4 py-3">
+            <div
+                className={`relative mx-auto max-w-7xl px-4 transition-all duration-300 ease-in-out overflow-hidden ${
+                    isScrolled
+                        ? "max-h-0 py-0 opacity-0"
+                        : "max-h-24 py-3 opacity-100"
+                }`}
+            >
                 <div className="flex items-start gap-3">
                     <div className="w-px bg-mb-silver/60 self-stretch" />
                     <div className="leading-tight">
