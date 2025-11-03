@@ -4,7 +4,7 @@ import { mbTheme } from "@/lib/theme";
 
 export const Titles = {
     // SPX (two charts inside one card)
-    SPX_CARD: "S&P 500 total return: annual and cumulative",
+    SPX_CARD: "S&P 500 total return",
     SPX_ANNUAL: "S&P 500 Annual Total Return (%)",
     SPX_CUMULATIVE: "S&P 500 Cumulative Total Return Index (2012 = 100)",
 
@@ -13,17 +13,16 @@ export const Titles = {
         "Indexed Comparison (2012 = 100): S&P 500 Total Return, G‑Class Sales, and Household Net Worth",
 
     // PE AUM
-    PE_CARD:
-        "Global private equity assets under management (traditional measure, USD trillions)",
+    PE_CARD: "Global private equity assets under management",
 
     // G‑Class sales
-    GCLASS_CARD: "Mercedes‑Benz G‑Class U.S. sales (calendar‑year units)",
+    GCLASS_CARD: "Mercedes‑Benz G‑Class U.S. sales",
 
     // Household net worth
-    HHNW_CARD: "U.S. household and nonprofit net worth (year‑end level)",
+    HHNW_CARD: "U.S. household and nonprofit net worth",
 
     // Pricing
-    PRICES_CARD: "G‑Class estimated price (proxy)",
+    PRICES_CARD: "G‑Class estimated price",
 } as const;
 
 export const Subtitles = {
