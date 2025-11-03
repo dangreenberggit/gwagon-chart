@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { Row, IndexedRow } from "@/lib/types";
 import { parseCSV, toSeriesRows } from "@/lib/csv";
 import { buildTotalReturnIndex } from "@/lib/finance";
-import { indexSeries, indexLevelsToBase100 } from "@/lib/utils";
+import { indexSeries } from "@/lib/utils";
 
 export function useDataLoader() {
     const [rows, setRows] = useState<Row[] | null>(null);
@@ -68,27 +68,16 @@ export function useDataLoader() {
                     0
                 );
 
-                // Use indexLevelsToBase100 for price indices (2012 = index 0)
-                const g550MsrpIdx = indexLevelsToBase100(
-                    base.map((r) => r.g550Msrp),
-                    0,
-                    { decimals: 1, onIssue: (msg) => console.warn(msg) }
-                );
-                const gClassAtpIdx = indexLevelsToBase100(
-                    base.map((r) => r.gClassAtp),
-                    0,
-                    { decimals: 1, onIssue: (msg) => console.warn(msg) }
-                );
-
                 // Use cumulative SPX index directly (already represents accumulation)
+                // CSV indices (g550MsrpIdx, gClassAtpIdx, hhNetWorthIdx) are authoritative when present
                 const indexed = base.map((r, i) => ({
                     year: r.year,
                     spxCumIdx: spxCumByYear.get(r.year) ?? null,
-                    peAumIdx: Number((peIdx[i] ?? 0).toFixed(1)),
-                    gSalesIdx: Number((salesIdx[i] ?? 0).toFixed(1)),
-                    g550MsrpIdx: g550MsrpIdx[i] ?? 0,
-                    gClassAtpIdx: gClassAtpIdx[i] ?? 0,
-                    hhNetWorthIdx: r.hhNetWorthIdx, // Use pre-indexed value from CSV
+                    peAumIdx: peIdx[i] ?? null,
+                    gSalesIdx: salesIdx[i] ?? null,
+                    g550MsrpIdx: r.g550MsrpIdx, // Use pre-indexed value from CSV (source of truth)
+                    gClassAtpIdx: r.gClassAtpIdx, // Use pre-indexed value from CSV (source of truth)
+                    hhNetWorthIdx: r.hhNetWorthIdx, // Use pre-indexed value from CSV (source of truth)
                 }));
                 setRows(base);
                 setIndexedRows(indexed);

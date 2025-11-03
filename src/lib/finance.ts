@@ -8,7 +8,7 @@
 //   - false -> first year equals base; compounding starts from the next year
 //
 // Output:
-// - array of { year, index } with index rounded to 2 decimals
+// - array of { year, index } with full precision (rounding handled at display layer)
 
 export function buildTotalReturnIndex(
     series: Array<{ year: number; trPct: number }>,
@@ -29,11 +29,11 @@ export function buildTotalReturnIndex(
         
         const r = item.trPct / 100;
         if (i === 0 && !baseYearIncluded) {
-            out.push({ year: item.year, index: Number(level.toFixed(2)) });
+            out.push({ year: item.year, index: level });
             continue;
         }
         level = level * (1 + r);
-        out.push({ year: item.year, index: Number(level.toFixed(2)) });
+        out.push({ year: item.year, index: level });
     }
 
     return out;

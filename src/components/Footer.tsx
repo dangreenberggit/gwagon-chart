@@ -26,6 +26,15 @@ export function Footer() {
                                         className="text-primary hover:underline"
                                     >
                                         SlickCharts S&P 500 Returns
+                                    </a>{" "}
+                                    |{" "}
+                                    <a
+                                        href="https://www.slickcharts.com/sp500/returns/details"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary hover:underline"
+                                    >
+                                        Return Details
                                     </a>
                                     . Calendar-year total return percentages
                                     (with dividends), compounded to a cumulative
@@ -98,16 +107,24 @@ export function Footer() {
                                         G‑Class ATP calibration:
                                     </strong>{" "}
                                     <a
-                                        href="https://www.kbb.com/press-releases/"
+                                        href="https://mediaroom.kbb.com/2024-04-15-New-Vehicle-Average-Transaction-Prices-Drop-to-Lowest-Level-in-nearly-Two-Years,-According-to-Latest-Kelley-Blue-Book-Estimates"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="text-primary hover:underline"
                                     >
                                         Kelley Blue Book / Cox Automotive,
-                                        new‑vehicle ATP report (March 2024)
+                                        Average Transaction Prices (March 2024)
+                                    </a>{" "}
+                                    (press release). G‑Class ATP ≈ $208,663.{" "}
+                                    <a
+                                        href="https://www.coxautoinc.com/wp-content/uploads/2024/04/March-2024-Kelley-Blue-Book-Average-Transaction-Price-tables.pdf"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary hover:underline"
+                                    >
+                                        Data tables (PDF)
                                     </a>
-                                    : G‑Class ATP ≈ $208,663 (used for proxy
-                                    calibration).
+                                    . Used for proxy calibration.
                                 </div>
                             </li>
                             <li className="flex items-start gap-2">
@@ -201,10 +218,17 @@ export function Footer() {
                         </p>
                         <p className="text-sm subtle">
                             <strong>Indexing:</strong> All indexed series use
-                            2012 = 100. The S&P 500 cumulative index is rebased
-                            so 2012 equals 100; compounding begins in 2013. For
-                            level series (PE Assets Under Management, G‑Class sales, household net
-                            worth, prices), index = 100 × value_t / value_2012.
+                            2012 = 100. The S&P 500 cumulative index uses
+                            <strong> geometric compounding</strong>: each year's
+                            index = previous year's index × (1 + return/100),
+                            representing cumulative compounded returns. Other
+                            series (PE Assets Under Management, G‑Class sales,
+                            household net worth, prices) use{" "}
+                            <strong>arithmetic indexing</strong>: index = 100 ×
+                            current value / 2012 value, representing relative
+                            change from base. When comparing on the same chart,
+                            both start at 100 but growth patterns differ
+                            (multiplicative vs relative).
                         </p>
                         <p className="text-sm subtle mt-2">
                             <strong>Estimated ATP (Proxy):</strong> A fixed

@@ -31,16 +31,17 @@ export function indexSeries(
 // Compute an index series where the base element equals 100.
 // levels[i] are level values (e.g., USD), not returns.
 // baseIndex points to the base element (e.g., the index of 2012).
+// Returns full precision values (rounding handled at display layer).
 export function indexLevelsToBase100(
     levels: Array<number | null | undefined>,
     baseIndex: number,
     options?: {
-        decimals?: number; // e.g., 1 for UI rounding; undefined leaves full precision
+        decimals?: number; // Reserved for future use (not used for calculation rounding)
         fallback?: "zeros" | "skip"; // what to do for invalid points: zeros or undefined
         onIssue?: (msg: string) => void; // logger
     }
 ): number[] {
-    const { decimals, fallback = "skip", onIssue } = options ?? {};
+    const { fallback = "skip", onIssue } = options ?? {};
     const base = levels[baseIndex];
 
     const invalidBase =
@@ -61,13 +62,11 @@ export function indexLevelsToBase100(
     }
 
     const b = base as number;
-    const toOut = (x: number) =>
-        decimals !== undefined ? Number(x.toFixed(decimals)) : x;
 
     return levels.map((v, i) => {
         if (v === null || v === undefined || !Number.isFinite(v as number)) {
             return fallback === "zeros" ? 0 : (undefined as any);
         }
-        return toOut(((v as number) / b) * 100);
+        return ((v as number) / b) * 100;
     });
 }
