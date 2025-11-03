@@ -44,17 +44,10 @@ export function HouseholdNetWorthChart({
             >
                 <CardTitle className="flex items-center justify-between">
                     <span className="flex items-center gap-2">
-                        {Titles.HHNW_CARD}
+                        {expandedCharts.hhNetWorth ? "▼" : "▶"} {Titles.HHNW_CARD}
                         <span className="text-xs font-normal px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">
                             USD T
                         </span>
-                    </span>
-                    <span className="subtle font-normal">
-                        {expandedCharts.hhNetWorth ? "▼" : "▶"}{" "}
-                        Click to{" "}
-                        {expandedCharts.hhNetWorth
-                            ? "collapse"
-                            : "expand"}
                     </span>
                 </CardTitle>
             </CardHeader>

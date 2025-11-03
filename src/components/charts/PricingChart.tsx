@@ -44,14 +44,10 @@ export function PricingChart({
             >
                 <CardTitle className="flex items-center justify-between">
                     <span className="flex items-center gap-2">
-                        {Titles.PRICES_CARD}
+                        {expandedCharts.prices ? "▼" : "▶"} {Titles.PRICES_CARD}
                         <span className="text-xs font-normal px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">
                             USD
                         </span>
-                    </span>
-                    <span className="subtle font-normal">
-                        {expandedCharts.prices ? "▼" : "▶"} Click to{" "}
-                        {expandedCharts.prices ? "collapse" : "expand"}
                     </span>
                 </CardTitle>
             </CardHeader>

@@ -16,7 +16,7 @@ export function Header() {
                         </div>
 
                         {/* black bar with custom SVG shape */}
-                        <div className="absolute z-10 left-5 top-1/2 -translate-y-1/2 h-10 w-[45%]">
+                        <div className="absolute z-10 left-5 top-1/2 -translate-y-1/2 h-10 w-[70%] sm:w-[60%] md:w-[28%]">
                             <svg
                                 viewBox="0 0 1000 80"
                                 preserveAspectRatio="none"
@@ -37,7 +37,7 @@ export function Header() {
                                 />
                             </svg>
 
-                            <h1 className="relative z-10 ml-8 text-[20px] sm:text-[22px] font-semibold tracking-tighter text-white flex items-center h-full">
+                            <h1 className="relative z-10 ml-8 text-[18px] sm:text-[20px] md:text-[22px] font-semibold tracking-tighter text-white flex items-center h-full">
                                 The G‑Class Economy
                             </h1>
                         </div>

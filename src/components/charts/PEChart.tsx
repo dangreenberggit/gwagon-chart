@@ -44,15 +44,10 @@ export function PEChart({
             >
                 <CardTitle className="flex items-center justify-between">
                     <span className="flex items-center gap-2">
-                        {Titles.PE_CARD}
+                        {expandedCharts.pe ? "▼" : "▶"} {Titles.PE_CARD}
                         <span className="text-xs font-normal px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">
                             USD T
                         </span>
-                    </span>
-                    <span className="subtle font-normal">
-                        {expandedCharts.pe ? "▼" : "▶"} Click
-                        to{" "}
-                        {expandedCharts.pe ? "collapse" : "expand"}
                     </span>
                 </CardTitle>
             </CardHeader>

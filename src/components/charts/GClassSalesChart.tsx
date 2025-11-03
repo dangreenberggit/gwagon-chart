@@ -44,14 +44,11 @@ export function GClassSalesChart({
             >
                 <CardTitle className="flex items-center justify-between">
                     <span className="flex items-center gap-2">
+                        {expandedCharts.gclass ? "▼" : "▶"}{" "}
                         {Titles.GCLASS_CARD}
                         <span className="text-xs font-normal px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">
                             Units
                         </span>
-                    </span>
-                    <span className="subtle font-normal">
-                        {expandedCharts.gclass ? "▼" : "▶"} Click to{" "}
-                        {expandedCharts.gclass ? "collapse" : "expand"}
                     </span>
                 </CardTitle>
             </CardHeader>
