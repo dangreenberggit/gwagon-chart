@@ -162,6 +162,20 @@
   }
 }
 
+/* Smooth scroll for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Add scroll offset for sticky header */
+[id^="spx-sources"],
+[id^="pe-sources"],
+[id^="gclass-sources"],
+[id^="hhnw-sources"],
+[id^="pricing-sources"] {
+  scroll-margin-top: 80px;
+}
+
 /* Tremor chart overrides */
 .tremor-LineChart-root,
 .tremor-AreaChart-root,

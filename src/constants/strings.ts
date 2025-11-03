@@ -1,5 +1,7 @@
 // src/constants/strings.ts
 
+import { mbTheme } from "@/lib/theme";
+
 export const Titles = {
     // SPX (two charts inside one card)
     SPX_CARD: "S&P 500 total return: annual and cumulative",
@@ -133,4 +135,13 @@ export const FooterAnchors = {
     GCLASS: "gclass-sources",
     HHNW: "hhnw-sources",
     PRICING: "pricing-sources",
+} as const;
+
+// Mapping from footer anchors to chart series colors
+export const FooterAnchorColors = {
+    [FooterAnchors.SPX]: mbTheme.colors.series.spx,
+    [FooterAnchors.PE]: mbTheme.colors.series.pe,
+    [FooterAnchors.GCLASS]: mbTheme.colors.series.sales,
+    [FooterAnchors.HHNW]: mbTheme.colors.series.wealth,
+    [FooterAnchors.PRICING]: mbTheme.colors.series.atp,
 } as const;

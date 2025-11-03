@@ -1,6 +1,11 @@
 import { Logo } from "./Logo";
+import { useHashHighlight } from "@/hooks/useHashHighlight";
+import { FooterAnchors, FooterAnchorColors } from "@/constants/strings";
+import { SourceIndicator } from "./SourceIndicator";
 
 export function Footer() {
+    const { isHighlighted } = useHashHighlight();
+
     return (
         <footer className="border-t border-border bg-gradient-to-b from-card to-secondary/30 mt-10">
             <div className="mx-auto max-w-7xl px-4 py-8">
@@ -11,12 +16,16 @@ export function Footer() {
                         </p>
                         <ul className="space-y-2 subtle">
                             <li
-                                id="spx-sources"
+                                id={FooterAnchors.SPX}
                                 className="flex items-start gap-2"
                             >
-                                <div
-                                    className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
-                                    style={{ backgroundColor: "#2453FF" }}
+                                <SourceIndicator
+                                    color={
+                                        FooterAnchorColors[FooterAnchors.SPX]
+                                    }
+                                    isHighlighted={isHighlighted(
+                                        FooterAnchors.SPX
+                                    )}
                                 />
                                 <div>
                                     <strong className="font-medium text-foreground">
@@ -46,12 +55,14 @@ export function Footer() {
                                 </div>
                             </li>
                             <li
-                                id="pe-sources"
+                                id={FooterAnchors.PE}
                                 className="flex items-start gap-2"
                             >
-                                <div
-                                    className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
-                                    style={{ backgroundColor: "#D39B00" }}
+                                <SourceIndicator
+                                    color={FooterAnchorColors[FooterAnchors.PE]}
+                                    isHighlighted={isHighlighted(
+                                        FooterAnchors.PE
+                                    )}
                                 />
                                 <div>
                                     <strong className="font-medium text-foreground">
@@ -71,12 +82,16 @@ export function Footer() {
                                 </div>
                             </li>
                             <li
-                                id="gclass-sources"
+                                id={FooterAnchors.GCLASS}
                                 className="flex items-start gap-2"
                             >
-                                <div
-                                    className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
-                                    style={{ backgroundColor: "#1FA97A" }}
+                                <SourceIndicator
+                                    color={
+                                        FooterAnchorColors[FooterAnchors.GCLASS]
+                                    }
+                                    isHighlighted={isHighlighted(
+                                        FooterAnchors.GCLASS
+                                    )}
                                 />
                                 <div>
                                     <strong className="font-medium text-foreground">
@@ -105,12 +120,16 @@ export function Footer() {
                                 </div>
                             </li>
                             <li
-                                id="hhnw-sources"
+                                id={FooterAnchors.HHNW}
                                 className="flex items-start gap-2"
                             >
-                                <div
-                                    className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
-                                    style={{ backgroundColor: "#6F5BD5" }}
+                                <SourceIndicator
+                                    color={
+                                        FooterAnchorColors[FooterAnchors.HHNW]
+                                    }
+                                    isHighlighted={isHighlighted(
+                                        FooterAnchors.HHNW
+                                    )}
                                 />
                                 <div>
                                     <strong className="font-medium text-foreground">
@@ -130,12 +149,18 @@ export function Footer() {
                                 </div>
                             </li>
                             <li
-                                id="pricing-sources"
+                                id={FooterAnchors.PRICING}
                                 className="flex items-start gap-2"
                             >
-                                <div
-                                    className="mt-1 h-3 w-3 flex-shrink-0 rounded-full shadow-sm"
-                                    style={{ backgroundColor: "#E05E8C" }}
+                                <SourceIndicator
+                                    color={
+                                        FooterAnchorColors[
+                                            FooterAnchors.PRICING
+                                        ]
+                                    }
+                                    isHighlighted={isHighlighted(
+                                        FooterAnchors.PRICING
+                                    )}
                                 />
                                 <div>
                                     <strong className="font-medium text-foreground">
