@@ -9,7 +9,7 @@ interface IndexedComparisonChartProps {
     data: Array<{
         Year: string;
         "S&P 500 total return index (2012 = 100)": number | null;
-        "US G‑Class sales (index, 2012 = 100)": number;
+        "US G‑Class sales (index, 2012 = 100)": number | null;
         "Household net worth (index, 2012 = 100)": number;
     }>;
 }
