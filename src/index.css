@@ -225,6 +225,18 @@
     opacity: 0.03;
   }
   
+  /* Grille pattern in dark mode - lighter for visibility */
+  .theme-dark .grille-pattern {
+    background-image: repeating-linear-gradient(
+      90deg,
+      hsl(var(--mb-star-silver)),
+      hsl(var(--mb-star-silver)) 1px,
+      transparent 1px,
+      transparent 6px
+    );
+    opacity: 0.15;
+  }
+  
   /* Tire cover plaque sheen - painted metal effect */
   .tire-sheen::after {
     content: "";
@@ -241,7 +253,7 @@
   }
   
   .theme-dark .header-bar-fill {
-    fill: hsl(var(--background));
+    fill: hsl(var(--g-cream));
   }
   
   .header-title {
@@ -249,7 +261,27 @@
   }
   
   .theme-dark .header-title {
-    color: hsl(var(--foreground));
+    color: hsl(var(--mb-night-black));
+  }
+  
+  /* Motif text in dark mode - lighter for contrast on dark background */
+  .theme-dark header .text-muted-foreground {
+    color: hsl(var(--mb-star-silver)) !important;
+  }
+  
+  /* Small details text in header - subtle black outline for contrast (dark mode only) */
+  .theme-dark header .text-xs.text-muted-foreground,
+  .theme-dark header .text-\[11px\].text-muted-foreground {
+    text-shadow: 
+      0 0 2px rgba(0, 0, 0, 1),
+      0 0 4px rgba(0, 0, 0, 0.8),
+      0 1px 2px rgba(0, 0, 0, 0.9),
+      0 2px 4px rgba(0, 0, 0, 0.7);
+  }
+  
+  /* Logo border in dark mode - lighter/silver for visibility */
+  .theme-dark .border-mb-night {
+    border-color: hsl(var(--mb-star-silver)) !important;
   }
 }
 
