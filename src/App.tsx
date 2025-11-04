@@ -12,6 +12,7 @@ import { GClassSalesChart } from "./components/charts/GClassSalesChart";
 import { HouseholdNetWorthChart } from "./components/charts/HouseholdNetWorthChart";
 import { PricingChart } from "./components/charts/PricingChart";
 import { toIndexedChartData } from "@/lib/dataTransformers";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export default function App() {
     const {
@@ -43,60 +44,62 @@ export default function App() {
     const dataIndexed = toIndexedChartData(indexedRows);
 
     return (
-        <div className="min-h-screen bg-background text-foreground">
-            <Header />
+        <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+            <div className="min-h-screen bg-background text-foreground">
+                <Header />
 
-            {/* Main Content */}
-            <main className="mx-auto max-w-7xl px-4 py-4">
-                <div className="grid gap-6">
-                    {/* Indexed Comparison Section Header */}
-                    <GrillSeparator>Indexed Comparison</GrillSeparator>
+                {/* Main Content */}
+                <main className="mx-auto max-w-7xl px-4 py-4">
+                    <div className="grid gap-6">
+                        {/* Indexed Comparison Section Header */}
+                        <GrillSeparator>Indexed Comparison</GrillSeparator>
 
-                    {/* Indexed Comparison Chart - Main Chart */}
-                    <IndexedComparisonChart data={dataIndexed} />
+                        {/* Indexed Comparison Chart - Main Chart */}
+                        <IndexedComparisonChart data={dataIndexed} />
 
-                    {/* Individual Charts - Collapsible */}
-                    <div className="space-y-4">
-                        <GrillSeparator>
-                            Individual Series Details
-                        </GrillSeparator>
+                        {/* Individual Charts - Collapsible */}
+                        <div className="space-y-4">
+                            <GrillSeparator>
+                                Individual Series Details
+                            </GrillSeparator>
 
-                        <SPXChart
-                            rows={rows}
-                            spxCumData={spxCumData}
-                            spxCumInvestment={spxCumInvestment}
-                            expandedCharts={expandedCharts}
-                            onToggle={() => toggleChart("spx")}
-                        />
+                            <SPXChart
+                                rows={rows}
+                                spxCumData={spxCumData}
+                                spxCumInvestment={spxCumInvestment}
+                                expandedCharts={expandedCharts}
+                                onToggle={() => toggleChart("spx")}
+                            />
 
-                        <PEChart
-                            rows={rows}
-                            expandedCharts={expandedCharts}
-                            onToggle={() => toggleChart("pe")}
-                        />
+                            <PEChart
+                                rows={rows}
+                                expandedCharts={expandedCharts}
+                                onToggle={() => toggleChart("pe")}
+                            />
 
-                        <GClassSalesChart
-                            rows={rows}
-                            expandedCharts={expandedCharts}
-                            onToggle={() => toggleChart("gclass")}
-                        />
+                            <GClassSalesChart
+                                rows={rows}
+                                expandedCharts={expandedCharts}
+                                onToggle={() => toggleChart("gclass")}
+                            />
 
-                        <HouseholdNetWorthChart
-                            rows={rows}
-                            expandedCharts={expandedCharts}
-                            onToggle={() => toggleChart("hhNetWorth")}
-                        />
+                            <HouseholdNetWorthChart
+                                rows={rows}
+                                expandedCharts={expandedCharts}
+                                onToggle={() => toggleChart("hhNetWorth")}
+                            />
 
-                        <PricingChart
-                            rows={rows}
-                            expandedCharts={expandedCharts}
-                            onToggle={() => toggleChart("prices")}
-                        />
+                            <PricingChart
+                                rows={rows}
+                                expandedCharts={expandedCharts}
+                                onToggle={() => toggleChart("prices")}
+                            />
+                        </div>
                     </div>
-                </div>
-            </main>
+                </main>
 
-            <Footer />
-        </div>
+                <Footer />
+            </div>
+        </ThemeProvider>
     );
 }

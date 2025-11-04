@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Tailwind v4: Custom variant for dark mode using .theme-dark class */
+@custom-variant dark (&:where(.theme-dark, .theme-dark *));
+
 @layer base {
   :root {
     /* Mercedes G-Class Theme - Light */
@@ -30,6 +33,9 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 60% 6%;
+    
     --radius: 4px; /* Squared G-Class geometry */
     
     /* Mercedes brand colors */
@@ -48,6 +54,70 @@
     --chart-wealth: 254 57% 59%; /* #6F5BD5 */
     --chart-atp: 343 78% 61%; /* #E05E8C */
     --chart-axis: 216 12% 79%; /* #C8CCD3 */
+    
+    /* Chart color variables for Tremor (Tailwind -500 shades) */
+    --chart-blue-500: 226 100% 56%; /* #2453FF - chart-spx */
+    --chart-emerald-500: 162 98% 37%; /* #1FA97A - chart-sales */
+    --chart-amber-500: 42 100% 41%; /* #D39B00 - chart-pe */
+    --chart-violet-500: 254 57% 59%; /* #6F5BD5 - chart-wealth */
+    --chart-pink-500: 343 78% 61%; /* #E05E8C - chart-atp */
+    --chart-gray-500: 216 12% 79%; /* #C8CCD3 - chart-axis */
+  }
+
+  .theme-dark {
+    /* Mercedes G-Class Theme - Dark: G-Class Night Package */
+    --background: 220 15% 7%; /* #0C0F13 */
+    --foreground: 210 20% 92%; /* #E7EBF0 */
+    
+    --card: 220 12% 9%; /* #11141A */
+    --card-foreground: 210 20% 92%; /* #E7EBF0 */
+    
+    --primary: 42 62% 52%; /* #C9A23B */
+    --primary-foreground: 220 30% 6%; /* #0B0D11 */
+    
+    --secondary: 220 10% 16%; /* #23272F */
+    --secondary-foreground: 210 16% 86%; /* #D7DDE6 */
+    
+    --muted: 220 10% 18%; /* #262B34 */
+    --muted-foreground: 215 12% 70%; /* #B3BAC4 */
+    
+    --accent: 135 22% 40%; /* #4F7053 */
+    --accent-foreground: 210 20% 92%; /* #E7EBF0 */
+    
+    --border: 215 12% 24%; /* #343A44 */
+    --input: 215 12% 24%; /* #343A44 */
+    --ring: 42 62% 52%; /* #C9A23B */
+    
+    --destructive: 355 76% 56%; /* #D64555 */
+    --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+    
+    --popover: 220 12% 9%; /* #11141A */
+    --popover-foreground: 210 20% 92%; /* #E7EBF0 */
+    
+    /* Mercedes brand colors */
+    --mb-night-black: 220 30% 4%; /* #0B0C0E */
+    --mb-star-silver: 215 12% 68%; /* #A8AFB8 */
+    
+    /* G-Class heritage accents */
+    --g-agave: 135 22% 40%; /* #4F7053 */
+    --g-colorado: 38 35% 58%; /* #B89767 */
+    --g-cream: 40 20% 85%; /* #DCD3C4 */
+    
+    /* Chart series colors (dark-tuned) */
+    --chart-spx: 226 95% 66%; /* #4B77FF */
+    --chart-sales: 162 86% 44%; /* #1DB57E */
+    --chart-pe: 42 100% 54%; /* #F0B22A */
+    --chart-wealth: 254 62% 67%; /* #8A79E6 */
+    --chart-atp: 343 78% 66%; /* #EB77A2 */
+    --chart-axis: 215 10% 52%; /* #7E8793 */
+    
+    /* Chart color variables for Tremor (Tailwind -500 shades) */
+    --chart-blue-500: 226 95% 66%; /* #4B77FF - chart-spx */
+    --chart-emerald-500: 162 86% 44%; /* #1DB57E - chart-sales */
+    --chart-amber-500: 42 100% 54%; /* #F0B22A - chart-pe */
+    --chart-violet-500: 254 62% 67%; /* #8A79E6 - chart-wealth */
+    --chart-pink-500: 343 78% 66%; /* #EB77A2 - chart-atp */
+    --chart-gray-500: 215 10% 52%; /* #7E8793 - chart-axis */
   }
 
   * { @apply border-border; }
@@ -82,6 +152,10 @@
 /* Enhanced tooltip */
 .recharts-tooltip-wrapper {
   filter: drop-shadow(0 4px 12px rgba(0,0,0,0.08));
+}
+
+.theme-dark .recharts-tooltip-wrapper {
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
 }
 
 .recharts-default-tooltip {
@@ -160,6 +234,23 @@
     background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0) 60%);
     pointer-events: none;
   }
+  
+  /* Header bar theme-aware colors */
+  .header-bar-fill {
+    fill: hsl(var(--mb-night-black));
+  }
+  
+  .theme-dark .header-bar-fill {
+    fill: hsl(var(--background));
+  }
+  
+  .header-title {
+    color: white;
+  }
+  
+  .theme-dark .header-title {
+    color: hsl(var(--foreground));
+  }
 }
 
 /* Smooth scroll for anchor links */
@@ -183,6 +274,28 @@ html {
   background-color: hsl(var(--card)) !important;
 }
 
+.theme-dark .tremor-LineChart-root,
+.theme-dark .tremor-AreaChart-root,
+.theme-dark .tremor-BarChart-root {
+  background-color: hsl(var(--card)) !important;
+}
+
 .tremor-LineChart-root .recharts-line {
   stroke-width: 3px !important;
+}
+
+.theme-dark .tremor-LineChart-root .recharts-line {
+  stroke-width: 3px !important;
+}
+
+/* Tremor chart gridlines for dark mode */
+.theme-dark .recharts-cartesian-grid line {
+  stroke: hsl(var(--chart-axis)) !important;
+  opacity: 0.35;
+}
+
+/* Tremor chart tooltips for dark mode */
+.theme-dark .recharts-tooltip-wrapper .tremor-Card-root {
+  background: hsl(var(--card)) !important;
+  border-color: hsl(var(--border)) !important;
 }

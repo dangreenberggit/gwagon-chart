@@ -37,6 +37,10 @@ export default {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
         // Mercedes brand colors
         mb: {
           night: "hsl(var(--mb-night-black))",
@@ -56,6 +60,25 @@ export default {
           wealth: "hsl(var(--chart-wealth))",
           atp: "hsl(var(--chart-atp))",
           axis: "hsl(var(--chart-axis))",
+        },
+        // Tremor chart colors - override only -500 shades for chartUtils.ts
+        blue: {
+          500: "hsl(var(--chart-blue-500))",
+        },
+        emerald: {
+          500: "hsl(var(--chart-emerald-500))",
+        },
+        amber: {
+          500: "hsl(var(--chart-amber-500))",
+        },
+        violet: {
+          500: "hsl(var(--chart-violet-500))",
+        },
+        pink: {
+          500: "hsl(var(--chart-pink-500))",
+        },
+        gray: {
+          500: "hsl(var(--chart-gray-500))",
         },
       },
       borderRadius: {
