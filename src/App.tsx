@@ -13,6 +13,8 @@ import { HouseholdNetWorthChart } from "./components/charts/HouseholdNetWorthCha
 import { PricingChart } from "./components/charts/PricingChart";
 import { toIndexedChartData } from "@/lib/dataTransformers";
 import { ThemeProvider } from "@/components/theme-provider";
+import { YouTubeVideo } from "./components/YouTubeVideo";
+import { YouTubeVideo as YouTubeVideoConfig } from "@/constants/strings";
 
 export default function App() {
     const {
@@ -93,6 +95,20 @@ export default function App() {
                                 rows={rows}
                                 expandedCharts={expandedCharts}
                                 onToggle={() => toggleChart("prices")}
+                            />
+                        </div>
+
+                        {/* YouTube Video Section */}
+                        <GrillSeparator>Related Content</GrillSeparator>
+                        <div className="space-y-3">
+                            <div className="px-4 py-3 bg-card border border-border rounded">
+                                <h4 className="text-base md:text-lg font-semibold tracking-tight bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent max-w-prose">
+                                    {YouTubeVideoConfig.CAPTION}
+                                </h4>
+                            </div>
+                            <YouTubeVideo
+                                videoId={YouTubeVideoConfig.ID}
+                                title={YouTubeVideoConfig.TITLE}
                             />
                         </div>
                     </div>

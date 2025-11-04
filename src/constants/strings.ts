@@ -144,3 +144,11 @@ export const FooterAnchorColors = {
     [FooterAnchors.HHNW]: mbTheme.colors.series.wealth,
     [FooterAnchors.PRICING]: mbTheme.colors.series.atp,
 } as const;
+
+// YouTube video configuration
+export const YouTubeVideo = {
+    ID: "rtqoZMUhO24",
+    TITLE: "The G-Wagon write off, explained: are they all committing tax fraud?",
+    CAPTION:
+        "The wealthy secret loophole to a free G‑Wagon (and maybe a future audit)",
+} as const;
