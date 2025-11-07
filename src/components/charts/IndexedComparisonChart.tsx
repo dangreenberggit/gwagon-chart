@@ -3,13 +3,18 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { InteractiveLineChart } from "../InteractiveLineChart";
 import { CustomTooltip } from "../CustomTooltip";
 import { formatIndexValue } from "@/lib/formatters";
-import { Titles, Subtitles, Categories, FooterAnchors } from "@/constants/strings";
+import {
+    Titles,
+    Subtitles,
+    Categories,
+    FooterAnchors,
+} from "@/constants/strings";
 
 interface IndexedComparisonChartProps {
     data: Array<{
         Year: string;
-        "S&P 500 total return index (2012 = 100)": number | null;
-        "US G‑Class sales (index, 2012 = 100)": number | null;
+        "S&P 500 total return index (2012 = 100)": number;
+        "US G‑Class sales (index, 2012 = 100)": number;
         "Household net worth (index, 2012 = 100)": number;
     }>;
 }
@@ -61,4 +66,3 @@ export function IndexedComparisonChart({ data }: IndexedComparisonChartProps) {
         </Card>
     );
 }
-

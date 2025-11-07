@@ -64,15 +64,33 @@ export function useDataLoader() {
                     0
                 );
 
-                const indexed = base.map((r, i) => ({
-                    year: r.year,
-                    spxCumIdx: spxCumByYear.get(r.year) ?? null,
-                    peAumIdx: peIdx[i] ?? null,
-                    gSalesIdx: salesIdx[i] ?? null,
-                    g550MsrpIdx: r.g550MsrpIdx,
-                    gClassAtpIdx: r.gClassAtpIdx,
-                    hhNetWorthIdx: hhNetWorthIdx[i] ?? null,
-                }));
+                // Validate that we have valid indexed values (no nulls from invalid data)
+                const validateIndexedValue = (value: number | null | undefined, name: string, year: number): number => {
+                    if (value === null || value === undefined) {
+                        throw new Error(`Invalid data: ${name} is null/undefined for year ${year}. This indicates corrupted or missing data.`);
+                    }
+                    if (!Number.isFinite(value)) {
+                        throw new Error(`Invalid data: ${name} is not finite (${value}) for year ${year}.`);
+                    }
+                    return value;
+                };
+
+                const indexed = base.map((r, i) => {
+                    const spxCumValue = spxCumByYear.get(r.year);
+                    if (spxCumValue === undefined) {
+                        throw new Error(`Missing S&P 500 cumulative data for year ${r.year}`);
+                    }
+
+                    return {
+                        year: r.year,
+                        spxCumIdx: validateIndexedValue(spxCumValue, "spxCumIdx", r.year),
+                        peAumIdx: validateIndexedValue(peIdx[i], "peAumIdx", r.year),
+                        gSalesIdx: validateIndexedValue(salesIdx[i], "gSalesIdx", r.year),
+                        g550MsrpIdx: r.g550MsrpIdx,
+                        gClassAtpIdx: r.gClassAtpIdx,
+                        hhNetWorthIdx: validateIndexedValue(hhNetWorthIdx[i], "hhNetWorthIdx", r.year),
+                    };
+                });
                 setRows(base);
                 setIndexedRows(indexed);
                 setSpxCumData(spxCum);

@@ -12,9 +12,9 @@ export type Row = {
 
 export type IndexedRow = {
     year: number;
-    spxCumIdx: number | null;
-    peAumIdx: number | null;
-    gSalesIdx: number | null;
+    spxCumIdx: number;
+    peAumIdx: number;
+    gSalesIdx: number;
     g550MsrpIdx: number;
     gClassAtpIdx: number;
     hhNetWorthIdx: number;
