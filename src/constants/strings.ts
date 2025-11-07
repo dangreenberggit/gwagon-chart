@@ -1,27 +1,19 @@
-// src/constants/strings.ts
-
 import { mbTheme } from "@/lib/theme";
 
 export const Titles = {
-    // SPX (two charts inside one card)
     SPX_CARD: "S&P 500 total return",
     SPX_ANNUAL: "S&P 500 Annual Total Return (%)",
     SPX_CUMULATIVE: "S&P 500 Cumulative Total Return Index (2012 = 100)",
 
-    // Indexed comparison
     INDEXED_CARD:
         "Indexed Comparison (2012 = 100): S&P 500 Total Return, G‑Class Sales, and Household Net Worth",
 
-    // PE AUM
     PE_CARD: "Global private equity assets under management",
 
-    // G‑Class sales
     GCLASS_CARD: "Mercedes‑Benz G‑Class U.S. sales",
 
-    // Household net worth
     HHNW_CARD: "U.S. household and nonprofit net worth",
 
-    // Pricing
     PRICES_CARD: "G‑Class estimated price",
 } as const;
 
@@ -43,30 +35,24 @@ export const Subtitles = {
 } as const;
 
 export const Categories = {
-    // SPX
     SPX_ANNUAL: ["S&P 500 Annual Total Return (%)"],
     SPX_CUMULATIVE: [
         "Total return (compounding from 2013)",
         "Total return (compounding from 2012)",
     ],
 
-    // Indexed comparison
     INDEXED: [
         "S&P 500 total return index (2012 = 100)",
         "US G‑Class sales (index, 2012 = 100)",
         "Household net worth (index, 2012 = 100)",
     ],
 
-    // G‑Class sales
     GCLASS: ["US G‑Class sales (units)"],
 
-    // Household net worth
     HHNW: ["Household Net Worth (USD T)"],
 
-    // Pricing
     PRICES: ["G‑Class estimated price (proxy, USD)"],
 
-    // PE
     PE: ["Global PE AUM (USD T)"],
 } as const;
 
@@ -80,7 +66,6 @@ export const AxisLabels = {
 } as const;
 
 export const Tooltips = {
-    // SPX cumulative footnote
     SPX_FOOTNOTE: {
         SOURCE: 'Source: SlickCharts "S&P 500 Returns" (annual totals and details).',
         CONSTRUCTION:
@@ -92,7 +77,6 @@ export const Tooltips = {
         UNITS: "Units: Index level (no units). Annual returns shown as percentages.",
     },
 
-    // G‑Class sales
     GCLASS_FOOTNOTE: {
         SOURCES: [
             "Mercedes‑Benz USA (MBUSA) press releases (for recent years).",
@@ -101,14 +85,12 @@ export const Tooltips = {
         DEF: "Definition: Calendar‑year U.S. sales/deliveries (units).",
     },
 
-    // Household net worth
     HHNW_FOOTNOTE: {
         SOURCE: "Source: Federal Reserve Economic Data (FRED), series TNWBSHNO.",
         DEF: "Definition: Net worth of households and nonprofit organizations (assets minus liabilities).",
         TIMING: "Timing: Q4 observation used to represent each year.",
     },
 
-    // Pricing
     PRICES_FOOTNOTE: {
         BASE_SOURCES: [
             "MBUSA media resources (for model‑year documentation).",
@@ -119,7 +101,6 @@ export const Tooltips = {
             "Estimated transaction price (ATP): Uses a fixed multiple calibrated to a Kelley Blue Book / Cox Automotive estimate for March 2024 (about $208,663). This is not an observed transaction series.",
     },
 
-    // PE (optional: if you add a footnote block)
     PE_FOOTNOTE: {
         SOURCE: "Source: McKinsey Global Private Markets Report (GPMR).",
         DEF: 'Definition: Traditional private equity assets under management include closed‑end funds (buyout, growth, venture) and combine invested assets and uninvested capital ("dry powder").',
@@ -127,7 +108,9 @@ export const Tooltips = {
     },
 } as const;
 
-// Footer anchor IDs for source deep-linking
+/**
+ * Footer anchor IDs used for deep-linking to source sections.
+ */
 export const FooterAnchors = {
     SPX: "spx-sources",
     PE: "pe-sources",
@@ -136,7 +119,9 @@ export const FooterAnchors = {
     PRICING: "pricing-sources",
 } as const;
 
-// Mapping from footer anchors to chart series colors
+/**
+ * Maps footer anchor IDs to their corresponding chart series colors.
+ */
 export const FooterAnchorColors = {
     [FooterAnchors.SPX]: mbTheme.colors.series.spx,
     [FooterAnchors.PE]: mbTheme.colors.series.pe,
@@ -145,7 +130,9 @@ export const FooterAnchorColors = {
     [FooterAnchors.PRICING]: mbTheme.colors.series.atp,
 } as const;
 
-// YouTube video configuration
+/**
+ * YouTube video configuration for the related content section.
+ */
 export const YouTubeVideo = {
     ID: "rtqoZMUhO24",
     TITLE: "The G-Wagon write off, explained: are they all committing tax fraud?",

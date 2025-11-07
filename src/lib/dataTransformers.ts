@@ -40,7 +40,7 @@ export function toGClassData(rows: Row[]) {
 export function toHouseholdNetWorthData(rows: Row[]) {
     return rows.map((r) => ({
         Year: r.year.toString(),
-        "Household Net Worth (USD T)": r.hhNetWorthBn / 1000, // Convert billions to trillions
+        "Household Net Worth (USD T)": r.hhNetWorthBn / 1000,
     }));
 }
 

@@ -33,7 +33,6 @@ export function SPXChart({
         [Categories.SPX_ANNUAL[0]]: r.spxTR,
     }));
 
-    // Combine both cumulative series for the chart
     const invByYear = new Map(spxCumInvestment.map((d) => [d.year, d.index]));
     const spxData = spxCumData.map((d) => ({
         Year: d.year.toString(),
@@ -72,7 +71,6 @@ export function SPXChart({
             {expandedCharts.spx && (
                 <CardContent>
                     <div className="space-y-6">
-                        {/* Annual Return Chart */}
                         <div>
                             <h3 className="font-medium mb-3">
                                 {Titles.SPX_ANNUAL}
@@ -105,7 +103,6 @@ export function SPXChart({
                             </ErrorBoundary>
                         </div>
 
-                        {/* Cumulative Return Chart */}
                         <div>
                             <h3 className="font-medium mb-3">
                                 {Titles.SPX_CUMULATIVE}

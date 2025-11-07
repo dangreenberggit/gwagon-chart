@@ -1,4 +1,6 @@
-// Mercedes G-Class Theme Export - Light Mode
+/**
+ * Mercedes G-Class theme configuration for light mode.
+ */
 export const mbTheme = {
     colors: {
         bg: "#FAFAFB",
@@ -27,7 +29,9 @@ export const mbTheme = {
     lineWidth: { primary: 3, secondary: 2 },
 };
 
-// Mercedes G-Class Theme Export - Dark Mode (G-Class Night Package)
+/**
+ * Mercedes G-Class theme configuration for dark mode (G-Class Night Package).
+ */
 export const themeDark = {
     colors: {
         bg: "#0C0F13",

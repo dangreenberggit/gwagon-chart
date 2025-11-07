@@ -50,16 +50,12 @@ export default function App() {
             <div className="min-h-screen bg-background text-foreground">
                 <Header />
 
-                {/* Main Content */}
                 <main className="mx-auto max-w-7xl px-4 py-4">
                     <div className="grid gap-6">
-                        {/* Indexed Comparison Section Header */}
                         <GrillSeparator>Indexed Comparison</GrillSeparator>
 
-                        {/* Indexed Comparison Chart - Main Chart */}
                         <IndexedComparisonChart data={dataIndexed} />
 
-                        {/* Individual Charts - Collapsible */}
                         <div className="space-y-4">
                             <GrillSeparator>
                                 Individual Series Details
@@ -98,7 +94,6 @@ export default function App() {
                             />
                         </div>
 
-                        {/* YouTube Video Section */}
                         <GrillSeparator>Related Content</GrillSeparator>
                         <div className="space-y-3">
                             <div className="px-4 py-3 bg-card border border-border rounded">

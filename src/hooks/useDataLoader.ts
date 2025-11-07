@@ -38,26 +38,19 @@ export function useDataLoader() {
                     hhNetWorthBn: r.hh_net_worth_usd_bn_q4,
                 }));
 
-                // Build cumulative SPX total return index (2012 base applied)
                 const spxTRSeries = base.map((r) => ({
                     year: r.year,
                     trPct: r.spxTR,
                 }));
                 
-                // Comparison mode: 2012 = 100, compounding starts 2013
                 const spxCumComparison = buildTotalReturnIndex(spxTRSeries, 100, false);
-                
-                // Investment mode: $100 at start of 2012, includes 2012's return
                 const spxCumInvestment = buildTotalReturnIndex(spxTRSeries, 100, true);
-                
-                // Use comparison mode for indexed view (2012 = 100)
                 const spxCum = spxCumComparison;
 
                 const spxCumByYear = new Map<number, number>(
                     spxCum.map((d) => [d.year, d.index])
                 );
 
-                // Indexed view for PE and G-Class (2012 = 100 via indexSeries)
                 const peIdx = indexSeries(
                     base.map((r) => r.peAumT),
                     0
@@ -68,18 +61,16 @@ export function useDataLoader() {
                 );
                 const hhNetWorthIdx = indexSeries(
                     base.map((r) => r.hhNetWorthBn),
-                    0  // 2012 is at index 0
+                    0
                 );
 
-                // Use cumulative SPX index directly (already represents accumulation)
-                // CSV indices (g550MsrpIdx, gClassAtpIdx) are authoritative when present
                 const indexed = base.map((r, i) => ({
                     year: r.year,
                     spxCumIdx: spxCumByYear.get(r.year) ?? null,
                     peAumIdx: peIdx[i] ?? null,
                     gSalesIdx: salesIdx[i] ?? null,
-                    g550MsrpIdx: r.g550MsrpIdx, // Use pre-indexed value from CSV (source of truth)
-                    gClassAtpIdx: r.gClassAtpIdx, // Use pre-indexed value from CSV (source of truth)
+                    g550MsrpIdx: r.g550MsrpIdx,
+                    gClassAtpIdx: r.gClassAtpIdx,
                     hhNetWorthIdx: hhNetWorthIdx[i] ?? null,
                 }));
                 setRows(base);

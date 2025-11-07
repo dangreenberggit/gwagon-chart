@@ -4,7 +4,9 @@
  */
 
 /**
- * Auto-detect locale from browser with fallback to 'en-US'.
+ * Auto-detects locale from browser with fallback to 'en-US'.
+ * 
+ * @returns Locale string (e.g., 'en-US', 'fr-FR').
  */
 export function getLocale(): string {
     if (typeof navigator !== "undefined" && navigator.language) {
@@ -14,8 +16,12 @@ export function getLocale(): string {
 }
 
 /**
- * Format a number with locale-aware formatting.
- * Handles non-number values by returning String(value).
+ * Formats a number with locale-aware formatting.
+ * 
+ * @param value - The value to format. Non-number values are converted to strings.
+ * @param locale - Optional locale string. Defaults to browser locale.
+ * @param options - Optional Intl.NumberFormatOptions for custom formatting.
+ * @returns Formatted number string, or String(value) if value is not a number.
  */
 export function formatNumber(
     value: number | string | null | undefined,
@@ -28,9 +34,12 @@ export function formatNumber(
 }
 
 /**
- * Format currency value with locale-aware formatting.
- * Defaults to USD currency.
- * Handles non-number values by returning String(value).
+ * Formats a currency value with locale-aware formatting.
+ * 
+ * @param value - The value to format. Non-number values are converted to strings.
+ * @param locale - Optional locale string. Defaults to browser locale.
+ * @param currency - Currency code (defaults to 'USD').
+ * @returns Formatted currency string, or String(value) if value is not a number.
  */
 export function formatCurrency(
     value: number | string | null | undefined,
@@ -48,9 +57,13 @@ export function formatCurrency(
 }
 
 /**
- * Format percentage value with locale-aware number formatting.
+ * Formats a percentage value with locale-aware number formatting.
  * Keeps the "%" suffix but formats the number part according to locale.
- * Handles non-number values by returning String(value).
+ * 
+ * @param value - The value to format. Non-number values are converted to strings.
+ * @param locale - Optional locale string. Defaults to browser locale.
+ * @param decimals - Number of decimal places (defaults to 1).
+ * @returns Formatted percentage string with "%" suffix, or String(value) if value is not a number.
  */
 export function formatPercentage(
     value: number | string | null | undefined,
@@ -67,7 +80,14 @@ export function formatPercentage(
 }
 
 /**
- * Format value based on dataKey type and context.
+ * Formats a value based on the dataKey type and context.
+ * Automatically detects the appropriate format (percentage, currency, units, index, etc.)
+ * and applies locale-aware formatting.
+ * 
+ * @param dataKey - The data key string that determines the formatting strategy.
+ * @param value - The numeric value to format, or null/undefined.
+ * @param locale - Optional locale string. Defaults to browser locale.
+ * @returns Formatted string value, or "N/A" if value is null/undefined.
  */
 export function formatValue(
     dataKey: string,
@@ -78,12 +98,10 @@ export function formatValue(
 
     const loc = locale || getLocale();
 
-    // Percentages - format as X.X% (locale-aware number part)
     if (dataKey.includes("(%)") || dataKey.includes("Return (%)")) {
         return formatPercentage(value, loc, 1);
     }
 
-    // Dollar values in trillions - format as $X.XX T
     if (dataKey.includes("(USD T)")) {
         const formatted = formatNumber(value, loc, {
             maximumFractionDigits: 2,
@@ -92,7 +110,6 @@ export function formatValue(
         return `$${formatted} T`;
     }
 
-    // Unit counts (sales) - format as X,XXX (no decimals, locale-aware)
     if (dataKey.includes("(units)")) {
         return formatNumber(value, loc, {
             maximumFractionDigits: 0,
@@ -100,7 +117,6 @@ export function formatValue(
         });
     }
 
-    // Dollar values (MSRP, ATP) - format as $XXX,XXX (no cents, locale-aware)
     if (
         dataKey.includes("MSRP (USD)") ||
         dataKey.includes("ATP (Proxy) (USD)")
@@ -112,7 +128,6 @@ export function formatValue(
         return `$${formatted}`;
     }
 
-    // Index values - format as XXX or XXX.X (up to one decimal, no trailing zeros)
     if (
         dataKey.includes("index") ||
         dataKey.includes("Index") ||
@@ -124,7 +139,6 @@ export function formatValue(
         });
     }
 
-    // Default formatting (locale-aware)
     return formatNumber(value, loc, {
         maximumFractionDigits: 2,
         minimumFractionDigits: 0,
@@ -132,8 +146,14 @@ export function formatValue(
 }
 
 /**
- * Create a value formatter function for use in chart valueFormatter props.
+ * Creates a value formatter function for use in chart valueFormatter props.
  * Automatically uses detected locale.
+ * 
+ * @param options - Configuration options:
+ *   - format: Format type ('number', 'currency', or 'percentage').
+ *   - decimals: Number of decimal places.
+ *   - currency: Currency code (for currency format).
+ * @returns A function that formats numbers according to the specified options.
  */
 export function createValueFormatter(options?: {
     format?: "number" | "currency" | "percentage";
@@ -162,8 +182,11 @@ export function createValueFormatter(options?: {
 }
 
 /**
- * Format indexed values (up to 1 decimal place, no trailing zeros).
- * Handles non-number values by returning String(value).
+ * Formats indexed values with up to 1 decimal place and no trailing zeros.
+ * 
+ * @param value - The value to format. Non-number values are converted to strings.
+ * @param locale - Optional locale string. Defaults to browser locale.
+ * @returns Formatted index value string, or String(value) if value is not a number.
  */
 export function formatIndexValue(
     value: number | string | null | undefined,
@@ -177,8 +200,11 @@ export function formatIndexValue(
 }
 
 /**
- * Format trillion currency values (e.g., $X.XX T).
- * Handles non-number values by returning String(value).
+ * Formats trillion currency values (e.g., $X.XX T).
+ * 
+ * @param value - The value to format. Non-number values are converted to strings.
+ * @param locale - Optional locale string. Defaults to browser locale.
+ * @returns Formatted trillion string with "$" prefix and "T" suffix, or String(value) if value is not a number.
  */
 export function formatTrillions(
     value: number | string | null | undefined,
@@ -193,8 +219,11 @@ export function formatTrillions(
 }
 
 /**
- * Format unit counts (e.g., sales units) with no decimals.
- * Handles non-number values by returning String(value).
+ * Formats unit counts (e.g., sales units) with no decimals.
+ * 
+ * @param value - The value to format. Non-number values are converted to strings.
+ * @param locale - Optional locale string. Defaults to browser locale.
+ * @returns Formatted unit count string with no decimals, or String(value) if value is not a number.
  */
 export function formatUnits(
     value: number | string | null | undefined,

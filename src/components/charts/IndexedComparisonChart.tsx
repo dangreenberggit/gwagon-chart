@@ -3,7 +3,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { InteractiveLineChart } from "../InteractiveLineChart";
 import { CustomTooltip } from "../CustomTooltip";
 import { formatIndexValue } from "@/lib/formatters";
-import { Titles, Subtitles, Categories } from "@/constants/strings";
+import { Titles, Subtitles, Categories, FooterAnchors } from "@/constants/strings";
 
 interface IndexedComparisonChartProps {
     data: Array<{
@@ -48,6 +48,15 @@ export function IndexedComparisonChart({ data }: IndexedComparisonChartProps) {
                         curveType="monotone"
                     />
                 </ErrorBoundary>
+                <div className="pt-4 border-t">
+                    <a
+                        href={`#${FooterAnchors.SPX}`}
+                        className="text-sm text-primary hover:underline"
+                        aria-label="View all sources for indexed comparison chart"
+                    >
+                        View all sources
+                    </a>
+                </div>
             </CardContent>
         </Card>
     );

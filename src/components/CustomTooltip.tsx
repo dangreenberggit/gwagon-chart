@@ -1,7 +1,9 @@
 import type { CustomTooltipProps } from "@tremor/react";
 import { formatValue } from "@/lib/formatters";
 
-// Helper function to create concise labels
+/**
+ * Maps full data key names to concise labels for tooltip display.
+ */
 const getConciseLabel = (dataKey: string) => {
     const labelMap: { [key: string]: string } = {
         "S&P 500 total return index (2012 = 100)": "S&P 500",
@@ -35,29 +37,28 @@ export const CustomTooltip = ({
 }: CustomTooltipProps) => {
     if (!active || !payload || payload.length === 0) return null;
 
-    // Define colors for each data series
     const getSeriesColor = (dataKey: string) => {
         const colorMap: { [key: string]: string } = {
-            "S&P 500 total return index (2012 = 100)": "#3b82f6", // blue
-            "S&P 500 Cumulative Total Return Index (2012 = 100)": "#3b82f6", // blue
-            "S&P 500 Annual Total Return (%)": "#3b82f6", // blue
-            "S&P 500 total return (%)": "#3b82f6", // blue
+            "S&P 500 total return index (2012 = 100)": "#3b82f6",
+            "S&P 500 Cumulative Total Return Index (2012 = 100)": "#3b82f6",
+            "S&P 500 Annual Total Return (%)": "#3b82f6",
+            "S&P 500 total return (%)": "#3b82f6",
             "S&P 500 Total Return Index (2012 = 100, compounding from 2013)":
-                "#3b82f6", // blue
+                "#3b82f6",
             "S&P 500 Total Return Index (base 100, compounding from 2012)":
-                "#10b981", // emerald
-            "Total return (compounding from 2013)": "#3b82f6", // blue
-            "Total return (compounding from 2012)": "#10b981", // emerald
-            "Global PE AUM (index, 2012 = 100)": "#f59e0b", // amber
-            "Global PE AUM (USD T)": "#f59e0b", // amber
-            "US G‑Class sales (index, 2012 = 100)": "#10b981", // emerald
-            "US G‑Class sales (units)": "#10b981", // emerald
-            "G‑Class Est. ATP (index, 2012 = 100)": "#ec4899", // pink
-            "G‑Class Est. ATP (Proxy) (USD)": "#ec4899", // pink
-            "G‑Class estimated price (proxy, USD)": "#ec4899", // pink
-            "G 550 base MSRP (USD)": "#a855f7", // purple
-            "Household net worth (index, 2012 = 100)": "#8b5cf6", // violet
-            "Household Net Worth (USD T)": "#8b5cf6", // violet
+                "#10b981",
+            "Total return (compounding from 2013)": "#3b82f6",
+            "Total return (compounding from 2012)": "#10b981",
+            "Global PE AUM (index, 2012 = 100)": "#f59e0b",
+            "Global PE AUM (USD T)": "#f59e0b",
+            "US G‑Class sales (index, 2012 = 100)": "#10b981",
+            "US G‑Class sales (units)": "#10b981",
+            "G‑Class Est. ATP (index, 2012 = 100)": "#ec4899",
+            "G‑Class Est. ATP (Proxy) (USD)": "#ec4899",
+            "G‑Class estimated price (proxy, USD)": "#ec4899",
+            "G 550 base MSRP (USD)": "#a855f7",
+            "Household net worth (index, 2012 = 100)": "#8b5cf6",
+            "Household Net Worth (USD T)": "#8b5cf6",
         };
         return colorMap[dataKey] || "#6b7280";
     };

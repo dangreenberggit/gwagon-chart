@@ -53,12 +53,10 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
     onValueChange,
     ...props
 }) => {
-    // State to track which categories are visible
     const [visibleCategories, setVisibleCategories] = useState<Set<string>>(
         new Set(categories)
     );
 
-    // Toggle category visibility
     const toggleCategory = useCallback((category: string) => {
         setVisibleCategories((prev) => {
             const newSet = new Set(prev);
@@ -71,7 +69,6 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
         });
     }, []);
 
-    // Filter data to only include visible categories
     const filteredData = data.map((item) => {
         const filteredItem = { ...item };
         categories.forEach((category) => {
@@ -82,22 +79,18 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
         return filteredItem;
     });
 
-    // Get visible categories for the chart
     const visibleCategoriesArray = categories.filter((cat) =>
         visibleCategories.has(cat)
     );
 
-    // Create category colors map
     const categoryColors = constructCategoryColors(categories, colors);
 
-    // Filter colors to match visible categories, maintaining original color mapping
     const visibleColors = categories
         .filter((cat) => visibleCategories.has(cat))
         .map((cat) => categoryColors.get(cat) || "blue");
 
     return (
         <div className="w-full">
-            {/* Custom Legend with Toggle Buttons */}
             {showLegend && (
                 <div className="mb-4 flex flex-wrap items-center gap-2">
                     {categories.map((category) => {
@@ -117,7 +110,6 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
                                         : "bg-secondary text-muted-foreground border-border hover:bg-secondary/80"
                                 )}
                             >
-                                {/* Color indicator */}
                                 <div
                                     className={cn(
                                         "h-3 w-3 rounded-full ring-2 ring-offset-1",
@@ -128,10 +120,8 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
                                     )}
                                 />
 
-                                {/* Category name */}
                                 <span>{category}</span>
 
-                                {/* Toggle indicator */}
                                 <span className="text-xs w-3 flex items-center justify-center">
                                     {isVisible ? "●" : "○"}
                                 </span>
@@ -141,7 +131,6 @@ export const InteractiveLineChart: React.FC<InteractiveLineChartProps> = ({
                 </div>
             )}
 
-            {/* Tremor LineChart */}
             <TremorLineChart
                 className={className}
                 data={filteredData}

@@ -10,8 +10,15 @@ export type SeriesRow = {
     hh_net_worth_usd_bn_q4: number;
 };
 
-// Simple CSV parser (no quoted commas).
-// Keep minimal to avoid dependency bloat; consider papaparse if fields become complex.
+/**
+ * Parses CSV text into an array of objects.
+ * 
+ * Note: This is a simple parser that does not handle quoted commas. Consider
+ * using papaparse if fields become more complex.
+ * 
+ * @param text - Raw CSV text content.
+ * @returns Array of objects with keys from the header row.
+ */
 export function parseCSV(text: string): Record<string, string>[] {
     const lines = text.trim().split(/\r?\n/);
     const firstLine = lines[0];
