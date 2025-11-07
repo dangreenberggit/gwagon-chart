@@ -6,7 +6,7 @@ const validAnchorIds = Object.values(FooterAnchors);
 /**
  * Hook that manages highlighting of footer anchor elements based on URL hash.
  * Automatically clears the highlight after 6 seconds and removes the hash from the URL.
- * 
+ *
  * @returns Object containing:
  *   - highlightedId: The currently highlighted anchor ID, or null if none.
  *   - isHighlighted: Function to check if a specific anchor ID is highlighted.
@@ -72,7 +72,10 @@ export function useHashHighlight() {
         window.addEventListener("hashchange", handleHashChangeWithTimeout);
 
         return () => {
-            window.removeEventListener("hashchange", handleHashChangeWithTimeout);
+            window.removeEventListener(
+                "hashchange",
+                handleHashChangeWithTimeout
+            );
             if (timeoutId) {
                 clearTimeout(timeoutId);
             }
@@ -85,4 +88,3 @@ export function useHashHighlight() {
 
     return { highlightedId, isHighlighted };
 }
-
