@@ -52,7 +52,7 @@ export function HouseholdNetWorthChart({
                 </CardTitle>
             </CardHeader>
             {expandedCharts.hhNetWorth && (
-                <div className="px-6 pb-4">
+                <div className="px-3 sm:px-6 pb-4">
                     <p className="text-sm text-muted-foreground mt-1">
                         {Subtitles.HHNW_CARD}
                     </p>

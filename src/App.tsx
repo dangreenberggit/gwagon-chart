@@ -50,7 +50,7 @@ export default function App() {
             <div className="min-h-screen bg-background text-foreground">
                 <Header />
 
-                <main className="mx-auto max-w-7xl px-4 py-4">
+                <main className="mx-auto max-w-7xl px-3 sm:px-4 py-4">
                     <div className="grid gap-6">
                         <GrillSeparator>Indexed Comparison</GrillSeparator>
 
@@ -96,7 +96,7 @@ export default function App() {
 
                         <GrillSeparator>Related Content</GrillSeparator>
                         <div className="space-y-3">
-                            <div className="px-4 py-3 bg-card border border-border rounded">
+                            <div className="px-3 sm:px-4 py-3 bg-card border border-border rounded">
                                 <h4 className="text-base md:text-lg font-semibold tracking-tight bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent max-w-prose">
                                     {YouTubeVideoConfig.CAPTION}
                                 </h4>

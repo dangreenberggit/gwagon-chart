@@ -122,6 +122,9 @@
 
   * { @apply border-border; }
   html, body, #root { height: 100%; }
+  html, body {
+    overflow-x: hidden;
+  }
   body { 
     @apply bg-background text-foreground antialiased; 
     text-rendering: optimizeLegibility;
@@ -132,6 +135,8 @@
 /* Recharts - Mercedes styled */
 .recharts-wrapper {
   background-color: hsl(var(--card)) !important;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .recharts-cartesian-axis-tick text,

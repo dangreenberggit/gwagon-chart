@@ -52,7 +52,7 @@ export function PricingChart({
                 </CardTitle>
             </CardHeader>
             {expandedCharts.prices && (
-                <div className="px-6 pb-4">
+                <div className="px-3 sm:px-6 pb-4">
                     <p className="text-sm text-muted-foreground mt-1">
                         {Subtitles.PRICES_CARD}
                     </p>

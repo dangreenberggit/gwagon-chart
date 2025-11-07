@@ -20,7 +20,7 @@ export function Header() {
 
             {/* Motif band */}
             <div className="relative">
-                <div className="mx-auto max-w-7xl px-4">
+                <div className="mx-auto max-w-7xl px-3 sm:px-4">
                     <div className="relative h-12 flex items-center justify-between">
                         <div className="flex items-center flex-1">
                             {/* circular logo mask — no rim */}
@@ -64,7 +64,7 @@ export function Header() {
 
             {/* Word block */}
             <div
-                className={`relative mx-auto max-w-7xl px-4 transition-all duration-300 ease-in-out overflow-hidden ${
+                className={`relative mx-auto max-w-7xl px-3 sm:px-4 transition-all duration-300 ease-in-out overflow-hidden ${
                     isScrolled
                         ? "max-h-0 py-0 opacity-0"
                         : "max-h-24 py-3 opacity-100"

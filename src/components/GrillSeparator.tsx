@@ -114,9 +114,9 @@ export const GrillSeparator: React.FC<GrillSeparatorProps> = ({
             </svg>
 
             {/* Center text section with background */}
-            <div className="relative px-8">
+            <div className="relative px-3 sm:px-6">
                 {/* Text - appears in front */}
-                <div className="relative z-10 px-6 py-3 bg-background/80 backdrop-blur-sm">
+                <div className="relative z-10 px-3 sm:px-6 py-3 bg-background/80 backdrop-blur-sm">
                     <h2 className="text-lg font-semibold tracking-tight text-foreground whitespace-nowrap">
                         {children}
                     </h2>
