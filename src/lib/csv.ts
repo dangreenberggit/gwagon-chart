@@ -8,7 +8,6 @@ export type SeriesRow = {
     g550_msrp_index_2012: number;
     gclass_est_atp_index_2012: number;
     hh_net_worth_usd_bn_q4: number;
-    hh_net_worth_index_2012: number;
 };
 
 // Simple CSV parser (no quoted commas).
@@ -40,6 +39,5 @@ export function toSeriesRows(rows: Record<string, string>[]): SeriesRow[] {
         g550_msrp_index_2012: Number(r.g550_msrp_index_2012),
         gclass_est_atp_index_2012: Number(r.gclass_est_atp_index_2012),
         hh_net_worth_usd_bn_q4: Number(r.hh_net_worth_usd_bn_q4),
-        hh_net_worth_index_2012: Number(r.hh_net_worth_index_2012),
     }));
 }

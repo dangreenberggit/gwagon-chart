@@ -8,7 +8,6 @@ export type Row = {
     g550MsrpIdx: number;
     gClassAtpIdx: number;
     hhNetWorthBn: number;
-    hhNetWorthIdx: number;
 };
 
 export type IndexedRow = {

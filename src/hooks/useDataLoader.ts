@@ -36,7 +36,6 @@ export function useDataLoader() {
                     g550MsrpIdx: r.g550_msrp_index_2012,
                     gClassAtpIdx: r.gclass_est_atp_index_2012,
                     hhNetWorthBn: r.hh_net_worth_usd_bn_q4,
-                    hhNetWorthIdx: r.hh_net_worth_index_2012,
                 }));
 
                 // Build cumulative SPX total return index (2012 base applied)
@@ -67,9 +66,13 @@ export function useDataLoader() {
                     base.map((r) => r.gSales),
                     0
                 );
+                const hhNetWorthIdx = indexSeries(
+                    base.map((r) => r.hhNetWorthBn),
+                    0  // 2012 is at index 0
+                );
 
                 // Use cumulative SPX index directly (already represents accumulation)
-                // CSV indices (g550MsrpIdx, gClassAtpIdx, hhNetWorthIdx) are authoritative when present
+                // CSV indices (g550MsrpIdx, gClassAtpIdx) are authoritative when present
                 const indexed = base.map((r, i) => ({
                     year: r.year,
                     spxCumIdx: spxCumByYear.get(r.year) ?? null,
@@ -77,7 +80,7 @@ export function useDataLoader() {
                     gSalesIdx: salesIdx[i] ?? null,
                     g550MsrpIdx: r.g550MsrpIdx, // Use pre-indexed value from CSV (source of truth)
                     gClassAtpIdx: r.gClassAtpIdx, // Use pre-indexed value from CSV (source of truth)
-                    hhNetWorthIdx: r.hhNetWorthIdx, // Use pre-indexed value from CSV (source of truth)
+                    hhNetWorthIdx: hhNetWorthIdx[i] ?? null,
                 }));
                 setRows(base);
                 setIndexedRows(indexed);
