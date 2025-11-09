@@ -50,7 +50,7 @@ export default function App() {
             <div className="min-h-screen bg-background text-foreground">
                 <Header />
 
-                <main className="mx-auto max-w-7xl px-3 sm:px-4 py-4">
+                <main className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
                     <div className="grid gap-6">
                         <GrillSeparator>Indexed Comparison</GrillSeparator>
 

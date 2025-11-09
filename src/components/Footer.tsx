@@ -8,7 +8,7 @@ export function Footer() {
 
     return (
         <footer className="border-t border-border bg-gradient-to-b from-card to-secondary/30 mt-10">
-            <div className="mx-auto max-w-7xl px-3 sm:px-4 py-8">
+            <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
                 <div className="flex flex-col gap-4">
                     <div>
                         <p className="font-medium text-foreground mb-2">
