@@ -33,7 +33,7 @@ export function HouseholdNetWorthChart({
                 className="cursor-pointer hover:bg-secondary/50 transition-colors"
                 onClick={onToggle}
                 onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
+                    if (e.key === "Enter" || e.key === " ") {
                         e.preventDefault();
                         onToggle();
                     }
@@ -44,10 +44,11 @@ export function HouseholdNetWorthChart({
             >
                 <CardTitle className="flex items-center justify-between gap-2 pr-2">
                     <span className="flex items-center gap-2">
-                        {expandedCharts.hhNetWorth ? "▼" : "▶"} {Titles.HHNW_CARD}
-                        <span className="text-xs font-normal px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">
-                            USD T
-                        </span>
+                        {expandedCharts.hhNetWorth ? "▼" : "▶"}{" "}
+                        {Titles.HHNW_CARD}
+                    </span>
+                    <span className="text-xs font-normal px-2.5 py-1 sm:px-2 sm:py-0.5 rounded-full bg-secondary text-muted-foreground whitespace-nowrap flex-shrink-0">
+                        USD T
                     </span>
                 </CardTitle>
             </CardHeader>
@@ -61,45 +62,44 @@ export function HouseholdNetWorthChart({
             {expandedCharts.hhNetWorth && (
                 <CardContent>
                     <div className="space-y-4">
-                    <ErrorBoundary
-                        fallback={
-                            <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
-                                <p className="text-muted-foreground">
-                                    Chart failed to load
-                                </p>
-                            </div>
-                        }
-                    >
-                        <LineChart
-                            className="h-48 w-full"
-                            data={hhNetWorthData}
-                            index="Year"
-                            categories={[...Categories.HHNW]}
-                            colors={["violet"]}
-                            yAxisWidth={64}
-                            showLegend={false}
-                            showTooltip={true}
-                            customTooltip={CustomTooltip}
-                            valueFormatter={formatTrillions}
-                            connectNulls
-                            curveType="monotone"
-                            xAxisLabel={AxisLabels.YEAR}
-                            yAxisLabel={AxisLabels.USD_TRILLIONS}
-                        />
-                    </ErrorBoundary>
-                    <div className="pt-4 border-t">
-                        <a
-                            href={`#${FooterAnchors.HHNW}`}
-                            className="text-sm text-primary hover:underline"
-                            aria-label="View sources and definitions for Household net worth"
+                        <ErrorBoundary
+                            fallback={
+                                <div className="h-48 w-full bg-muted border-2 border-dashed border-border flex items-center justify-center">
+                                    <p className="text-muted-foreground">
+                                        Chart failed to load
+                                    </p>
+                                </div>
+                            }
                         >
-                            Sources and definitions
-                        </a>
-                    </div>
+                            <LineChart
+                                className="h-48 w-full"
+                                data={hhNetWorthData}
+                                index="Year"
+                                categories={[...Categories.HHNW]}
+                                colors={["violet"]}
+                                yAxisWidth={64}
+                                showLegend={false}
+                                showTooltip={true}
+                                customTooltip={CustomTooltip}
+                                valueFormatter={formatTrillions}
+                                connectNulls
+                                curveType="monotone"
+                                xAxisLabel={AxisLabels.YEAR}
+                                yAxisLabel={AxisLabels.USD_TRILLIONS}
+                            />
+                        </ErrorBoundary>
+                        <div className="pt-4 border-t">
+                            <a
+                                href={`#${FooterAnchors.HHNW}`}
+                                className="text-sm text-primary hover:underline"
+                                aria-label="View sources and definitions for Household net worth"
+                            >
+                                Sources and definitions
+                            </a>
+                        </div>
                     </div>
                 </CardContent>
             )}
         </Card>
     );
 }
-

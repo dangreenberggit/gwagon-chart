@@ -20,11 +20,7 @@ interface PEChartProps {
     onToggle: () => void;
 }
 
-export function PEChart({
-    rows,
-    expandedCharts,
-    onToggle,
-}: PEChartProps) {
+export function PEChart({ rows, expandedCharts, onToggle }: PEChartProps) {
     const peData = toPEData(rows);
 
     return (
@@ -33,7 +29,7 @@ export function PEChart({
                 className="cursor-pointer hover:bg-secondary/50 transition-colors"
                 onClick={onToggle}
                 onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
+                    if (e.key === "Enter" || e.key === " ") {
                         e.preventDefault();
                         onToggle();
                     }
@@ -45,9 +41,9 @@ export function PEChart({
                 <CardTitle className="flex items-center justify-between gap-2 pr-2">
                     <span className="flex items-center gap-2">
                         {expandedCharts.pe ? "▼" : "▶"} {Titles.PE_CARD}
-                        <span className="text-xs font-normal px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">
-                            USD T
-                        </span>
+                    </span>
+                    <span className="text-xs font-normal px-2.5 py-1 sm:px-2 sm:py-0.5 rounded-full bg-secondary text-muted-foreground whitespace-nowrap flex-shrink-0">
+                        USD T
                     </span>
                 </CardTitle>
             </CardHeader>
@@ -100,4 +96,3 @@ export function PEChart({
         </Card>
     );
 }
-

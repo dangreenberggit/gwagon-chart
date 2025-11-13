@@ -46,9 +46,9 @@ export function GClassSalesChart({
                     <span className="flex items-center gap-2">
                         {expandedCharts.gclass ? "▼" : "▶"}{" "}
                         {Titles.GCLASS_CARD}
-                        <span className="text-xs font-normal px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">
-                            Units
-                        </span>
+                    </span>
+                    <span className="text-xs font-normal px-2.5 py-1 sm:px-2 sm:py-0.5 rounded-full bg-secondary text-muted-foreground whitespace-nowrap flex-shrink-0">
+                        Units
                     </span>
                 </CardTitle>
             </CardHeader>
